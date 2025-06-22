@@ -5,20 +5,17 @@ const Reservation = require('../Models/Reservations');
 const addTable = async (req, res) => {
   try {
     const { tableName, tableType, capacity, status, description } = req.body;
-    // Handle image upload - generate filename for memory storage in production
+    // Handle image upload
     let image = null;
     if (req.file) {
       if (req.file.filename) {
         // Disk storage (development)
         image = `/uploads/${req.file.filename}`;
+        console.log('Development table upload - saved to disk:', image);
       } else {
-        // Memory storage (production) - generate unique filename
-        const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
-        const extension = req.file.originalname.split('.').pop();
-        const filename = `${uniqueSuffix}.${extension}`;
-        image = `/uploads/${filename}`;
-
-        console.log('Production table upload detected, filename generated:', filename);
+        // Memory storage (production) - don't save image path
+        console.log('Production environment detected - table file upload not supported on serverless');
+        image = null;
       }
     }
 

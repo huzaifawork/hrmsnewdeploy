@@ -8,6 +8,7 @@ import {
   FiEye, FiEdit, FiTrash, FiToggleLeft, FiToggleRight, FiPlus,
   FiDollarSign, FiStar, FiClock, FiCheck, FiX, FiTrendingUp
 } from "react-icons/fi";
+import { getMenuImageUrl, handleImageError } from "../../utils/imageUtils";
 import "./AdminManageRooms.css";
 
 const AdminViewMenus = () => {
@@ -64,26 +65,7 @@ const AdminViewMenus = () => {
     }
   };
 
-  const getImageUrl = (imagePath) => {
-    if (!imagePath) return '/images/placeholder-menu.jpg';
-    try {
-      // If it's already a full URL (Unsplash, etc.), return as is
-      if (imagePath.startsWith('http://') || imagePath.startsWith('https://')) {
-        return imagePath;
-      }
-      // If it's a local upload path
-      const cleanPath = imagePath.replace(/^\/+/, '');
-      // Use the base server URL (without /api) for images
-      const serverURL = process.env.REACT_APP_SERVER_URL || process.env.REACT_APP_API_URL || 'https://hrms-bace.vercel.app';
-      if (cleanPath.includes('uploads')) {
-        return `${serverURL}/${cleanPath}`;
-      }
-      return `${serverURL}/uploads/${cleanPath}`;
-    } catch (error) {
-      console.error('Error formatting image URL:', error);
-      return '/images/placeholder-menu.jpg';
-    }
-  };
+
 
   // Filter and sort menu items
   const filteredMenuItems = menuItems.filter(item => {
@@ -225,13 +207,10 @@ const AdminViewMenus = () => {
                 <div key={item._id} className={`enhanced-menu-card ${viewMode}-card`}>
                   <div className="menu-image-container">
                     <img
-                      src={getImageUrl(item.image)}
+                      src={getMenuImageUrl(item.image)}
                       alt={item.name}
                       className="menu-image"
-                      onError={(e) => {
-                        e.target.src = "/images/placeholder-menu.jpg";
-                        e.target.onerror = null;
-                      }}
+                      onError={(e) => handleImageError(e, "/images/placeholder-menu.jpg")}
                     />
                     <div className="image-overlay">
                       <div className="overlay-actions">

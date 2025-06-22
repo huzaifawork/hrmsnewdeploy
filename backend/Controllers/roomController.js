@@ -105,22 +105,24 @@ exports.addRoom = async (req, res) => {
       petFriendly
     } = req.body;
 
-    // Handle image upload - generate filename for memory storage in production
+    // Handle image upload
     let image = null;
     if (req.file) {
       if (req.file.filename) {
         // Disk storage (development)
         image = `/uploads/${req.file.filename}`;
+        console.log('Development upload - saved to disk:', image);
       } else {
-        // Memory storage (production) - generate unique filename
-        const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
-        const extension = req.file.originalname.split('.').pop();
-        const filename = `${uniqueSuffix}.${extension}`;
-        image = `/uploads/${filename}`;
-
-        // In production, you would typically upload to cloud storage here
-        // For now, we'll use a placeholder or external URL
-        console.log('Production upload detected, filename generated:', filename);
+        // Memory storage (production) - since we can't save files on Vercel,
+        // we'll set image to null and let frontend handle placeholder
+        console.log('Production environment detected - file upload not supported on serverless');
+        console.log('File details:', {
+          originalname: req.file.originalname,
+          mimetype: req.file.mimetype,
+          size: req.file.size
+        });
+        // Don't set image path for production uploads since files can't be served
+        image = null;
       }
     }
 
@@ -291,14 +293,12 @@ exports.updateRoom = async (req, res) => {
       if (req.file.filename) {
         // Disk storage (development)
         updateData.image = `/uploads/${req.file.filename}`;
+        console.log('Development update - saved to disk:', updateData.image);
       } else {
-        // Memory storage (production) - generate unique filename
-        const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
-        const extension = req.file.originalname.split('.').pop();
-        const filename = `${uniqueSuffix}.${extension}`;
-        updateData.image = `/uploads/${filename}`;
-
-        console.log('Production upload detected for update, filename generated:', filename);
+        // Memory storage (production) - don't update image field
+        console.log('Production environment detected - file upload not supported on serverless');
+        console.log('Keeping existing image for room update');
+        // Don't update the image field in production
       }
     }
 

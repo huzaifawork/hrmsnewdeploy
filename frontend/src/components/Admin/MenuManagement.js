@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
+import { getMenuImageUrl, handleImageError } from "../../utils/imageUtils";
 import "./MenuManagement.css";
 
 const MenuManagement = () => {
@@ -164,17 +165,7 @@ const MenuManagement = () => {
     }
   };
 
-  const getImageUrl = (imagePath) => {
-    if (!imagePath) return "https://via.placeholder.com/150";
-    if (imagePath.startsWith("http")) return imagePath;
-    const cleanPath = imagePath.replace(/^\/+/, '');
-    // Use the base server URL (without /api) for images
-    const serverURL = process.env.REACT_APP_SERVER_URL || process.env.REACT_APP_API_URL || 'https://hrms-bace.vercel.app';
-    if (cleanPath.includes('uploads')) {
-      return `${serverURL}/${cleanPath}`;
-    }
-    return `${serverURL}/uploads/${cleanPath}`;
-  };
+
 
   return (
     <div className="menu-management cosmic-container">
@@ -214,12 +205,10 @@ const MenuManagement = () => {
             <tr key={item._id}>
               <td>
                 <img
-                  src={getImageUrl(item.image)}
+                  src={getMenuImageUrl(item.image)}
                   alt={item.name}
                   className="menu-thumbnail"
-                  onError={(e) => {
-                    e.target.src = "https://via.placeholder.com/150";
-                  }}
+                  onError={(e) => handleImageError(e, "https://via.placeholder.com/150")}
                 />
               </td>
               <td>{item.name}</td>
@@ -272,7 +261,7 @@ const MenuManagement = () => {
           />
           {(imagePreview || editingItem?.image) && (
             <img
-              src={imagePreview || getImageUrl(editingItem?.image)}
+              src={imagePreview || getMenuImageUrl(editingItem?.image)}
               alt="Preview"
               className="image-preview mt-2"
             />
