@@ -18,6 +18,9 @@ dist/
 .env.test.local
 .env.production.local
 
+# Vercel environment variables (contains secrets)
+VERCEL_ENV_VARS.md
+
 # IDE files
 .vscode/
 .idea/
