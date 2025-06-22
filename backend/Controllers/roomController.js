@@ -124,6 +124,10 @@ exports.addRoom = async (req, res) => {
         // Don't set image path for production uploads since files can't be served
         image = null;
       }
+    } else if (req.body.imageUrl) {
+      // Handle image URL
+      image = req.body.imageUrl;
+      console.log('Image URL provided:', image);
     }
 
     // Parse amenities if it's a string
@@ -289,6 +293,7 @@ exports.updateRoom = async (req, res) => {
       description,
     };
 
+    // Handle image update
     if (req.file) {
       if (req.file.filename) {
         // Disk storage (development)
@@ -300,6 +305,10 @@ exports.updateRoom = async (req, res) => {
         console.log('Keeping existing image for room update');
         // Don't update the image field in production
       }
+    } else if (req.body.imageUrl) {
+      // Handle image URL update
+      updateData.image = req.body.imageUrl;
+      console.log('Image URL updated:', updateData.image);
     }
 
     const updatedRoom = await Room.findByIdAndUpdate(

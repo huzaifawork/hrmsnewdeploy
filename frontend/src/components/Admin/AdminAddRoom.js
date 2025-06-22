@@ -13,6 +13,7 @@
     const navigate = useNavigate();
     const [loading, setLoading] = useState(false);
     const [imagePreview, setImagePreview] = useState(null);
+    const [imageUrl, setImageUrl] = useState("");
     const [formData, setFormData] = useState({
       roomNumber: "",
       roomType: "",
@@ -101,6 +102,11 @@
         }
       });
 
+      // Add image URL if provided
+      if (imageUrl.trim()) {
+        submitData.append('imageUrl', imageUrl.trim());
+      }
+
       setLoading(true);
       try {
         const token = localStorage.getItem("token");
@@ -133,6 +139,7 @@
           petFriendly: false
         });
         setImagePreview(null);
+        setImageUrl("");
         
         // Reset the file input
         const fileInput = document.querySelector('input[type="file"]');
@@ -419,16 +426,42 @@
                   </div>
                 </div>
 
-                <div className="form-group">
-                  <label>Room Image</label>
-                  <input
-                    type="file"
-                    name="image"
-                    className="cosmic-input"
-                    onChange={handleImageChange}
-                    accept="image/*"
-                    required
-                  />
+                <div className="form-group full-width">
+                  <label className="form-label">
+                    <FiImage className="label-icon" />
+                    Room Image
+                  </label>
+
+                  {/* Image URL Input */}
+                  <div className="form-group">
+                    <label className="form-label">Image URL (Recommended)</label>
+                    <input
+                      type="url"
+                      value={imageUrl}
+                      onChange={(e) => {
+                        setImageUrl(e.target.value);
+                        if (e.target.value) {
+                          setImagePreview(e.target.value);
+                        }
+                      }}
+                      className="enhanced-input"
+                      placeholder="https://images.unsplash.com/... or any image URL"
+                    />
+                    <small className="form-text">Paste an image URL for instant preview</small>
+                  </div>
+
+                  {/* OR File Upload */}
+                  <div className="form-group">
+                    <label className="form-label">OR Upload File</label>
+                    <input
+                      type="file"
+                      name="image"
+                      className="enhanced-input"
+                      onChange={handleImageChange}
+                      accept="image/*"
+                    />
+                    <small className="form-text">File upload (works in development only)</small>
+                  </div>
                 </div>
 
                   <button type="submit" className="cosmic-button" disabled={loading}>

@@ -17,6 +17,10 @@ const addTable = async (req, res) => {
         console.log('Production environment detected - table file upload not supported on serverless');
         image = null;
       }
+    } else if (req.body.imageUrl) {
+      // Handle image URL
+      image = req.body.imageUrl;
+      console.log('Table image URL provided:', image);
     }
 
     const newTable = new Table({
