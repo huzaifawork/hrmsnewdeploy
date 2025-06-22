@@ -19,6 +19,7 @@ import {
 import { Link, useNavigate } from 'react-router-dom';
 import Header from '../components/common/Header';
 import RoomDetailsModal from '../components/RoomDetailsModal';
+import { getRoomImageUrl, handleImageError } from '../utils/imageUtils';
 // import RoomRecommendationExplainer from '../components/RoomRecommendationExplainer';
 
 const RoomPage = () => {
@@ -50,24 +51,7 @@ const RoomPage = () => {
     errors: []
   });
 
-  // Helper function to get the correct image URL
-  const getImageUrl = (imagePath) => {
-    if (!imagePath) return '/images/placeholder-room.jpg';
 
-    try {
-      if (imagePath.startsWith('http')) return imagePath;
-      const cleanPath = imagePath.replace(/^\/+/, '');
-      // Use the base server URL (without /api) for images
-      const serverURL = process.env.REACT_APP_SERVER_URL || process.env.REACT_APP_API_URL || 'https://hrms-bace.vercel.app';
-      if (cleanPath.includes('uploads')) {
-        return `${serverURL}/${cleanPath}`;
-      }
-      return `${serverURL}/uploads/${cleanPath}`;
-    } catch (error) {
-      console.error('Error formatting image URL:', error);
-      return '/images/placeholder-room.jpg';
-    }
-  };
 
   // Check if user is logged in
   useEffect(() => {
@@ -296,7 +280,7 @@ const RoomPage = () => {
         roomId: room._id,
         roomName: room.roomName || `Room ${room.roomNumber}`,
         roomType: room.roomType,
-        roomImage: getImageUrl(room.image),
+        roomImage: getRoomImageUrl(room.image),
         price: room.price,
         capacity: room.capacity,
         amenities: room.amenities,
@@ -1257,13 +1241,9 @@ const RoomPage = () => {
                     {/* Image Section */}
                     <div style={{ position: 'relative', height: '250px', overflow: 'hidden' }}>
                       <img
-                        src={getImageUrl(room.image)}
+                        src={getRoomImageUrl(room.image)}
                         alt={room.roomNumber || room.roomName}
-                        onError={(e) => {
-                          console.error('Error loading image:', room.image);
-                          e.target.src = '/images/placeholder-room.jpg';
-                          e.target.onerror = null;
-                        }}
+                        onError={(e) => handleImageError(e, '/images/placeholder-room.jpg')}
                         style={{
                           width: '100%',
                           height: '100%',

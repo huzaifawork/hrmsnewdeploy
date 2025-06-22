@@ -7,6 +7,7 @@ import {
   FiEdit, FiSave, FiRefreshCw, FiHome, FiDollarSign, FiUsers,
   FiMapPin, FiImage, FiCheck, FiX
 } from "react-icons/fi";
+import { getRoomImageUrl, handleImageError } from "../../utils/imageUtils";
 import "./AdminManageRooms.css";
 
 const AdminRoomUpdate = () => {
@@ -108,17 +109,7 @@ const AdminRoomUpdate = () => {
     setImage(e.target.files[0]);
   };
 
-  const getImageUrl = (imagePath) => {
-    if (!imagePath) return "/images/placeholder-room.jpg";
-    if (imagePath.startsWith('http')) return imagePath;
-    const cleanPath = imagePath.replace(/^\/+/, '');
-    // Use the base server URL (without /api) for images
-    const serverURL = process.env.REACT_APP_SERVER_URL || process.env.REACT_APP_API_URL || 'https://hrms-bace.vercel.app';
-    if (cleanPath.includes('uploads')) {
-      return `${serverURL}/${cleanPath}`;
-    }
-    return `${serverURL}/uploads/${cleanPath}`;
-  };
+
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -407,10 +398,11 @@ const AdminRoomUpdate = () => {
                     {selectedRoom.image && (
                       <div className="mb-2">
                         <img
-                          src={getImageUrl(selectedRoom.image)}
+                          src={getRoomImageUrl(selectedRoom.image)}
                           alt={selectedRoom.roomNumber}
                           style={{ width: '100px', height: '60px', objectFit: 'cover' }}
                           className="rounded"
+                          onError={(e) => handleImageError(e, "/images/placeholder-room.jpg")}
                         />
                       </div>
                     )}

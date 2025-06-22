@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { FiStar, FiWifi, FiCoffee, FiTv, FiHeart, FiTrendingUp, FiShoppingCart, FiEye } from "react-icons/fi";
 import { Link } from "react-router-dom";
+import { getRoomImageUrl, handleImageError } from "../../utils/imageUtils";
 import "bootstrap/dist/css/bootstrap.min.css";
 
 const Rooms = () => {
@@ -14,21 +15,7 @@ const Rooms = () => {
   const [user, setUser] = useState(null);
   const [hoveredRoom, setHoveredRoom] = useState(null);
 
-  const getImageUrl = (imagePath) => {
-    if (!imagePath) return "/images/placeholder-room.jpg";
-    try {
-      if (imagePath.startsWith("http")) return imagePath;
-      const cleanPath = imagePath.replace(/^\/+/, "");
-      // Use the base server URL (without /api) for images
-      const serverURL = process.env.REACT_APP_SERVER_URL || process.env.REACT_APP_API_URL || 'https://hrms-bace.vercel.app';
-      return cleanPath.includes("uploads")
-        ? `${serverURL}/${cleanPath}`
-        : `${serverURL}/uploads/${cleanPath}`;
-    } catch (error) {
-      console.error("Error formatting image URL:", error);
-      return "/images/placeholder-room.jpg";
-    }
-  };
+
 
   // Check if user is logged in
   useEffect(() => {
@@ -346,7 +333,7 @@ const Rooms = () => {
                 background: 'linear-gradient(180deg, rgba(0, 0, 0, 0.2) 0%, rgba(0, 0, 0, 0.6) 100%)',
                 backgroundSize: 'cover',
                 backgroundPosition: 'center',
-                backgroundImage: `url(${getImageUrl(room.image)})`,
+                backgroundImage: `url(${getRoomImageUrl(room.image)})`,
                 transform: hoveredRoom === room._id ? 'scale(1.05)' : 'scale(1)',
                 transition: 'transform 0.6s cubic-bezier(0.4, 0, 0.2, 1)'
               }}>
