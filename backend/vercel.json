@@ -6,7 +6,8 @@
       "src": "index.serverless.js",
       "use": "@vercel/node",
       "config": {
-        "maxLambdaSize": "50mb"
+        "maxLambdaSize": "50mb",
+        "maxDuration": 30
       }
     }
   ],
@@ -15,10 +16,5 @@
       "src": "/(.*)",
       "dest": "/index.serverless.js"
     }
-  ],
-  "functions": {
-    "index.serverless.js": {
-      "maxDuration": 30
-    }
-  }
+  ]
 }

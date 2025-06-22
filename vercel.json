@@ -13,7 +13,8 @@
       "src": "backend/index.serverless.js",
       "use": "@vercel/node",
       "config": {
-        "maxLambdaSize": "50mb"
+        "maxLambdaSize": "50mb",
+        "maxDuration": 30
       }
     }
   ],
@@ -45,10 +46,5 @@
   ],
   "env": {
     "NODE_ENV": "production"
-  },
-  "functions": {
-    "backend/index.serverless.js": {
-      "maxDuration": 30
-    }
   }
 }
