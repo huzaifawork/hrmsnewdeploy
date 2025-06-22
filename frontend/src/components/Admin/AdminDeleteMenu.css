@@ -1,0 +1,288 @@
+/* Cosmic Theme Variables */
+:root {
+  --cosmic-bg: #0a0b1e;
+  --cosmic-card-bg: #12132d;
+  --cosmic-primary: #6e56cf;
+  --cosmic-secondary: #8b7dd8;
+  --cosmic-text: #e4e2ff;
+  --cosmic-border: #2a2b55;
+  --cosmic-shadow: rgba(110, 86, 207, 0.15);
+  --cosmic-hover: #1c1d3d;
+  --cosmic-gradient: linear-gradient(135deg, #6e56cf 0%, #8b7dd8 100%);
+  --transition-speed: 0.3s;
+}
+
+/* Container Styles */
+.delete-menu-container {
+  padding: 2rem;
+  max-width: 1400px;
+  margin: 0 auto;
+  background-color: var(--cosmic-bg);
+  min-height: 100vh;
+  color: var(--cosmic-text);
+}
+
+/* Header Styles */
+.delete-menu-header {
+  background: var(--cosmic-card-bg);
+  padding: 1.5rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px var(--cosmic-shadow);
+  margin-bottom: 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border: 1px solid var(--cosmic-border);
+}
+
+.delete-menu-header h2 {
+  color: var(--cosmic-text);
+  margin: 0;
+  font-size: 2rem;
+  font-weight: 600;
+  background: var(--cosmic-gradient);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* No Items Message */
+.no-items-message {
+  text-align: center;
+  padding: 3rem;
+  background: var(--cosmic-card-bg);
+  border-radius: 12px;
+  border: 1px solid var(--cosmic-border);
+  margin: 2rem 0;
+}
+
+.no-items-message h4 {
+  color: var(--cosmic-text);
+  margin-bottom: 1rem;
+  font-size: 1.5rem;
+}
+
+.no-items-message p {
+  color: var(--cosmic-secondary);
+  opacity: 0.8;
+}
+
+/* Menu Items Grid */
+.menu-items-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1.5rem;
+  padding: 1rem;
+}
+
+/* Menu Item Card */
+.menu-item-card {
+  background: var(--cosmic-card-bg);
+  border: 2px solid var(--cosmic-border);
+  border-radius: 16px;
+  overflow: hidden;
+  transition: all var(--transition-speed);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  position: relative;
+}
+
+.menu-item-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, #dc3545, #ff4757, #dc3545);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.menu-item-card:hover::before {
+  opacity: 1;
+}
+
+.menu-item-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 12px 35px rgba(220, 53, 69, 0.3);
+  border-color: #dc3545;
+}
+
+.menu-item-image {
+  width: 100%;
+  height: 200px;
+  position: relative;
+  overflow: hidden;
+}
+
+.menu-item-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform var(--transition-speed);
+}
+
+.menu-item-image img:hover {
+  transform: scale(1.05);
+}
+
+.menu-item-info {
+  padding: 1.2rem;
+  background: var(--cosmic-card-bg);
+}
+
+.menu-item-info h4 {
+  color: var(--cosmic-text);
+  margin: 0 0 0.5rem 0;
+  font-size: 1.2rem;
+  font-weight: 600;
+}
+
+.menu-item-info p {
+  color: var(--cosmic-secondary);
+  margin: 0 0 0.5rem 0;
+  font-size: 0.9rem;
+  text-transform: capitalize;
+  opacity: 0.8;
+}
+
+.menu-item-info .item-category {
+  background: var(--cosmic-primary);
+  color: white;
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  font-size: 0.8rem;
+  display: inline-block;
+  margin-bottom: 0.5rem;
+}
+
+.menu-item-info .item-price {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--cosmic-text);
+  margin-bottom: 0.5rem;
+}
+
+.menu-item-info .item-availability {
+  font-size: 0.85rem;
+  margin-bottom: 1rem;
+}
+
+.menu-item-info .available {
+  color: #28a745;
+  font-weight: 600;
+}
+
+.menu-item-info .unavailable {
+  color: #dc3545;
+  font-weight: 600;
+}
+
+/* Delete Button */
+.delete-button {
+  margin-top: 1rem;
+  width: 100%;
+  background: linear-gradient(135deg, #dc3545 0%, #ff4757 100%) !important;
+  border: 2px solid #dc3545 !important;
+  padding: 1rem !important;
+  border-radius: 12px !important;
+  color: white !important;
+  font-weight: 700 !important;
+  font-size: 1rem !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.5px !important;
+  transition: all var(--transition-speed) !important;
+  box-shadow: 0 4px 15px rgba(220, 53, 69, 0.3) !important;
+  position: relative !important;
+  overflow: hidden !important;
+}
+
+.delete-button::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transition: left 0.5s;
+}
+
+.delete-button:hover::before {
+  left: 100%;
+}
+
+.delete-button:hover {
+  transform: translateY(-3px) !important;
+  box-shadow: 0 8px 25px rgba(220, 53, 69, 0.5) !important;
+  background: linear-gradient(135deg, #c82333 0%, #e74c3c 100%) !important;
+  border-color: #c82333 !important;
+}
+
+.delete-button:active {
+  transform: translateY(-1px) !important;
+}
+
+.delete-button:disabled {
+  opacity: 0.7 !important;
+  cursor: not-allowed !important;
+  transform: none !important;
+}
+
+/* Delete Modal */
+.delete-modal {
+  background: var(--cosmic-card-bg);
+  border: 1px solid var(--cosmic-border);
+}
+
+.delete-modal .modal-content {
+  background: var(--cosmic-card-bg);
+  border: none;
+  border-radius: 12px;
+}
+
+.delete-modal .modal-header {
+  border-bottom: 1px solid var(--cosmic-border);
+}
+
+.delete-modal .modal-title {
+  color: var(--cosmic-text);
+  font-weight: 600;
+}
+
+.delete-modal .modal-body {
+  color: var(--cosmic-text);
+  padding: 1.5rem;
+}
+
+.delete-modal .modal-footer {
+  border-top: 1px solid var(--cosmic-border);
+  padding: 1rem;
+}
+
+/* Loading State */
+.loading-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background: var(--cosmic-bg);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .delete-menu-container {
+    padding: 1rem;
+  }
+
+  .menu-items-grid {
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  }
+
+  .delete-menu-header h2 {
+    font-size: 1.5rem;
+  }
+
+  .no-items-message {
+    padding: 2rem;
+  }
+} 

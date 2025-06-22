@@ -1,0 +1,9 @@
+{
+  "short_name": "HRMS",
+  "name": "Hotel & Restaurant Management System",
+  "icons": [],
+  "start_url": ".",
+  "display": "standalone",
+  "theme_color": "#0A192F",
+  "background_color": "#0A192F"
+}
