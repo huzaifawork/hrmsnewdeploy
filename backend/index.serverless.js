@@ -178,6 +178,23 @@ app.get('/api/simple-test', (req, res) => {
   });
 });
 
+// Debug endpoint to check connection string
+app.get('/api/debug/connection', (req, res) => {
+  const mongo_url = process.env.Mongo_Conn || process.env.MONGO_URI || "mongodb+srv://mhuzaifatariq7:zqdaRL05TfaNgD8x@cluster0.kyswp.mongodb.net/hrms?retryWrites=true&w=majority";
+
+  res.json({
+    success: true,
+    debug: {
+      hasMongoConn: !!process.env.Mongo_Conn,
+      hasMongoUri: !!process.env.MONGO_URI,
+      connectionPreview: mongo_url.substring(0, 50) + '...',
+      clusterCheck: mongo_url.includes('cluster0.kyswp') ? 'CORRECT' : 'WRONG',
+      environment: process.env.NODE_ENV
+    },
+    timestamp: new Date().toISOString()
+  });
+});
+
 // Create default admin endpoint
 app.post('/api/setup/admin', async (req, res) => {
   try {

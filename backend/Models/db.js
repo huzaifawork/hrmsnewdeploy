@@ -1,16 +1,11 @@
 const mongoose = require('mongoose');
 
-// Use environment variables or fallback to your actual connection string
-const mongo_url = process.env.Mongo_Conn ||
-                  process.env.MONGO_URI ||
-                  "mongodb+srv://mhuzaifatariq7:zqdaRL05TfaNgD8x@cluster0.kyswp.mongodb.net/hrms?retryWrites=true&w=majority";
+// HARDCODED CONNECTION STRING FOR IMMEDIATE FIX
+const mongo_url = "mongodb+srv://mhuzaifatariq7:zqdaRL05TfaNgD8x@cluster0.kyswp.mongodb.net/hrms?retryWrites=true&w=majority";
 
-if (!mongo_url) {
-    console.error('❌ No MongoDB connection string found');
-} else {
-    console.log('✅ MongoDB connection string found');
-    console.log('🔗 Using connection:', mongo_url.substring(0, 30) + '...');
-}
+console.log('✅ Using hardcoded MongoDB connection string');
+console.log('🔗 Connection URL:', mongo_url.substring(0, 50) + '...');
+console.log('🔍 Cluster:', mongo_url.includes('cluster0.kyswp') ? 'CORRECT' : 'WRONG');
 
 // Global connection state
 let isConnected = false;
@@ -26,16 +21,19 @@ const connectDB = async () => {
         const options = {
             useNewUrlParser: true,
             useUnifiedTopology: true,
-            serverSelectionTimeoutMS: 5000,
+            serverSelectionTimeoutMS: 10000, // Increased timeout
             socketTimeoutMS: 45000,
-            maxPoolSize: 10,
+            maxPoolSize: 5, // Reduced for serverless
             minPoolSize: 1,
             maxIdleTimeMS: 30000,
-            // Remove problematic options for serverless
-            bufferCommands: true, // Enable buffering for serverless
+            bufferCommands: true,
+            retryWrites: true,
+            w: 'majority'
         };
 
-        console.log('🔄 Connecting to MongoDB...');
+        console.log('🔄 Connecting to MongoDB with URL:', mongo_url.substring(0, 50) + '...');
+        console.log('🔄 Connection options:', JSON.stringify(options, null, 2));
+
         await mongoose.connect(mongo_url, options);
 
         isConnected = true;
