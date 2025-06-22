@@ -1,9 +1,11 @@
 const mongoose = require('mongoose');
 
-const mongo_url = process.env.Mongo_Conn || process.env.MONGO_URI;
+const mongo_url = process.env.Mongo_Conn || process.env.MONGO_URI || 'mongodb+srv://huzaifa:huzaifa123@cluster0.mongodb.net/hrms?retryWrites=true&w=majority';
 
 if (!mongo_url) {
     console.error('❌ No MongoDB connection string found in environment variables');
+} else {
+    console.log('✅ MongoDB connection string found');
 }
 
 // Global connection state
@@ -89,29 +91,3 @@ module.exports = {
     isConnected: () => isConnected,
     createDefaultAdmin
 };
-
-// Create default admin only when needed
-const createDefaultAdmin = async () => {
-    try {
-        const UserModel = require('./User');
-        const bcrypt = require('bcrypt');
-
-        const adminExists = await UserModel.findOne({ role: 'admin' });
-        if (!adminExists) {
-            const hashedPassword = await bcrypt.hash("admin123", 10);
-            const admin = new UserModel({
-                name: "Default Admin",
-                email: "admin@example.com",
-                password: hashedPassword,
-                role: "admin"
-            });
-            await admin.save();
-            console.log("✅ Default admin created: admin@example.com / admin123");
-        }
-    } catch (error) {
-        console.error("❌ Error creating default admin:", error);
-    }
-};
-
-// Export the connection function
-module.exports = { connectDB, createDefaultAdmin };
