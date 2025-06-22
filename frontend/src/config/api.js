@@ -1,6 +1,6 @@
 // API Configuration
-const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || 'http://localhost:8080/api';
-const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:8080';
+const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || 'https://hrms-bace.vercel.app/api';
+const API_URL = process.env.REACT_APP_API_URL || 'https://hrms-bace.vercel.app';
 
 export const apiConfig = {
   baseURL: API_BASE_URL,

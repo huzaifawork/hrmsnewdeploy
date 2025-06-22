@@ -110,7 +110,8 @@ const AdminRoomUpdate = () => {
   const getImageUrl = (imagePath) => {
     if (!imagePath) return "/images/placeholder-room.jpg";
     if (imagePath.startsWith('http')) return imagePath;
-    return `http://localhost:8080${imagePath}`;
+    const serverURL = process.env.REACT_APP_API_URL || 'https://hrms-bace.vercel.app';
+    return `${serverURL}${imagePath}`;
   };
 
   const handleSubmit = async (e) => {

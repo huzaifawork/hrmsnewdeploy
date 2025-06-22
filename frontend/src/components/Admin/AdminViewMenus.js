@@ -70,10 +70,11 @@ const AdminViewMenus = () => {
       }
       // If it's a local upload path
       const cleanPath = imagePath.replace(/^\/+/, '');
+      const serverURL = process.env.REACT_APP_API_URL || 'https://hrms-bace.vercel.app';
       if (cleanPath.includes('uploads')) {
-        return `http://localhost:8080/${cleanPath}`;
+        return `${serverURL}/${cleanPath}`;
       }
-      return `http://localhost:8080/uploads/${cleanPath}`;
+      return `${serverURL}/uploads/${cleanPath}`;
     } catch (error) {
       console.error('Error formatting image URL:', error);
       return '/images/placeholder-menu.jpg';
