@@ -55,6 +55,7 @@ try {
 // Import and register routes individually with error handling
 let routesLoaded = 0;
 let totalRoutes = 0;
+let routeErrors = [];
 
 // Helper function to safely load routes
 function safeLoadRoute(routePath, mountPath, routeName) {
@@ -66,6 +67,14 @@ function safeLoadRoute(routePath, mountPath, routeName) {
     console.log(`✅ ${routeName} loaded successfully at ${mountPath}`);
     return true;
   } catch (error) {
+    const errorInfo = {
+      routeName,
+      routePath,
+      mountPath,
+      error: error.message,
+      stack: error.stack
+    };
+    routeErrors.push(errorInfo);
     console.error(`❌ Failed to load ${routeName}:`, error.message);
     console.error(`   Route path: ${routePath}`);
     console.error(`   Mount path: ${mountPath}`);
@@ -114,6 +123,33 @@ app.get('/api/simple-test', (req, res) => {
   });
 });
 
+// Test file system access
+app.get('/api/debug/filesystem', (req, res) => {
+  const fs = require('fs');
+  const path = require('path');
+
+  try {
+    const routesDir = path.join(__dirname, 'Routes');
+    const files = fs.readdirSync(routesDir);
+
+    res.json({
+      success: true,
+      routesDirectory: routesDir,
+      filesFound: files,
+      testRouteExists: files.includes('testRoutes.js'),
+      menuRouteExists: files.includes('menuRoutes.js'),
+      timestamp: new Date().toISOString()
+    });
+  } catch (error) {
+    res.json({
+      success: false,
+      error: error.message,
+      __dirname,
+      timestamp: new Date().toISOString()
+    });
+  }
+});
+
 // System info endpoint
 app.get('/api/info', (req, res) => {
   res.status(200).json({
@@ -125,6 +161,17 @@ app.get('/api/info', (req, res) => {
       environment: process.env.NODE_ENV || 'production',
       timestamp: new Date().toISOString()
     }
+  });
+});
+
+// Route errors endpoint
+app.get('/api/debug/errors', (req, res) => {
+  res.status(200).json({
+    success: true,
+    routesLoaded,
+    totalRoutes,
+    errors: routeErrors,
+    timestamp: new Date().toISOString()
   });
 });
 
