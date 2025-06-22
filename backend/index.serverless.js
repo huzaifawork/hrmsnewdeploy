@@ -17,10 +17,11 @@ process.on('unhandledRejection', (reason, promise) => {
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 
-// CORS Setup for Vercel
+// CORS Setup for Vercel - Allow your specific frontend URL
 const corsOptions = {
   origin: [
     "http://localhost:3000",
+    "https://hrms-frontend-swart.vercel.app",
     /\.vercel\.app$/,
     /\.localhost$/
   ],

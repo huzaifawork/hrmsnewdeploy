@@ -82,7 +82,8 @@ const ReserveTable = () => {
     // Check availability for specific date/time
     if (reservationData.date && reservationData.time && filters.availability) {
       try {
-        const response = await axios.get(`http://localhost:8080/api/tables/availability`, {
+        const apiUrl = process.env.REACT_APP_API_BASE_URL || 'https://hrms-bace.vercel.app/api';
+        const response = await axios.get(`${apiUrl}/tables/availability`, {
           params: {
             reservationDate: reservationData.date,
             time: reservationData.time,
@@ -113,7 +114,8 @@ const ReserveTable = () => {
 
   const fetchTables = async () => {
     try {
-      const response = await axios.get("http://localhost:8080/api/tables");
+      const apiUrl = process.env.REACT_APP_API_BASE_URL || 'https://hrms-bace.vercel.app/api';
+      const response = await axios.get(`${apiUrl}/tables`);
       setTables(response.data);
     } catch (error) {
       setError("Failed to load tables. Please try again later.");
@@ -198,7 +200,8 @@ const ReserveTable = () => {
 
     // Check for double booking
     try {
-      const response = await axios.get(`http://localhost:8080/api/tables/availability`, {
+      const apiUrl = process.env.REACT_APP_API_BASE_URL || 'https://hrms-bace.vercel.app/api';
+      const response = await axios.get(`${apiUrl}/tables/availability`, {
         params: {
           reservationDate: reservationData.date,
           time: reservationData.time,

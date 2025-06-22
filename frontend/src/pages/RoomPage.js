@@ -81,7 +81,8 @@ const RoomPage = () => {
   useEffect(() => {
     const fetchRooms = async () => {
       try {
-        const response = await axios.get('http://localhost:8080/api/rooms');
+        const apiUrl = process.env.REACT_APP_API_BASE_URL || 'https://hrms-bace.vercel.app/api';
+        const response = await axios.get(`${apiUrl}/rooms`);
         setRooms(response.data);
       } catch (error) {
         setError('Failed to load rooms. Please try again.');
@@ -98,7 +99,8 @@ const RoomPage = () => {
   useEffect(() => {
     const fetchPopularRooms = async () => {
       try {
-        const response = await axios.get('http://localhost:8080/api/rooms/popular?count=6');
+        const apiUrl = process.env.REACT_APP_API_BASE_URL || 'https://hrms-bace.vercel.app/api';
+        const response = await axios.get(`${apiUrl}/rooms/popular?count=6`);
         if (response.data.success) {
           setPopularRooms(response.data.popularRooms);
         }
@@ -117,8 +119,9 @@ const RoomPage = () => {
 
       setRecommendationsLoading(true);
       try {
+        const apiUrl = process.env.REACT_APP_API_BASE_URL || 'https://hrms-bace.vercel.app/api';
         const response = await axios.get(
-          `http://localhost:8080/api/rooms/recommendations/${user.id}?count=8`,
+          `${apiUrl}/rooms/recommendations/${user.id}?count=8`,
           {
             headers: { Authorization: `Bearer ${user.token}` }
           }
@@ -143,8 +146,9 @@ const RoomPage = () => {
     if (!user?.id || !user?.token) return;
 
     try {
+      const apiUrl = process.env.REACT_APP_API_BASE_URL || 'https://hrms-bace.vercel.app/api';
       await axios.post(
-        'http://localhost:8080/api/rooms/interactions',
+        `${apiUrl}/rooms/interactions`,
         {
           userId: user.id,
           roomId,
