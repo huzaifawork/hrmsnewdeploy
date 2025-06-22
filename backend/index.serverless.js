@@ -59,6 +59,8 @@ const initializeDatabase = async () => {
   try {
     require("dotenv").config();
     console.log('✅ Environment variables loaded');
+    console.log('🔍 Mongo_Conn:', process.env.Mongo_Conn ? 'Found' : 'Not found');
+    console.log('🔍 MONGO_URI:', process.env.MONGO_URI ? 'Found' : 'Not found');
 
     if (process.env.MONGO_URI || process.env.Mongo_Conn) {
       const { connectDB } = require("./Models/db");

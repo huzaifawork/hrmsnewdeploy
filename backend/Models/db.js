@@ -1,11 +1,15 @@
 const mongoose = require('mongoose');
 
-const mongo_url = process.env.Mongo_Conn || process.env.MONGO_URI || 'mongodb+srv://huzaifa:huzaifa123@cluster0.mongodb.net/hrms?retryWrites=true&w=majority';
+// Use environment variables or fallback to your actual connection string
+const mongo_url = process.env.Mongo_Conn ||
+                  process.env.MONGO_URI ||
+                  "mongodb+srv://mhuzaifatariq7:zqdaRL05TfaNgD8x@cluster0.kyswp.mongodb.net/hrms?retryWrites=true&w=majority";
 
 if (!mongo_url) {
-    console.error('❌ No MongoDB connection string found in environment variables');
+    console.error('❌ No MongoDB connection string found');
 } else {
     console.log('✅ MongoDB connection string found');
+    console.log('🔗 Using connection:', mongo_url.substring(0, 30) + '...');
 }
 
 // Global connection state
