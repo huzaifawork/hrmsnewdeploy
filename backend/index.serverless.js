@@ -4,6 +4,15 @@ const cors = require("cors");
 // Initialize express app first
 const app = express();
 
+// Error handling for the entire app
+process.on('uncaughtException', (error) => {
+  console.error('Uncaught Exception:', error);
+});
+
+process.on('unhandledRejection', (reason, promise) => {
+  console.error('Unhandled Rejection at:', promise, 'reason:', reason);
+});
+
 // Basic middleware setup
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true, limit: '10mb' }));
@@ -43,22 +52,30 @@ app.get('/api/status', (req, res) => {
 
 // Initialize database connection (with error handling)
 let dbConnected = false;
-try {
-  require("dotenv").config();
-  console.log('Environment variables loaded');
+let dbError = null;
 
-  // Only try to connect to database if we have connection string
-  if (process.env.MONGO_URI || process.env.Mongo_Conn) {
-    require("./Models/db");
-    dbConnected = true;
-    console.log('Database connection initialized');
-  } else {
-    console.warn('No database connection string found');
+const initializeDatabase = async () => {
+  try {
+    require("dotenv").config();
+    console.log('✅ Environment variables loaded');
+
+    if (process.env.MONGO_URI || process.env.Mongo_Conn) {
+      const { connectDB } = require("./Models/db");
+      await connectDB();
+      dbConnected = true;
+      console.log('✅ Database connection initialized');
+    } else {
+      console.warn('⚠️ No database connection string found');
+    }
+  } catch (error) {
+    console.error("❌ Database connection error:", error);
+    dbError = error.message;
+    // Don't crash, just continue without database
   }
-} catch (error) {
-  console.error("Database connection error:", error);
-  // Don't crash, just continue without database
-}
+};
+
+// Initialize database
+initializeDatabase();
 
 // Import and register routes individually with error handling
 let routesLoaded = 0;
@@ -68,11 +85,16 @@ let routeErrors = [];
 // Helper function to safely load routes
 function safeLoadRoute(routePath, mountPath, routeName) {
   try {
-    console.log(`🔄 Attempting to load ${routeName} from ${routePath}...`);
+    console.log(`🔄 Loading ${routeName}...`);
     const route = require(routePath);
+
+    if (!route) {
+      throw new Error(`Route module is undefined`);
+    }
+
     app.use(mountPath, route);
     routesLoaded++;
-    console.log(`✅ ${routeName} loaded successfully at ${mountPath}`);
+    console.log(`✅ ${routeName} loaded at ${mountPath}`);
     return true;
   } catch (error) {
     const errorInfo = {
@@ -80,55 +102,52 @@ function safeLoadRoute(routePath, mountPath, routeName) {
       routePath,
       mountPath,
       error: error.message,
-      stack: error.stack
+      timestamp: new Date().toISOString()
     };
     routeErrors.push(errorInfo);
-    console.error(`❌ Failed to load ${routeName}:`, error.message);
-    console.error(`   Route path: ${routePath}`);
-    console.error(`   Mount path: ${mountPath}`);
-    console.error(`   Error stack:`, error.stack);
+    console.error(`❌ ${routeName} failed: ${error.message}`);
     return false;
   }
 }
 
-// Load core routes first
-console.log('🔄 Loading routes...');
+// Load routes systematically
+console.log('🔄 Loading HRMS routes...');
 
-try {
-  // Test route first (simplest)
-  safeLoadRoute("./Routes/testRoutes", "/api/test-routes", "Test Routes");
+// Core business routes (most important)
+const coreRoutes = [
+  ["./Routes/AuthRouter", "/auth", "Authentication"],
+  ["./Routes/menuRoutes", "/api/menus", "Menu Management"],
+  ["./Routes/roomRoutes", "/api/rooms", "Room Management"],
+  ["./Routes/tableRoutes", "/api/tables", "Table Management"],
+  ["./Routes/orderRoutes", "/api/orders", "Order Management"],
+  ["./Routes/bookingRoutes", "/api/bookings", "Room Bookings"],
+  ["./Routes/ReservationRoutes", "/api/reservations", "Table Reservations"],
+  ["./Routes/UserRoutes", "/api/user", "User Management"],
+];
 
-  // Essential routes
-  safeLoadRoute("./Routes/menuRoutes", "/api/menus", "Menu Routes");
-  safeLoadRoute("./Routes/roomRoutes", "/api/rooms", "Room Routes");
-  safeLoadRoute("./Routes/tableRoutes", "/api/tables", "Table Routes");
-  safeLoadRoute("./Routes/orderRoutes", "/api/orders", "Order Routes");
-  safeLoadRoute("./Routes/bookingRoutes", "/api/bookings", "Booking Routes");
-  safeLoadRoute("./Routes/AuthRouter", "/auth", "Auth Routes");
-} catch (error) {
-  console.error('Critical error loading core routes:', error);
-}
+// Load core routes
+coreRoutes.forEach(([path, mount, name]) => {
+  safeLoadRoute(path, mount, name);
+});
 
-try {
-  // Additional routes
-  safeLoadRoute("./Routes/PicRoutes", "/api/files", "File Routes");
-  safeLoadRoute("./Routes/staffRoutes", "/api/staff", "Staff Routes");
-  safeLoadRoute("./Routes/shiftroutes", "/api/shift", "Shift Routes");
-  safeLoadRoute("./Routes/ProductRouter", "/api/products", "Product Routes");
-  safeLoadRoute("./Routes/GoogleRoutes", "/auth/google", "Google Auth Routes");
-  safeLoadRoute("./Routes/ReservationRoutes", "/api/reservations", "Reservation Routes");
-  safeLoadRoute("./Routes/ReservationRoutes", "/api/table-reservations", "Table Reservation Routes");
-  safeLoadRoute("./Routes/UserRoutes", "/api/user", "User Routes");
-  safeLoadRoute("./Routes/feedbackRoutes", "/api/feedback", "Feedback Routes");
-  safeLoadRoute("./Routes/AdminRoutes", "/api/admin", "Admin Routes");
-  safeLoadRoute("./Routes/paymentRoutes", "/api/payment", "Payment Routes");
-  safeLoadRoute("./Routes/recommendationRoutes", "/api/food-recommendations", "Food Recommendation Routes");
-} catch (error) {
-  console.error('Error loading additional routes:', error);
-}
+// Additional feature routes
+const additionalRoutes = [
+  ["./Routes/AdminRoutes", "/api/admin", "Admin Panel"],
+  ["./Routes/feedbackRoutes", "/api/feedback", "Feedback System"],
+  ["./Routes/staffRoutes", "/api/staff", "Staff Management"],
+  ["./Routes/paymentRoutes", "/api/payment", "Payment Processing"],
+  ["./Routes/recommendationRoutes", "/api/food-recommendations", "Food Recommendations"],
+  ["./Routes/GoogleRoutes", "/auth/google", "Google Authentication"],
+  ["./Routes/PicRoutes", "/api/files", "File Upload"],
+];
 
-totalRoutes = 18;
-console.log(`📊 Routes loaded: ${routesLoaded}/${totalRoutes}`);
+// Load additional routes
+additionalRoutes.forEach(([path, mount, name]) => {
+  safeLoadRoute(path, mount, name);
+});
+
+totalRoutes = coreRoutes.length + additionalRoutes.length;
+console.log(`📊 HRMS Routes: ${routesLoaded}/${totalRoutes} loaded successfully`);
 
 // Add a simple test route to verify routing works
 app.get('/api/simple-test', (req, res) => {
@@ -171,9 +190,18 @@ app.get('/api/info', (req, res) => {
   res.status(200).json({
     success: true,
     system: {
-      database: dbConnected ? 'connected' : 'disconnected',
-      routes: `${routesLoaded}/${totalRoutes} loaded`,
-      routesWorking: routesLoaded > 0,
+      name: "HRMS Backend API",
+      version: "1.0.0",
+      database: {
+        status: dbConnected ? 'connected' : 'disconnected',
+        error: dbError || null
+      },
+      routes: {
+        loaded: routesLoaded,
+        total: totalRoutes,
+        percentage: Math.round((routesLoaded / totalRoutes) * 100),
+        working: routesLoaded > 0
+      },
       environment: process.env.NODE_ENV || 'production',
       timestamp: new Date().toISOString()
     }
@@ -326,22 +354,39 @@ app.get('/api/test-rooms', async (req, res) => {
   }
 });
 
-// Error handling middleware
+// Global error handling middleware
 app.use((error, req, res, next) => {
-  console.error('Unhandled error:', error);
+  console.error('🚨 Unhandled error:', error);
+
+  // Don't expose internal errors in production
+  const isDev = process.env.NODE_ENV === 'development';
+
   res.status(500).json({
     success: false,
     message: 'Internal server error',
-    error: process.env.NODE_ENV === 'development' ? error.message : 'Something went wrong'
+    error: isDev ? error.message : 'Something went wrong',
+    timestamp: new Date().toISOString(),
+    ...(isDev && { stack: error.stack })
   });
 });
 
-// 404 handler
+// 404 handler for undefined routes
 app.use('*', (req, res) => {
   res.status(404).json({
     success: false,
-    message: 'Route not found',
-    path: req.originalUrl
+    message: 'API endpoint not found',
+    path: req.originalUrl,
+    method: req.method,
+    availableEndpoints: [
+      '/api/health',
+      '/api/info',
+      '/api/menus',
+      '/api/rooms',
+      '/api/orders',
+      '/auth/login',
+      '/auth/signup'
+    ],
+    timestamp: new Date().toISOString()
   });
 });
 

@@ -1,15 +1,17 @@
 const mongoose = require('mongoose');
-const UserModel = require('./User');
-const bcrypt = require('bcrypt');
 
 const mongo_url = process.env.Mongo_Conn || process.env.MONGO_URI;
 
-// Serverless-optimized MongoDB connection
+if (!mongo_url) {
+    console.error('❌ No MongoDB connection string found in environment variables');
+    process.exit(1);
+}
+
+// Optimized connection for serverless
 const connectDB = async () => {
     try {
         if (mongoose.connection.readyState === 1) {
-            console.log("MongoDB already connected");
-            return;
+            return mongoose.connection;
         }
 
         const options = {
@@ -17,40 +19,47 @@ const connectDB = async () => {
             bufferMaxEntries: 0,
             useNewUrlParser: true,
             useUnifiedTopology: true,
-            serverSelectionTimeoutMS: 5000, // Timeout after 5s instead of 30s
-            socketTimeoutMS: 45000, // Close sockets after 45s of inactivity
-            maxPoolSize: 10, // Maintain up to 10 socket connections
-            minPoolSize: 1, // Maintain at least 1 socket connection
-            maxIdleTimeMS: 30000, // Close connections after 30s of inactivity
+            serverSelectionTimeoutMS: 5000,
+            socketTimeoutMS: 45000,
+            maxPoolSize: 10,
+            minPoolSize: 1,
+            maxIdleTimeMS: 30000,
         };
 
-        await mongoose.connect(mongo_url, options);
+        const connection = await mongoose.connect(mongo_url, options);
         console.log("✅ Connected to MongoDB");
-
-        // Only create admin in development or first run
-        if (process.env.NODE_ENV !== 'production') {
-            createDefaultAdmin();
-        }
+        return connection;
     } catch (err) {
         console.error("❌ MongoDB Connection error:", err);
         throw err;
     }
 };
 
-// Connect immediately
-connectDB();
+// Initialize connection
+connectDB().catch(console.error);
 
+// Create default admin only when needed
 const createDefaultAdmin = async () => {
-    const adminExists = await UserModel.findOne({ role: 'admin' });
-    if (!adminExists) {
-        const hashedPassword = await bcrypt.hash("admin123", 10);
-        const admin = new UserModel({
-            name: "Default Admin",
-            email: "admin@example.com",
-            password: hashedPassword,
-            role: "admin"
-        });
-        await admin.save();
-        console.log("Default admin account created with email: admin@example.com and password: admin123");
+    try {
+        const UserModel = require('./User');
+        const bcrypt = require('bcrypt');
+
+        const adminExists = await UserModel.findOne({ role: 'admin' });
+        if (!adminExists) {
+            const hashedPassword = await bcrypt.hash("admin123", 10);
+            const admin = new UserModel({
+                name: "Default Admin",
+                email: "admin@example.com",
+                password: hashedPassword,
+                role: "admin"
+            });
+            await admin.save();
+            console.log("✅ Default admin created: admin@example.com / admin123");
+        }
+    } catch (error) {
+        console.error("❌ Error creating default admin:", error);
     }
 };
+
+// Export the connection function
+module.exports = { connectDB, createDefaultAdmin };
