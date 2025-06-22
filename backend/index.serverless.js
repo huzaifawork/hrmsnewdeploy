@@ -59,19 +59,26 @@ let totalRoutes = 0;
 // Helper function to safely load routes
 function safeLoadRoute(routePath, mountPath, routeName) {
   try {
+    console.log(`🔄 Attempting to load ${routeName} from ${routePath}...`);
     const route = require(routePath);
     app.use(mountPath, route);
     routesLoaded++;
-    console.log(`✅ ${routeName} loaded successfully`);
+    console.log(`✅ ${routeName} loaded successfully at ${mountPath}`);
     return true;
   } catch (error) {
     console.error(`❌ Failed to load ${routeName}:`, error.message);
+    console.error(`   Route path: ${routePath}`);
+    console.error(`   Mount path: ${mountPath}`);
+    console.error(`   Error stack:`, error.stack);
     return false;
   }
 }
 
 // Load core routes first
 console.log('🔄 Loading routes...');
+
+// Test route first (simplest)
+safeLoadRoute("./Routes/testRoutes", "/api/test-routes", "Test Routes");
 
 // Essential routes
 safeLoadRoute("./Routes/menuRoutes", "/api/menus", "Menu Routes");
@@ -95,7 +102,7 @@ safeLoadRoute("./Routes/AdminRoutes", "/api/admin", "Admin Routes");
 safeLoadRoute("./Routes/paymentRoutes", "/api/payment", "Payment Routes");
 safeLoadRoute("./Routes/recommendationRoutes", "/api/food-recommendations", "Food Recommendation Routes");
 
-totalRoutes = 17;
+totalRoutes = 18;
 console.log(`📊 Routes loaded: ${routesLoaded}/${totalRoutes}`);
 
 // Add a simple test route to verify routing works
