@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import {
   FiHome,
   FiClock,
@@ -29,9 +29,9 @@ const MyBookings = () => {
 
   useEffect(() => {
     fetchBookings();
-  }, []);
+  }, [fetchBookings]);
 
-  const fetchBookings = async () => {
+  const fetchBookings = useCallback(async () => {
     try {
       setLoading(true);
       setError(null);
@@ -42,7 +42,8 @@ const MyBookings = () => {
         return;
       }
 
-      const response = await axios.get("http://localhost:8080/api/bookings/user", {
+      const apiUrl = process.env.REACT_APP_API_BASE_URL || 'https://hrms-bace.vercel.app/api';
+      const response = await axios.get(`${apiUrl}/bookings/user`, {
         headers: { Authorization: `Bearer ${token}` }
       });
 
@@ -104,7 +105,7 @@ const MyBookings = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [navigate]);
 
   const isUpcoming = (checkIn) => {
     return new Date(checkIn) >= new Date();

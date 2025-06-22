@@ -3,7 +3,6 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import { FiSearch, FiShoppingCart } from "react-icons/fi";
 import PersonalizedRecommendations from '../components/recommendations/PersonalizedRecommendations';
-import RecommendationCard from '../components/recommendations/RecommendationCard';
 import { recommendationAPI, recommendationHelpers } from '../api/recommendations';
 import Header from "../components/common/Header";
 import '../styles/simple-theme.css';

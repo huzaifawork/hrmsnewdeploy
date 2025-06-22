@@ -78,7 +78,7 @@ const Profile = () => {
       avgPartySize: 0
     }
   });
-  const [recentActivity, setRecentActivity] = useState({
+  const [, setRecentActivity] = useState({
     bookings: [],
     orders: [],
     reservations: []
