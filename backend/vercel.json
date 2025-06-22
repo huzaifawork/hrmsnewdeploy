@@ -3,7 +3,7 @@
   "name": "hrms-backend",
   "builds": [
     {
-      "src": "index.serverless.js",
+      "src": "minimal.js",
       "use": "@vercel/node",
       "config": {
         "maxLambdaSize": "50mb",
@@ -14,7 +14,7 @@
   "routes": [
     {
       "src": "/(.*)",
-      "dest": "/index.serverless.js"
+      "dest": "/minimal.js"
     }
   ]
 }

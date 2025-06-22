@@ -45,11 +45,19 @@ app.get('/api/status', (req, res) => {
 let dbConnected = false;
 try {
   require("dotenv").config();
-  require("./Models/db");
-  dbConnected = true;
-  console.log('Database connection initialized');
+  console.log('Environment variables loaded');
+
+  // Only try to connect to database if we have connection string
+  if (process.env.MONGO_URI || process.env.Mongo_Conn) {
+    require("./Models/db");
+    dbConnected = true;
+    console.log('Database connection initialized');
+  } else {
+    console.warn('No database connection string found');
+  }
 } catch (error) {
   console.error("Database connection error:", error);
+  // Don't crash, just continue without database
 }
 
 // Import and register routes individually with error handling
@@ -86,30 +94,38 @@ function safeLoadRoute(routePath, mountPath, routeName) {
 // Load core routes first
 console.log('🔄 Loading routes...');
 
-// Test route first (simplest)
-safeLoadRoute("./Routes/testRoutes", "/api/test-routes", "Test Routes");
+try {
+  // Test route first (simplest)
+  safeLoadRoute("./Routes/testRoutes", "/api/test-routes", "Test Routes");
 
-// Essential routes
-safeLoadRoute("./Routes/menuRoutes", "/api/menus", "Menu Routes");
-safeLoadRoute("./Routes/roomRoutes", "/api/rooms", "Room Routes");
-safeLoadRoute("./Routes/tableRoutes", "/api/tables", "Table Routes");
-safeLoadRoute("./Routes/orderRoutes", "/api/orders", "Order Routes");
-safeLoadRoute("./Routes/bookingRoutes", "/api/bookings", "Booking Routes");
-safeLoadRoute("./Routes/AuthRouter", "/auth", "Auth Routes");
+  // Essential routes
+  safeLoadRoute("./Routes/menuRoutes", "/api/menus", "Menu Routes");
+  safeLoadRoute("./Routes/roomRoutes", "/api/rooms", "Room Routes");
+  safeLoadRoute("./Routes/tableRoutes", "/api/tables", "Table Routes");
+  safeLoadRoute("./Routes/orderRoutes", "/api/orders", "Order Routes");
+  safeLoadRoute("./Routes/bookingRoutes", "/api/bookings", "Booking Routes");
+  safeLoadRoute("./Routes/AuthRouter", "/auth", "Auth Routes");
+} catch (error) {
+  console.error('Critical error loading core routes:', error);
+}
 
-// Additional routes
-safeLoadRoute("./Routes/PicRoutes", "/api/files", "File Routes");
-safeLoadRoute("./Routes/staffRoutes", "/api/staff", "Staff Routes");
-safeLoadRoute("./Routes/shiftroutes", "/api/shift", "Shift Routes");
-safeLoadRoute("./Routes/ProductRouter", "/api/products", "Product Routes");
-safeLoadRoute("./Routes/GoogleRoutes", "/auth/google", "Google Auth Routes");
-safeLoadRoute("./Routes/ReservationRoutes", "/api/reservations", "Reservation Routes");
-safeLoadRoute("./Routes/ReservationRoutes", "/api/table-reservations", "Table Reservation Routes");
-safeLoadRoute("./Routes/UserRoutes", "/api/user", "User Routes");
-safeLoadRoute("./Routes/feedbackRoutes", "/api/feedback", "Feedback Routes");
-safeLoadRoute("./Routes/AdminRoutes", "/api/admin", "Admin Routes");
-safeLoadRoute("./Routes/paymentRoutes", "/api/payment", "Payment Routes");
-safeLoadRoute("./Routes/recommendationRoutes", "/api/food-recommendations", "Food Recommendation Routes");
+try {
+  // Additional routes
+  safeLoadRoute("./Routes/PicRoutes", "/api/files", "File Routes");
+  safeLoadRoute("./Routes/staffRoutes", "/api/staff", "Staff Routes");
+  safeLoadRoute("./Routes/shiftroutes", "/api/shift", "Shift Routes");
+  safeLoadRoute("./Routes/ProductRouter", "/api/products", "Product Routes");
+  safeLoadRoute("./Routes/GoogleRoutes", "/auth/google", "Google Auth Routes");
+  safeLoadRoute("./Routes/ReservationRoutes", "/api/reservations", "Reservation Routes");
+  safeLoadRoute("./Routes/ReservationRoutes", "/api/table-reservations", "Table Reservation Routes");
+  safeLoadRoute("./Routes/UserRoutes", "/api/user", "User Routes");
+  safeLoadRoute("./Routes/feedbackRoutes", "/api/feedback", "Feedback Routes");
+  safeLoadRoute("./Routes/AdminRoutes", "/api/admin", "Admin Routes");
+  safeLoadRoute("./Routes/paymentRoutes", "/api/payment", "Payment Routes");
+  safeLoadRoute("./Routes/recommendationRoutes", "/api/food-recommendations", "Food Recommendation Routes");
+} catch (error) {
+  console.error('Error loading additional routes:', error);
+}
 
 totalRoutes = 18;
 console.log(`📊 Routes loaded: ${routesLoaded}/${totalRoutes}`);
