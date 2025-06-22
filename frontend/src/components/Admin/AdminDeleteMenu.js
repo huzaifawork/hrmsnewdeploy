@@ -86,7 +86,8 @@ const AdminDeleteMenu = () => {
 
       console.log("Deleting menu item:", selectedItem._id);
 
-      const response = await axios.delete(`http://localhost:8080/api/menus/${selectedItem._id}`, {
+      const apiUrl = process.env.REACT_APP_API_BASE_URL || 'https://hrms-bace.vercel.app/api';
+      const response = await axios.delete(`${apiUrl}/menus/${selectedItem._id}`, {
         headers: {
           Authorization: `Bearer ${token}`,
           "Content-Type": "application/json"
@@ -147,7 +148,7 @@ const AdminDeleteMenu = () => {
                     item.image
                       ? (item.image.startsWith('http://') || item.image.startsWith('https://'))
                         ? item.image
-                        : `http://localhost:8080${item.image}`
+                        : `${process.env.REACT_APP_API_URL || 'https://hrms-bace.vercel.app'}${item.image}`
                       : "/placeholder-food.jpg"
                   }
                   alt={item.name}

@@ -28,7 +28,8 @@ const AdminUpdateTable = () => {
 
   const fetchTables = async () => {
     try {
-      const response = await axios.get("http://localhost:8080/api/tables");
+      const apiUrl = process.env.REACT_APP_API_BASE_URL || 'https://hrms-bace.vercel.app/api';
+      const response = await axios.get(`${apiUrl}/tables`);
       setTables(response.data);
     } catch (error) {
       console.error("Error fetching tables:", error);
@@ -69,13 +70,14 @@ const AdminUpdateTable = () => {
 
     try {
       const token = localStorage.getItem("token");
+      const apiUrl = process.env.REACT_APP_API_BASE_URL || 'https://hrms-bace.vercel.app/api';
       const response = await axios.put(
-        `http://localhost:8080/api/tables/${selectedTable._id}`,
+        `${apiUrl}/tables/${selectedTable._id}`,
         data,
         {
-          headers: { 
+          headers: {
             Authorization: `Bearer ${token}`,
-            "Content-Type": "multipart/form-data" 
+            "Content-Type": "multipart/form-data"
           },
         }
       );

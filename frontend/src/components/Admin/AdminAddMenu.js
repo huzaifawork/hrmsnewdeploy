@@ -86,8 +86,9 @@ const AdminAddMenu = () => {
     setLoading(true);
     try {
       const token = localStorage.getItem("token");
+      const apiUrl = process.env.REACT_APP_API_BASE_URL || 'https://hrms-bace.vercel.app/api';
       await axios.post(
-        "http://localhost:8080/api/menus",
+        `${apiUrl}/menus`,
         submitData,
         {
           headers: {

@@ -26,10 +26,11 @@ const MenuManagement = () => {
   const fetchMenuItems = async () => {
     setLoading(true);
     try {
+      const apiUrl = process.env.REACT_APP_API_BASE_URL || 'https://hrms-bace.vercel.app/api';
       const url = selectedCategory === "all"
-        ? "http://localhost:8080/api/menus"
-        : `http://localhost:8080/api/menus/category/${selectedCategory}`;
-      
+        ? `${apiUrl}/menus`
+        : `${apiUrl}/menus/category/${selectedCategory}`;
+
       const response = await axios.get(url);
       setMenuItems(response.data);
     } catch (error) {
@@ -117,7 +118,8 @@ const MenuManagement = () => {
         formData.append("image", image);
       }
 
-      const response = await axios.put(`http://localhost:8080/api/menus/${id}`, formData, {
+      const apiUrl = process.env.REACT_APP_API_BASE_URL || 'https://hrms-bace.vercel.app/api';
+      const response = await axios.put(`${apiUrl}/menus/${id}`, formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
@@ -139,7 +141,8 @@ const MenuManagement = () => {
     if (window.confirm("Are you sure you want to delete this menu item?")) {
       setLoading(true);
       try {
-        await axios.delete(`http://localhost:8080/api/menus/${id}`);
+        const apiUrl = process.env.REACT_APP_API_BASE_URL || 'https://hrms-bace.vercel.app/api';
+        await axios.delete(`${apiUrl}/menus/${id}`);
         setMenuItems(menuItems.filter(item => item._id !== id));
         toast.success("Menu item deleted successfully");
       } catch (error) {
@@ -152,7 +155,8 @@ const MenuManagement = () => {
 
   const handleAvailabilityToggle = async (id, currentStatus) => {
     try {
-      const response = await axios.patch(`http://localhost:8080/api/menus/${id}/toggle-availability`);
+      const apiUrl = process.env.REACT_APP_API_BASE_URL || 'https://hrms-bace.vercel.app/api';
+      const response = await axios.patch(`${apiUrl}/menus/${id}/toggle-availability`);
       setMenuItems(menuItems.map(item => item._id === id ? response.data : item));
       toast.success("Availability updated successfully");
     } catch (error) {
@@ -163,7 +167,8 @@ const MenuManagement = () => {
   const getImageUrl = (imagePath) => {
     if (!imagePath) return "https://via.placeholder.com/150";
     if (imagePath.startsWith("http")) return imagePath;
-    return `http://localhost:8080${imagePath}`;
+    const serverURL = process.env.REACT_APP_API_URL || 'https://hrms-bace.vercel.app';
+    return `${serverURL}${imagePath}`;
   };
 
   return (

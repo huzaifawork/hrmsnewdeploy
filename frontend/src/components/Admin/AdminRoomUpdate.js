@@ -46,7 +46,8 @@ const AdminRoomUpdate = () => {
   const fetchRooms = async () => {
     try {
       setLoading(true);
-      const response = await axios.get("http://localhost:8080/api/rooms", {
+      const apiUrl = process.env.REACT_APP_API_BASE_URL || 'https://hrms-bace.vercel.app/api';
+      const response = await axios.get(`${apiUrl}/rooms`, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
@@ -137,7 +138,8 @@ const AdminRoomUpdate = () => {
     }
 
     try {
-      await axios.put(`http://localhost:8080/api/rooms/${selectedRoom._id}`, data, {
+      const apiUrl = process.env.REACT_APP_API_BASE_URL || 'https://hrms-bace.vercel.app/api';
+      await axios.put(`${apiUrl}/rooms/${selectedRoom._id}`, data, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
           "Content-Type": "multipart/form-data",

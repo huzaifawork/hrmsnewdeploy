@@ -69,7 +69,8 @@ const RoomRecommendationAnalytics = () => {
 
   const fetchSystemStatus = async () => {
     try {
-      const response = await axios.get('http://localhost:8080/api/rooms/ml/status');
+      const apiUrl = process.env.REACT_APP_API_BASE_URL || 'https://hrms-bace.vercel.app/api';
+      const response = await axios.get(`${apiUrl}/rooms/ml/status`);
       if (response.data.success) {
         setSystemStatus(response.data);
       }

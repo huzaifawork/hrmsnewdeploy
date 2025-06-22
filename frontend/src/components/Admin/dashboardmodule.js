@@ -699,7 +699,8 @@ export default function Dashboardmodule() {
                 onClick={async () => {
                   try {
                     const token = localStorage.getItem("token");
-                    const response = await axios.get("http://localhost:8080/api/bookings/db-check", {
+                    const apiUrl = process.env.REACT_APP_API_BASE_URL || 'https://hrms-bace.vercel.app/api';
+                    const response = await axios.get(`${apiUrl}/bookings/db-check`, {
                       headers: { Authorization: `Bearer ${token}` }
                     });
                     console.log("🔍 DB Check Result:", response.data);

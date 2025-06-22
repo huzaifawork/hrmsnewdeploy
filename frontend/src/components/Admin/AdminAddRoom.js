@@ -104,8 +104,9 @@
       setLoading(true);
       try {
         const token = localStorage.getItem("token");
+        const apiUrl = process.env.REACT_APP_API_BASE_URL || 'https://hrms-bace.vercel.app/api';
         const response = await axios.post(
-          "http://localhost:8080/api/rooms",
+          `${apiUrl}/rooms`,
           submitData,
           {
             headers: {

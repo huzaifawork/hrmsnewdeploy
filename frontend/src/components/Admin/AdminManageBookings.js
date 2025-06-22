@@ -38,8 +38,9 @@ const AdminManageBookings = () => {
     setLoading(true);
     try {
       const token = localStorage.getItem("token");
-      const response = await axios.get("http://localhost:8080/api/bookings", {
-        headers: { 
+      const apiUrl = process.env.REACT_APP_API_BASE_URL || 'https://hrms-bace.vercel.app/api';
+      const response = await axios.get(`${apiUrl}/bookings`, {
+        headers: {
           Authorization: `Bearer ${token}`,
           'Content-Type': 'application/json'
         }
@@ -74,8 +75,9 @@ const AdminManageBookings = () => {
       
       const deleteToast = toast.loading("Deleting booking...");
       
-      const response = await axios.delete(`http://localhost:8080/api/bookings/${bookingId}`, {
-        headers: { 
+      const apiUrl = process.env.REACT_APP_API_BASE_URL || 'https://hrms-bace.vercel.app/api';
+      const response = await axios.delete(`${apiUrl}/bookings/${bookingId}`, {
+        headers: {
           Authorization: `Bearer ${token}`,
           'Content-Type': 'application/json'
         }

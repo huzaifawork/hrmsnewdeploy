@@ -50,8 +50,9 @@ const MyOrders = () => {
   const updateOrderStatus = async (orderId, newStatus) => {
     try {
       const token = localStorage.getItem("token");
+      const apiUrl = process.env.REACT_APP_API_BASE_URL || 'https://hrms-bace.vercel.app/api';
       await axios.patch(
-        `http://localhost:8080/api/orders/${orderId}/status`,
+        `${apiUrl}/orders/${orderId}/status`,
         { status: newStatus },
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -93,8 +94,9 @@ const MyOrders = () => {
       
       console.log("Fetching orders with token:", token ? "Present" : "Missing");
       
-      const response = await axios.get(`http://localhost:8080/api/orders`, {
-        headers: { 
+      const apiUrl = process.env.REACT_APP_API_BASE_URL || 'https://hrms-bace.vercel.app/api';
+      const response = await axios.get(`${apiUrl}/orders`, {
+        headers: {
           Authorization: `Bearer ${token}`,
           'Content-Type': 'application/json'
         },
@@ -140,8 +142,9 @@ const MyOrders = () => {
   const handleCancelOrder = async (orderId) => {
     try {
       const token = localStorage.getItem("token");
+      const apiUrl = process.env.REACT_APP_API_BASE_URL || 'https://hrms-bace.vercel.app/api';
       await axios.delete(
-        `http://localhost:8080/api/orders/${orderId}`,
+        `${apiUrl}/orders/${orderId}`,
         { headers: { Authorization: `Bearer ${token}` } }
       );
       fetchOrders();

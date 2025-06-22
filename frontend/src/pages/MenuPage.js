@@ -84,7 +84,8 @@ const MenuPage = () => {
 
   const addToCart = async (itemId) => {
     try {
-      await axios.post('http://localhost:8080/api/cart', { itemId });
+      const apiUrl = process.env.REACT_APP_API_BASE_URL || 'https://hrms-bace.vercel.app/api';
+      await axios.post(`${apiUrl}/cart`, { itemId });
       // Show success notification
     } catch (error) {
       // Show error notification

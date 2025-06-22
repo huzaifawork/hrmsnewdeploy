@@ -53,8 +53,9 @@ const TableConfirmationPage = () => {
             throw new Error('Please login to view reservation details');
           }
 
+          const apiUrl = process.env.REACT_APP_API_BASE_URL || 'https://hrms-bace.vercel.app/api';
           const response = await axios.get(
-            `http://localhost:8080/api/reservations/${reservationId}`,
+            `${apiUrl}/reservations/${reservationId}`,
             {
               headers: {
                 'Authorization': `Bearer ${token}`,
@@ -92,8 +93,9 @@ const TableConfirmationPage = () => {
       const token = localStorage.getItem('token');
       if (!token) return;
 
+      const apiUrl = process.env.REACT_APP_API_BASE_URL || 'https://hrms-bace.vercel.app/api';
       const userResponse = await axios.get(
-        `http://localhost:8080/api/user/profile`,
+        `${apiUrl}/user/profile`,
         {
           headers: {
             'Authorization': `Bearer ${token}`,

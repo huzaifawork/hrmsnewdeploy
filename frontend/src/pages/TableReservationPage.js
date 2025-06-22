@@ -204,7 +204,8 @@ const TableReservationPage = () => {
       
       setAvailability({ ...availability, isChecking: true });
       
-      const response = await axios.get(`http://localhost:8080/api/tables/availability`, {
+      const apiUrl = process.env.REACT_APP_API_BASE_URL || 'https://hrms-bace.vercel.app/api';
+      const response = await axios.get(`${apiUrl}/tables/availability`, {
         params: {
           reservationDate: formData.date,
           time: formData.time,
@@ -292,7 +293,8 @@ const TableReservationPage = () => {
 
       console.log("Sending reservation data:", reservationData);
 
-      const response = await axios.post('http://localhost:8080/api/reservations', reservationData, {
+      const apiUrl = process.env.REACT_APP_API_BASE_URL || 'https://hrms-bace.vercel.app/api';
+      const response = await axios.post(`${apiUrl}/reservations`, reservationData, {
         headers: {
           'Authorization': `Bearer ${token}`
         }
@@ -303,7 +305,7 @@ const TableReservationPage = () => {
         try {
           const userId = localStorage.getItem('userId');
           if (userId && tableDetails.tableId) {
-            await axios.post('http://localhost:8080/api/tables/track-reservation', {
+            await axios.post(`${apiUrl}/tables/track-reservation`, {
               tableId: tableDetails.tableId,
               reservationId: response.data.reservation._id,
               userId: userId

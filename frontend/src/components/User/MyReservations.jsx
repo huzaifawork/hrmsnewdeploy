@@ -40,7 +40,8 @@ const MyReservations = () => {
 
     try {
       setLoading(true);
-      const response = await axios.get("http://localhost:8080/api/reservations/user", {
+      const apiUrl = process.env.REACT_APP_API_BASE_URL || 'https://hrms-bace.vercel.app/api';
+      const response = await axios.get(`${apiUrl}/reservations/user`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       console.log("Raw response data:", response.data); // Debug log
@@ -106,10 +107,11 @@ const MyReservations = () => {
     
     try {
       setLoading(true);
-      await axios.delete(`http://localhost:8080/api/reservations/${reservationId}`, {
+      const apiUrl = process.env.REACT_APP_API_BASE_URL || 'https://hrms-bace.vercel.app/api';
+      await axios.delete(`${apiUrl}/reservations/${reservationId}`, {
         headers: { Authorization: `Bearer ${token}` }
       });
-      
+
       toast.success("Reservation cancelled successfully!");
       // Refresh the reservations list
       fetchReservations();

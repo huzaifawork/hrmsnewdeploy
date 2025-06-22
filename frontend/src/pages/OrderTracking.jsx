@@ -551,7 +551,7 @@ const OrderTracking = () => {
                 </div>
                 <div className="socket-info-row">
                   <span className="socket-label">Server:</span>
-                  <span className="socket-value">http://localhost:8080</span>
+                  <span className="socket-value">{process.env.REACT_APP_API_URL || 'https://hrms-bace.vercel.app'}</span>
                 </div>
               </div>
               

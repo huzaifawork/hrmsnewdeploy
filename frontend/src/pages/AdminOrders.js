@@ -34,11 +34,12 @@ const AdminOrders = () => {
 
   const updateOrderStatus = async (orderId, status) => {
     try {
-      await axios.put(`http://localhost:8080/api/orders/${orderId}/status`, { status });
+      const apiUrl = process.env.REACT_APP_API_BASE_URL || 'https://hrms-bace.vercel.app/api';
+      await axios.put(`${apiUrl}/orders/${orderId}/status`, { status });
       // Update local state immediately for better UX
-      setOrders(prevOrders => 
-        prevOrders.map(order => 
-          order._id === orderId 
+      setOrders(prevOrders =>
+        prevOrders.map(order =>
+          order._id === orderId
             ? { ...order, deliveryStatus: status }
             : order
         )

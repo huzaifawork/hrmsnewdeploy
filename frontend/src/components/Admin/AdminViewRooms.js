@@ -40,7 +40,8 @@ const AdminViewRooms = () => {
     try {
       setLoading(true);
       const token = localStorage.getItem("token");
-      const response = await axios.get("http://localhost:8080/api/rooms", {
+      const apiUrl = process.env.REACT_APP_API_BASE_URL || 'https://hrms-bace.vercel.app/api';
+      const response = await axios.get(`${apiUrl}/rooms`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       setRooms(response.data);
@@ -59,7 +60,8 @@ const AdminViewRooms = () => {
 
   const fetchPopularRooms = async () => {
     try {
-      const response = await axios.get("http://localhost:8080/api/rooms/popular?count=10");
+      const apiUrl = process.env.REACT_APP_API_BASE_URL || 'https://hrms-bace.vercel.app/api';
+      const response = await axios.get(`${apiUrl}/rooms/popular?count=10`);
       if (response.data.success) {
         setPopularRooms(response.data.popularRooms);
       }

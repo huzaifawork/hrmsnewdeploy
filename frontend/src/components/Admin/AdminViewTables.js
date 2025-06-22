@@ -38,7 +38,8 @@ const AdminViewTables = () => {
   const fetchTables = async () => {
     setLoading(true);
     try {
-      const response = await axios.get("http://localhost:8080/api/tables");
+      const apiUrl = process.env.REACT_APP_API_BASE_URL || 'https://hrms-bace.vercel.app/api';
+      const response = await axios.get(`${apiUrl}/tables`);
       console.log("Fetched tables:", response.data);
       setTables(response.data);
       setFilteredTables(response.data);
@@ -217,7 +218,7 @@ const AdminViewTables = () => {
                   <div key={table._id} className={`enhanced-table-card ${viewMode}-card`}>
                     <div className="table-image-container">
                       <img
-                        src={table.image ? `http://localhost:8080${table.image}` : "/images/placeholder-table.jpg"}
+                        src={table.image ? `${process.env.REACT_APP_API_URL || 'https://hrms-bace.vercel.app'}${table.image}` : "/images/placeholder-table.jpg"}
                         alt={`Table ${table.tableNumber || table.tableName}`}
                         className="table-image"
                         onError={(e) => {

@@ -23,7 +23,8 @@ const AdminViewTable = () => {
     try {
       setLoading(true);
       const token = localStorage.getItem('token');
-      const response = await axios.get('http://localhost:8080/api/tables', {
+      const apiUrl = process.env.REACT_APP_API_BASE_URL || 'https://hrms-bace.vercel.app/api';
+      const response = await axios.get(`${apiUrl}/tables`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       

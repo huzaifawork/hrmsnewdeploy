@@ -27,9 +27,10 @@ const AdminViewMenus = () => {
   const fetchMenuItems = async () => {
     setLoading(true);
     try {
+      const apiUrl = process.env.REACT_APP_API_BASE_URL || 'https://hrms-bace.vercel.app/api';
       const url = selectedCategory === "all"
-        ? "http://localhost:8080/api/menus"
-        : `http://localhost:8080/api/menus/category/${selectedCategory}`;
+        ? `${apiUrl}/menus`
+        : `${apiUrl}/menus/category/${selectedCategory}`;
       
       const response = await axios.get(url);
       setMenuItems(response.data);
@@ -42,7 +43,8 @@ const AdminViewMenus = () => {
 
   const handleDeleteItem = async (id) => {
     try {
-      await axios.delete(`http://localhost:8080/api/menus/${id}`);
+      const apiUrl = process.env.REACT_APP_API_BASE_URL || 'https://hrms-bace.vercel.app/api';
+      await axios.delete(`${apiUrl}/menus/${id}`);
       setMenuItems(menuItems.filter(item => item._id !== id));
       toast.success("Menu item deleted successfully");
       setShowDeleteModal(false);
@@ -53,7 +55,8 @@ const AdminViewMenus = () => {
 
   const handleAvailabilityToggle = async (id, currentStatus) => {
     try {
-      const response = await axios.patch(`http://localhost:8080/api/menus/${id}/toggle-availability`);
+      const apiUrl = process.env.REACT_APP_API_BASE_URL || 'https://hrms-bace.vercel.app/api';
+      const response = await axios.patch(`${apiUrl}/menus/${id}/toggle-availability`);
       setMenuItems(menuItems.map(item => item._id === id ? response.data : item));
       toast.success("Availability updated successfully");
     } catch (error) {

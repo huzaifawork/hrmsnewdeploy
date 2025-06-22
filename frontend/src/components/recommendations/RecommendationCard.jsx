@@ -91,7 +91,8 @@ const RecommendationCard = ({
     if (imagePath.startsWith("http://") || imagePath.startsWith("https://")) {
       return imagePath;
     }
-    return `http://localhost:8080${imagePath.startsWith('/') ? imagePath : '/' + imagePath}`;
+    const apiUrl = process.env.REACT_APP_API_URL || 'https://hrms-bace.vercel.app';
+    return `${apiUrl}${imagePath.startsWith('/') ? imagePath : '/' + imagePath}`;
   };
 
   return (

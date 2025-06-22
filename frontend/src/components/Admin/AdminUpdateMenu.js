@@ -39,7 +39,8 @@ const AdminUpdateMenu = () => {
   const fetchMenuItems = async () => {
     try {
       const token = localStorage.getItem("token");
-      const response = await axios.get("http://localhost:8080/api/menus", {
+      const apiUrl = process.env.REACT_APP_API_BASE_URL || 'https://hrms-bace.vercel.app/api';
+      const response = await axios.get(`${apiUrl}/menus`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -70,7 +71,8 @@ const AdminUpdateMenu = () => {
       if (item.image.startsWith('http://') || item.image.startsWith('https://')) {
         setImagePreview(item.image);
       } else {
-        setImagePreview(`http://localhost:8080${item.image}`);
+        const serverURL = process.env.REACT_APP_API_URL || 'https://hrms-bace.vercel.app';
+        setImagePreview(`${serverURL}${item.image}`);
       }
     } else {
       setImagePreview(null);
@@ -120,7 +122,8 @@ const AdminUpdateMenu = () => {
         }
       });
 
-      await axios.put(`http://localhost:8080/api/menus/${selectedItem._id}`, submitData, {
+      const apiUrl = process.env.REACT_APP_API_BASE_URL || 'https://hrms-bace.vercel.app/api';
+      await axios.put(`${apiUrl}/menus/${selectedItem._id}`, submitData, {
         headers: {
           Authorization: `Bearer ${token}`,
           "Content-Type": "multipart/form-data",
@@ -176,7 +179,7 @@ const AdminUpdateMenu = () => {
                       item.image
                         ? (item.image.startsWith('http://') || item.image.startsWith('https://'))
                           ? item.image
-                          : `http://localhost:8080${item.image}`
+                          : `${process.env.REACT_APP_API_URL || 'https://hrms-bace.vercel.app'}${item.image}`
                         : "/placeholder-food.jpg"
                     }
                     alt={item.name}

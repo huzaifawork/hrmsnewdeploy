@@ -152,14 +152,15 @@ const BookingPage = () => {
         setError(null);
 
         // Fetch room details
-        const roomResponse = await axios.get('http://localhost:8080/api/rooms', {
+        const apiUrl = process.env.REACT_APP_API_BASE_URL || 'https://hrms-bace.vercel.app/api';
+        const roomResponse = await axios.get(`${apiUrl}/rooms`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
         });
 
         // Fetch user profile data to pre-fill the form
-        const userResponse = await axios.get('http://localhost:8080/api/user/profile', {
+        const userResponse = await axios.get(`${apiUrl}/user/profile`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -364,7 +365,8 @@ const BookingPage = () => {
         numberOfNights: bookingSummary.nights
       };
 
-      const response = await axios.post('http://localhost:8080/api/bookings', bookingData, {
+      const apiUrl = process.env.REACT_APP_API_BASE_URL || 'https://hrms-bace.vercel.app/api';
+      const response = await axios.post(`${apiUrl}/bookings`, bookingData, {
         headers: { 'Authorization': `Bearer ${token}` }
       });
 

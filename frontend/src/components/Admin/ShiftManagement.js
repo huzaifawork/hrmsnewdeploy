@@ -27,7 +27,8 @@ const ShiftManagement = () => {
   const fetchShifts = async () => {
     try {
       const token = localStorage.getItem("token");
-      const response = await axios.get(`http://localhost:8080/api/shift?date=${selectedDate}`, {
+      const apiUrl = process.env.REACT_APP_API_BASE_URL || 'https://hrms-bace.vercel.app/api';
+      const response = await axios.get(`${apiUrl}/shift?date=${selectedDate}`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       setShifts(response.data);
@@ -41,7 +42,8 @@ const ShiftManagement = () => {
   const fetchStaff = async () => {
     try {
       const token = localStorage.getItem("token");
-      const response = await axios.get("http://localhost:8080/api/staff", {
+      const apiUrl = process.env.REACT_APP_API_BASE_URL || 'https://hrms-bace.vercel.app/api';
+      const response = await axios.get(`${apiUrl}/staff`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       setStaff(response.data);
@@ -54,8 +56,9 @@ const ShiftManagement = () => {
     e.preventDefault();
     try {
       const token = localStorage.getItem("token");
+      const apiUrl = process.env.REACT_APP_API_BASE_URL || 'https://hrms-bace.vercel.app/api';
       const response = await axios.post(
-        "http://localhost:8080/api/shift/add",
+        `${apiUrl}/shift/add`,
         newShift,
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -78,8 +81,9 @@ const ShiftManagement = () => {
   const handleUpdateShiftStatus = async (shiftId, newStatus) => {
     try {
       const token = localStorage.getItem("token");
+      const apiUrl = process.env.REACT_APP_API_BASE_URL || 'https://hrms-bace.vercel.app/api';
       const response = await axios.patch(
-        `http://localhost:8080/api/shift/${shiftId}/toggle`,
+        `${apiUrl}/shift/${shiftId}/toggle`,
         { status: newStatus },
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -96,7 +100,8 @@ const ShiftManagement = () => {
     if (window.confirm("Are you sure you want to delete this shift?")) {
       try {
         const token = localStorage.getItem("token");
-        await axios.delete(`http://localhost:8080/api/shift/${shiftId}`, {
+        const apiUrl = process.env.REACT_APP_API_BASE_URL || 'https://hrms-bace.vercel.app/api';
+        await axios.delete(`${apiUrl}/shift/${shiftId}`, {
           headers: { Authorization: `Bearer ${token}` }
         });
         setShifts(shifts.filter(shift => shift._id !== shiftId));

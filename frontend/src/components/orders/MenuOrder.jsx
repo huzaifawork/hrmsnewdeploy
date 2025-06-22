@@ -111,7 +111,8 @@ const MenuOrder = () => {
     React.useEffect(() => {
         const fetchMenuItems = async () => {
             try {
-                const response = await axios.get('http://localhost:8080/api/menu');
+                const apiUrl = process.env.REACT_APP_API_BASE_URL || 'https://hrms-bace.vercel.app/api';
+                const response = await axios.get(`${apiUrl}/menu`);
                 setMenuItems(response.data);
             } catch (err) {
                 setError('Failed to fetch menu items');
@@ -190,7 +191,8 @@ const MenuOrder = () => {
                 paymentMethodId: paymentMethodId
             };
 
-            const response = await axios.post('http://localhost:8080/api/orders', orderData, {
+            const apiUrl = process.env.REACT_APP_API_BASE_URL || 'https://hrms-bace.vercel.app/api';
+            const response = await axios.post(`${apiUrl}/orders`, orderData, {
                 headers: {
                     'Authorization': `Bearer ${token}`
                 }
