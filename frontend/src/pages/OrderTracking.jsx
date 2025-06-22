@@ -176,8 +176,9 @@ const OrderTracking = () => {
         console.log("Fetching order data for ID:", validOrderId);
         console.log("Using token:", token ? "Yes (Token exists)" : "No (Token missing)");
         
+        const apiUrl = process.env.REACT_APP_API_BASE_URL || 'https://hrms-bace.vercel.app/api';
         const response = await axios.get(
-          `http://localhost:8080/api/orders/${validOrderId}`,
+          `${apiUrl}/orders/${validOrderId}`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
