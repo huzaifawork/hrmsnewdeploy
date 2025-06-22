@@ -60,15 +60,16 @@ const OrderConfirmation = () => {
   // Simple test to check if backend is reachable
   const testBackendConnection = async () => {
     try {
+      const apiUrl = process.env.REACT_APP_API_BASE_URL || 'https://hrms-bace.vercel.app/api';
       logInfo("Testing backend connection", {
-        url: 'http://localhost:8080/api/health',
+        url: `${apiUrl}/health`,
         timestamp: new Date().toISOString()
       });
-      
+
       const controller = new AbortController();
       const timeoutId = setTimeout(() => controller.abort(), 5000);
-      
-      const response = await fetch('http://localhost:8080/api/health', {
+
+      const response = await fetch(`${apiUrl}/health`, {
         method: 'GET',
         signal: controller.signal,
         headers: {

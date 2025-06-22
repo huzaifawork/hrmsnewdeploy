@@ -35,8 +35,9 @@ const RoomRecommendationAnalytics = () => {
   const fetchAnalytics = async () => {
     try {
       const token = localStorage.getItem('token');
+      const apiUrl = process.env.REACT_APP_API_BASE_URL || 'https://hrms-bace.vercel.app/api';
       // Use the correct admin analytics endpoint
-      const response = await axios.get('http://localhost:8080/api/admin/dashboard/analytics', {
+      const response = await axios.get(`${apiUrl}/admin/dashboard/analytics`, {
         headers: { Authorization: `Bearer ${token}` }
       });
 
@@ -126,7 +127,8 @@ const RoomRecommendationAnalytics = () => {
 
   const fetchMLMetrics = async () => {
     try {
-      const response = await axios.get('http://localhost:8080/api/rooms/ml/accuracy');
+      const apiUrl = process.env.REACT_APP_API_BASE_URL || 'https://hrms-bace.vercel.app/api';
+      const response = await axios.get(`${apiUrl}/rooms/ml/accuracy`);
       if (response.data.success) {
         setMlMetrics(response.data);
       }
@@ -142,7 +144,8 @@ const RoomRecommendationAnalytics = () => {
 
   const fetchConfusionMatrix = async () => {
     try {
-      const response = await axios.get('http://localhost:8080/api/rooms/ml/confusion-matrix');
+      const apiUrl = process.env.REACT_APP_API_BASE_URL || 'https://hrms-bace.vercel.app/api';
+      const response = await axios.get(`${apiUrl}/rooms/ml/confusion-matrix`);
       if (response.data.success) {
         setConfusionMatrix(response.data);
       }

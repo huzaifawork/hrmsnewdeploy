@@ -26,14 +26,15 @@ export default function OrderFood() {
     useEffect(() => {
         const fetchMenuItems = async () => {
             try {
-                const response = await axios.get('http://localhost:8080/api/menus');
+                const apiUrl = process.env.REACT_APP_API_BASE_URL || 'https://hrms-bace.vercel.app/api';
+                const response = await axios.get(`${apiUrl}/menus`);
                 setMenuItems(response.data);
                 setFilteredItems(response.data);
-                
+
                 // Extract unique categories
                 const uniqueCategories = [...new Set(response.data.map(item => item.category))];
                 setCategories(uniqueCategories);
-                
+
                 setLoading(false);
             } catch (err) {
                 setError('Failed to load menu items');

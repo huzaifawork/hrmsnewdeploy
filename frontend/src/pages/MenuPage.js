@@ -24,7 +24,8 @@ const MenuPage = () => {
 
   const fetchMenuData = async () => {
     try {
-      const menuResponse = await axios.get('http://localhost:8080/api/menus');
+      const apiUrl = process.env.REACT_APP_API_BASE_URL || 'https://hrms-bace.vercel.app/api';
+      const menuResponse = await axios.get(`${apiUrl}/menus`);
       setMenuItems(menuResponse.data);
 
       // Extract unique categories from menu items
