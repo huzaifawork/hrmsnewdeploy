@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 
 // HARDCODED CONNECTION STRING FOR IMMEDIATE FIX
-const mongo_url = "mongodb+srv://mhuzaifatariq7:zqdaRL05TfaNgD8x@cluster0.kyswp.mongodb.net/hrms?retryWrites=true&w=majority";
+const mongo_url = "mongodb+srv://mhuzaifatariq7:zqdaRL05TfaNgD8x@cluster0.kyswp.mongodb.net/hrms?retryWrites=true&w=majority&appName=HRMS&maxIdleTimeMS=30000&serverSelectionTimeoutMS=10000";
 
 console.log('✅ Using hardcoded MongoDB connection string');
 console.log('🔗 Connection URL:', mongo_url.substring(0, 50) + '...');
@@ -28,15 +28,17 @@ const connectDB = async () => {
         const options = {
             useNewUrlParser: true,
             useUnifiedTopology: true,
-            serverSelectionTimeoutMS: 15000, // Increased timeout further
-            socketTimeoutMS: 45000,
-            connectTimeoutMS: 15000,
-            maxPoolSize: 5,
-            minPoolSize: 1,
+            serverSelectionTimeoutMS: 10000, // Reduced for faster failure
+            socketTimeoutMS: 30000,
+            connectTimeoutMS: 10000,
+            maxPoolSize: 3, // Reduced for serverless
+            minPoolSize: 0, // Allow 0 connections when idle
             maxIdleTimeMS: 30000,
-            bufferCommands: true,
+            bufferCommands: false, // Disable for serverless
             retryWrites: true,
-            w: 'majority'
+            w: 'majority',
+            heartbeatFrequencyMS: 10000,
+            family: 4 // Force IPv4
         };
 
         console.log('🔄 Attempting fresh MongoDB connection...');
