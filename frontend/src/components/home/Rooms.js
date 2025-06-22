@@ -19,7 +19,8 @@ const Rooms = () => {
     try {
       if (imagePath.startsWith("http")) return imagePath;
       const cleanPath = imagePath.replace(/^\/+/, "");
-      const serverURL = process.env.REACT_APP_API_URL || 'https://hrms-bace.vercel.app';
+      // Use the base server URL (without /api) for images
+      const serverURL = process.env.REACT_APP_SERVER_URL || process.env.REACT_APP_API_URL || 'https://hrms-bace.vercel.app';
       return cleanPath.includes("uploads")
         ? `${serverURL}/${cleanPath}`
         : `${serverURL}/uploads/${cleanPath}`;

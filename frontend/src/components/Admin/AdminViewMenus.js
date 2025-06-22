@@ -73,7 +73,8 @@ const AdminViewMenus = () => {
       }
       // If it's a local upload path
       const cleanPath = imagePath.replace(/^\/+/, '');
-      const serverURL = process.env.REACT_APP_API_URL || 'https://hrms-bace.vercel.app';
+      // Use the base server URL (without /api) for images
+      const serverURL = process.env.REACT_APP_SERVER_URL || process.env.REACT_APP_API_URL || 'https://hrms-bace.vercel.app';
       if (cleanPath.includes('uploads')) {
         return `${serverURL}/${cleanPath}`;
       }

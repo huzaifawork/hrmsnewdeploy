@@ -111,8 +111,13 @@ const AdminRoomUpdate = () => {
   const getImageUrl = (imagePath) => {
     if (!imagePath) return "/images/placeholder-room.jpg";
     if (imagePath.startsWith('http')) return imagePath;
-    const serverURL = process.env.REACT_APP_API_URL || 'https://hrms-bace.vercel.app';
-    return `${serverURL}${imagePath}`;
+    const cleanPath = imagePath.replace(/^\/+/, '');
+    // Use the base server URL (without /api) for images
+    const serverURL = process.env.REACT_APP_SERVER_URL || process.env.REACT_APP_API_URL || 'https://hrms-bace.vercel.app';
+    if (cleanPath.includes('uploads')) {
+      return `${serverURL}/${cleanPath}`;
+    }
+    return `${serverURL}/uploads/${cleanPath}`;
   };
 
   const handleSubmit = async (e) => {
