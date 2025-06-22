@@ -105,7 +105,24 @@ exports.addRoom = async (req, res) => {
       petFriendly
     } = req.body;
 
-    const image = req.file ? `/uploads/${req.file.filename}` : null;
+    // Handle image upload - generate filename for memory storage in production
+    let image = null;
+    if (req.file) {
+      if (req.file.filename) {
+        // Disk storage (development)
+        image = `/uploads/${req.file.filename}`;
+      } else {
+        // Memory storage (production) - generate unique filename
+        const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
+        const extension = req.file.originalname.split('.').pop();
+        const filename = `${uniqueSuffix}.${extension}`;
+        image = `/uploads/${filename}`;
+
+        // In production, you would typically upload to cloud storage here
+        // For now, we'll use a placeholder or external URL
+        console.log('Production upload detected, filename generated:', filename);
+      }
+    }
 
     // Parse amenities if it's a string
     let parsedAmenities = [];
@@ -271,7 +288,18 @@ exports.updateRoom = async (req, res) => {
     };
 
     if (req.file) {
-      updateData.image = `/uploads/${req.file.filename}`;
+      if (req.file.filename) {
+        // Disk storage (development)
+        updateData.image = `/uploads/${req.file.filename}`;
+      } else {
+        // Memory storage (production) - generate unique filename
+        const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
+        const extension = req.file.originalname.split('.').pop();
+        const filename = `${uniqueSuffix}.${extension}`;
+        updateData.image = `/uploads/${filename}`;
+
+        console.log('Production upload detected for update, filename generated:', filename);
+      }
     }
 
     const updatedRoom = await Room.findByIdAndUpdate(

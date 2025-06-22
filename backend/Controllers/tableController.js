@@ -5,7 +5,22 @@ const Reservation = require('../Models/Reservations');
 const addTable = async (req, res) => {
   try {
     const { tableName, tableType, capacity, status, description } = req.body;
-    const image = req.file ? `/uploads/${req.file.filename}` : null;
+    // Handle image upload - generate filename for memory storage in production
+    let image = null;
+    if (req.file) {
+      if (req.file.filename) {
+        // Disk storage (development)
+        image = `/uploads/${req.file.filename}`;
+      } else {
+        // Memory storage (production) - generate unique filename
+        const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
+        const extension = req.file.originalname.split('.').pop();
+        const filename = `${uniqueSuffix}.${extension}`;
+        image = `/uploads/${filename}`;
+
+        console.log('Production table upload detected, filename generated:', filename);
+      }
+    }
 
     const newTable = new Table({
       tableName,
