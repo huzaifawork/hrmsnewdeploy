@@ -1,6 +1,6 @@
 const Booking = require("../Models/Booking");
 const Room = require("../Models/Room");
-const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
+const stripe = require('../config/stripe');
 
 // Create a new booking
 exports.createBooking = async (req, res) => {
@@ -49,6 +49,12 @@ exports.createBooking = async (req, res) => {
     // Process payment with Stripe
     let paymentIntent;
     if (payment === 'card' && paymentMethodId) {
+      if (!stripe) {
+        return res.status(500).json({
+          error: 'Payment processing unavailable',
+          message: 'Stripe is not configured properly'
+        });
+      }
       try {
         // First create the payment intent
         paymentIntent = await stripe.paymentIntents.create({
