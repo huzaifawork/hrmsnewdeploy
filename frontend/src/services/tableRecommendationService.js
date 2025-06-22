@@ -222,9 +222,10 @@ export const tableUtils = {
     try {
       if (imagePath.startsWith("http")) return imagePath;
       const cleanPath = imagePath.replace(/^\/+/, "");
+      const serverURL = process.env.REACT_APP_API_URL || 'https://hrms-bace.vercel.app';
       return cleanPath.includes("uploads")
-        ? `http://localhost:8080/${cleanPath}`
-        : `http://localhost:8080/uploads/${cleanPath}`;
+        ? `${serverURL}/${cleanPath}`
+        : `${serverURL}/uploads/${cleanPath}`;
     } catch (error) {
       console.error("Error formatting image URL:", error);
       return "/images/placeholder-table.jpg";
