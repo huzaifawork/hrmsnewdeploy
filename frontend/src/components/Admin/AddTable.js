@@ -55,7 +55,8 @@ const AdminManageTables = () => {
       data.append("image", image);
     }
     try {
-      await axios.post("http://localhost:8080/api/tables/add", data, {
+      const apiUrl = process.env.REACT_APP_API_BASE_URL || 'https://hrms-bace.vercel.app/api';
+      await axios.post(`${apiUrl}/tables/add`, data, {
         headers: { "Content-Type": "multipart/form-data" },
       });
       alert("Table added successfully!");

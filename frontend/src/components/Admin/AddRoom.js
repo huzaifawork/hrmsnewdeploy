@@ -130,13 +130,14 @@ const AdminManageRooms = () => {
 
     try {
       setLoading(true);
+      const apiUrl = process.env.REACT_APP_API_BASE_URL || 'https://hrms-bace.vercel.app/api';
       if (selectedRoom) {
-        await axios.put(`http://localhost:8080/api/rooms/${selectedRoom._id}`, formData, {
+        await axios.put(`${apiUrl}/rooms/${selectedRoom._id}`, formData, {
           headers: { "Content-Type": "multipart/form-data" },
         });
         setAlert({ show: true, message: "Room updated successfully!", variant: "success" });
       } else {
-        await axios.post("http://localhost:8080/api/rooms/add", formData, {
+        await axios.post(`${apiUrl}/rooms/add`, formData, {
           headers: { "Content-Type": "multipart/form-data" },
         });
         setAlert({ show: true, message: "Room added successfully!", variant: "success" });

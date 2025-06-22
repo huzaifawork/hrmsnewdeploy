@@ -26,7 +26,8 @@ const TableReservation = () => {
   const fetchTables = async () => {
     try {
       // Always fetch regular tables first as fallback
-      const tablesResponse = await axios.get("http://localhost:8080/api/tables");
+      const apiUrl = process.env.REACT_APP_API_BASE_URL || 'https://hrms-bace.vercel.app/api';
+      const tablesResponse = await axios.get(`${apiUrl}/tables`);
       console.log('Fetched tables:', tablesResponse.data);
 
       if (tablesResponse.data && tablesResponse.data.length > 0) {

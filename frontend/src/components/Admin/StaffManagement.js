@@ -100,7 +100,8 @@ const StaffManagement = () => {
   const fetchStaff = async () => {
     try {
       const token = localStorage.getItem("token");
-      const response = await axios.get("http://localhost:8080/api/staff", {
+      const apiUrl = process.env.REACT_APP_API_BASE_URL || 'https://hrms-bace.vercel.app/api';
+      const response = await axios.get(`${apiUrl}/staff`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       setStaff(response.data);

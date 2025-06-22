@@ -59,7 +59,7 @@ const TablesSection = () => {
                   <div className="card-image">
                     {table.image && (
                       <img
-                        src={`http://localhost:8080${table.image}`}
+                        src={`${process.env.REACT_APP_API_URL || 'https://hrms-bace.vercel.app'}${table.image}`}
                         alt={table.tableName}
                         loading="lazy"
                       />

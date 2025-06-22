@@ -47,7 +47,8 @@ const Rooms = () => {
   useEffect(() => {
     const fetchRooms = async () => {
       try {
-        const response = await axios.get("http://localhost:8080/api/rooms");
+        const apiUrl = process.env.REACT_APP_API_BASE_URL || 'https://hrms-bace.vercel.app/api';
+        const response = await axios.get(`${apiUrl}/rooms`);
 
         setRooms(response.data);
       } catch (error) {
@@ -65,7 +66,8 @@ const Rooms = () => {
   useEffect(() => {
     const fetchPopularRooms = async () => {
       try {
-        const response = await axios.get('http://localhost:8080/api/rooms/popular?count=6');
+        const apiUrl = process.env.REACT_APP_API_BASE_URL || 'https://hrms-bace.vercel.app/api';
+        const response = await axios.get(`${apiUrl}/rooms/popular?count=6`);
         if (response.data.success) {
           console.log('Fetched popular rooms:', response.data.popularRooms.length, response.data.popularRooms);
           setPopularRooms(response.data.popularRooms);
@@ -84,8 +86,9 @@ const Rooms = () => {
       if (!user?.id || !user?.token) return;
 
       try {
+        const apiUrl = process.env.REACT_APP_API_BASE_URL || 'https://hrms-bace.vercel.app/api';
         const response = await axios.get(
-          `http://localhost:8080/api/rooms/recommendations/${user.id}?count=6`,
+          `${apiUrl}/rooms/recommendations/${user.id}?count=6`,
           {
             headers: { Authorization: `Bearer ${user.token}` }
           }
