@@ -15,6 +15,7 @@ const AdminUpdateTable = () => {
   const [tables, setTables] = useState([]);
   const [selectedTable, setSelectedTable] = useState(null);
   const [image, setImage] = useState(null);
+  const [imageUrl, setImageUrl] = useState("");
   const [formData, setFormData] = useState({
     tableName: "",
     tableType: "",
@@ -43,6 +44,8 @@ const AdminUpdateTable = () => {
 
   const handleSelectTable = (table) => {
     setSelectedTable(table);
+    setImage(null);
+    setImageUrl(table.image || ""); // Pre-fill with current image URL
     setFormData({
       tableName: table.tableName,
       tableType: table.tableType,
@@ -66,6 +69,8 @@ const AdminUpdateTable = () => {
     data.append("status", formData.status);
     if (image) {
       data.append("image", image);
+    } else if (imageUrl.trim()) {
+      data.append("imageUrl", imageUrl.trim());
     }
 
     try {
@@ -91,6 +96,7 @@ const AdminUpdateTable = () => {
         status: "Available",
       });
       setImage(null);
+      setImageUrl("");
       
       // Reset file input
       const fileInput = document.getElementById("table-image");
@@ -224,8 +230,20 @@ const AdminUpdateTable = () => {
                   </Form.Select>
                 </Form.Group>
 
+                <Form.Group className="mb-3">
+                  <Form.Label>Image URL</Form.Label>
+                  <Form.Control
+                    type="url"
+                    value={imageUrl}
+                    onChange={(e) => setImageUrl(e.target.value)}
+                    className="cosmic-input"
+                    placeholder="https://images.unsplash.com/... or any table image URL"
+                  />
+                  <small className="text-muted">Paste an image URL for instant update</small>
+                </Form.Group>
+
                 <Form.Group className="mb-4">
-                  <Form.Label>Update Image (Optional)</Form.Label>
+                  <Form.Label>OR Upload File</Form.Label>
                   <Form.Control
                     type="file"
                     className="cosmic-input"
@@ -233,6 +251,7 @@ const AdminUpdateTable = () => {
                     accept="image/jpeg, image/png"
                     onChange={handleImageChange}
                   />
+                  <small className="text-muted">File upload (works in development only)</small>
                 </Form.Group>
 
                 <div className="text-center">

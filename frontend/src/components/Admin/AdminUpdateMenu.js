@@ -19,6 +19,7 @@ const AdminUpdateMenu = () => {
     image: null,
   });
   const [imagePreview, setImagePreview] = useState(null);
+  const [imageUrl, setImageUrl] = useState("");
   const [categories] = useState([
     "appetizers",
     "main-course",
@@ -66,8 +67,10 @@ const AdminUpdateMenu = () => {
       category: item.category,
       image: null,
     });
-    // Set image preview with proper URL handling
+
+    // Set image URL and preview
     if (item.image) {
+      setImageUrl(item.image || "");
       if (item.image.startsWith('http://') || item.image.startsWith('https://')) {
         setImagePreview(item.image);
       } else {
@@ -75,6 +78,7 @@ const AdminUpdateMenu = () => {
         setImagePreview(`${serverURL}${item.image}`);
       }
     } else {
+      setImageUrl("");
       setImagePreview(null);
     }
   };
@@ -122,6 +126,11 @@ const AdminUpdateMenu = () => {
         }
       });
 
+      // Add image URL if provided
+      if (imageUrl.trim()) {
+        submitData.append('imageUrl', imageUrl.trim());
+      }
+
       const apiUrl = process.env.REACT_APP_API_BASE_URL || 'https://hrms-bace.vercel.app/api';
       await axios.put(`${apiUrl}/menus/${selectedItem._id}`, submitData, {
         headers: {
@@ -141,6 +150,7 @@ const AdminUpdateMenu = () => {
         image: null,
       });
       setImagePreview(null);
+      setImageUrl("");
     } catch (error) {
       console.error("Error updating menu item:", error);
       toast.error(error.response?.data?.message || "Error updating menu item");
@@ -217,13 +227,31 @@ const AdminUpdateMenu = () => {
               </div>
 
               <Form.Group className="form-group">
-                <Form.Label>Image</Form.Label>
+                <Form.Label>Image URL</Form.Label>
+                <Form.Control
+                  type="url"
+                  value={imageUrl}
+                  onChange={(e) => {
+                    setImageUrl(e.target.value);
+                    if (e.target.value) {
+                      setImagePreview(e.target.value);
+                    }
+                  }}
+                  className="form-control"
+                  placeholder="https://images.unsplash.com/... or any food image URL"
+                />
+                <small className="text-muted">Paste an image URL for instant preview</small>
+              </Form.Group>
+
+              <Form.Group className="form-group">
+                <Form.Label>OR Upload File</Form.Label>
                 <Form.Control
                   type="file"
                   accept="image/*"
                   onChange={handleImageChange}
                   className="form-control"
                 />
+                <small className="text-muted">File upload (works in development only)</small>
               </Form.Group>
 
               <Form.Group className="form-group">
@@ -311,6 +339,7 @@ const AdminUpdateMenu = () => {
                       image: null,
                     });
                     setImagePreview(null);
+                    setImageUrl("");
                   }}
                 >
                   Cancel

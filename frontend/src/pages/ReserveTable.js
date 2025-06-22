@@ -5,7 +5,7 @@ import { FiCalendar, FiUsers, FiClock, FiX, FiStar, FiHeart } from "react-icons/
 import Header from "../components/common/Header";
 import EditReservation from "../components/User/EditReservation";
 import TableRecommendations from "../components/tables/TableRecommendations";
-import { tableRecommendationService } from "../services/tableRecommendationService";
+import { tableRecommendationService, tableUtils } from "../services/tableRecommendationService";
 import "./ReserveTable.css";
 
 const ReserveTable = () => {
@@ -33,20 +33,7 @@ const ReserveTable = () => {
   const queryParams = new URLSearchParams(location.search);
   const editReservationId = queryParams.get('edit');
 
-  const getImageUrl = (imagePath) => {
-    if (!imagePath) return "/images/placeholder-table.jpg";
-    try {
-      if (imagePath.startsWith("http")) return imagePath;
-      const cleanPath = imagePath.replace(/^\/+/, "");
-      const serverURL = process.env.REACT_APP_API_URL || 'https://hrms-bace.vercel.app';
-      return cleanPath.includes("uploads")
-        ? `${serverURL}/${cleanPath}`
-        : `${serverURL}/uploads/${cleanPath}`;
-    } catch (error) {
-      console.error("Error formatting image URL:", error);
-      return "/images/placeholder-table.jpg";
-    }
-  };
+
 
   useEffect(() => {
     fetchTables();
@@ -227,7 +214,7 @@ const ReserveTable = () => {
     const reservationDetails = {
       tableId: table._id,
       tableName: table.tableName,
-      tableImage: getImageUrl(table.image),
+      tableImage: tableUtils.getImageUrl(table.image),
       tableCapacity: table.capacity,
       tableDescription: table.description,
       date: reservationData.date,
@@ -772,7 +759,7 @@ const ReserveTable = () => {
                   {/* Table Image */}
                   <div style={{ position: 'relative', paddingTop: '60%', overflow: 'hidden' }}>
                     <img
-                      src={getImageUrl(table.image)}
+                      src={tableUtils.getImageUrl(table.image)}
                       alt={table.tableName}
                       style={{
                         position: 'absolute',

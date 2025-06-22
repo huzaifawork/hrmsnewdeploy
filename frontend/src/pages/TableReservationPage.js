@@ -6,6 +6,7 @@ import axios from 'axios';
 import { loadStripe } from '@stripe/stripe-js';
 import { Elements, CardElement, useStripe, useElements } from '@stripe/react-stripe-js';
 import PageLayout from '../components/layout/PageLayout';
+import { tableUtils } from '../services/tableRecommendationService';
 import './TableReservationPage.css';
 
 // Initialize Stripe
@@ -107,20 +108,7 @@ const TableReservationPage = () => {
   });
   const [showPaymentForm, setShowPaymentForm] = useState(false);
 
-  const getImageUrl = (imagePath) => {
-    if (!imagePath) return "/images/placeholder-table.jpg";
-    try {
-      if (imagePath.startsWith("http")) return imagePath;
-      const cleanPath = imagePath.replace(/^\/+/, "");
-      const serverURL = process.env.REACT_APP_API_URL || 'https://hrms-bace.vercel.app';
-      return cleanPath.includes("uploads")
-        ? `${serverURL}/${cleanPath}`
-        : `${serverURL}/uploads/${cleanPath}`;
-    } catch (error) {
-      console.error("Error formatting image URL:", error);
-      return "/images/placeholder-table.jpg";
-    }
-  };
+
 
   useEffect(() => {
     const storedDetails = localStorage.getItem('reservationDetails');
@@ -345,7 +333,7 @@ const TableReservationPage = () => {
               <div className="reservation-form h-100">
                 <div className="table-image-container">
                   <img 
-                    src={getImageUrl(tableDetails.tableImage)}
+                    src={tableUtils.getImageUrl(tableDetails.tableImage)}
                     alt={tableDetails.tableName}
                     className="img-fluid rounded"
                     onError={(e) => {

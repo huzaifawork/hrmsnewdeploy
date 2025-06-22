@@ -160,9 +160,11 @@ const updateTable = async (req, res) => {
       description: description || undefined,
     };
 
-    // Only update image if a new one is provided
+    // Handle image update
     if (image) {
       updateData.image = image;
+    } else if (req.body.imageUrl) {
+      updateData.image = req.body.imageUrl;
     }
 
     const updatedTable = await Table.findByIdAndUpdate(

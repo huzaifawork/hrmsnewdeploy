@@ -4,25 +4,14 @@ import { FiStar, FiInfo, FiShoppingCart, FiClock, FiThermometer, FiHeart } from 
 import { Link } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { apiConfig } from "../../config/api";
+import { getMenuImageUrl, handleImageError } from "../../utils/imageUtils";
 
 const MostPopularItems = () => {
   const [menuItems, setMenuItems] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  const getImageUrl = (imagePath) => {
-    if (!imagePath) return "/images/placeholder-food.jpg";
-    try {
-      if (imagePath.startsWith("http")) return imagePath;
-      const cleanPath = imagePath.replace(/^\/+/, "");
-      return cleanPath.includes("uploads")
-        ? `${apiConfig.serverURL}/${cleanPath}`
-        : `${apiConfig.serverURL}/uploads/${cleanPath}`;
-    } catch (error) {
-      console.error("Error formatting image URL:", error);
-      return "/images/placeholder-food.jpg";
-    }
-  };
+
 
   // Fetch menu items
   useEffect(() => {
@@ -306,7 +295,7 @@ const MostPopularItems = () => {
                 overflow: 'hidden'
               }}>
                 <img
-                  src={getImageUrl(item.image)}
+                  src={getMenuImageUrl(item.image)}
                   alt={item.name}
                   style={{
                     width: '100%',
@@ -314,10 +303,7 @@ const MostPopularItems = () => {
                     objectFit: 'cover',
                     transition: 'transform 0.3s ease'
                   }}
-                  onError={(e) => {
-                    e.target.src = "/images/placeholder-food.jpg";
-                    e.target.onerror = null;
-                  }}
+                  onError={(e) => handleImageError(e, "/images/placeholder-food.jpg")}
                 />
 
                 {/* Rating Badge */}
