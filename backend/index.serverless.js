@@ -230,6 +230,42 @@ app.post('/api/setup/admin', async (req, res) => {
   }
 });
 
+// Force fresh database connection endpoint
+app.get('/api/force-reconnect', async (req, res) => {
+  try {
+    // Reset connection state
+    dbConnected = false;
+    dbError = null;
+
+    // Close existing connection
+    const mongoose = require('mongoose');
+    if (mongoose.connection.readyState !== 0) {
+      await mongoose.connection.close();
+      console.log('🔄 Closed existing MongoDB connection');
+    }
+
+    // Force fresh connection
+    await initializeDatabase();
+
+    res.json({
+      success: true,
+      message: 'Forced database reconnection',
+      database: {
+        connected: dbConnected,
+        error: dbError,
+        readyState: mongoose.connection.readyState
+      },
+      timestamp: new Date().toISOString()
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: error.message,
+      timestamp: new Date().toISOString()
+    });
+  }
+});
+
 // Test file system access
 app.get('/api/debug/filesystem', (req, res) => {
   const fs = require('fs');

@@ -12,18 +12,26 @@ let isConnected = false;
 
 // Optimized connection for serverless
 const connectDB = async () => {
+    // Force fresh connection - don't reuse if there were previous errors
     if (isConnected && mongoose.connection.readyState === 1) {
         console.log('✅ Using existing MongoDB connection');
         return mongoose.connection;
     }
 
     try {
+        // Close any existing connection first
+        if (mongoose.connection.readyState !== 0) {
+            await mongoose.connection.close();
+            console.log('🔄 Closed previous connection');
+        }
+
         const options = {
             useNewUrlParser: true,
             useUnifiedTopology: true,
-            serverSelectionTimeoutMS: 10000, // Increased timeout
+            serverSelectionTimeoutMS: 15000, // Increased timeout further
             socketTimeoutMS: 45000,
-            maxPoolSize: 5, // Reduced for serverless
+            connectTimeoutMS: 15000,
+            maxPoolSize: 5,
             minPoolSize: 1,
             maxIdleTimeMS: 30000,
             bufferCommands: true,
@@ -31,8 +39,8 @@ const connectDB = async () => {
             w: 'majority'
         };
 
-        console.log('🔄 Connecting to MongoDB with URL:', mongo_url.substring(0, 50) + '...');
-        console.log('🔄 Connection options:', JSON.stringify(options, null, 2));
+        console.log('🔄 Attempting fresh MongoDB connection...');
+        console.log('🔗 URL:', mongo_url.substring(0, 60) + '...');
 
         await mongoose.connect(mongo_url, options);
 
