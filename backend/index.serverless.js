@@ -53,6 +53,7 @@ app.get('/api/status', (req, res) => {
 // Initialize database connection (with error handling)
 let dbConnected = false;
 let dbError = null;
+let dbConnection = null;
 
 const initializeDatabase = async () => {
   try {
@@ -61,20 +62,33 @@ const initializeDatabase = async () => {
 
     if (process.env.MONGO_URI || process.env.Mongo_Conn) {
       const { connectDB } = require("./Models/db");
-      await connectDB();
+      dbConnection = await connectDB();
       dbConnected = true;
-      console.log('✅ Database connection initialized');
+      console.log('✅ Database connection established');
     } else {
       console.warn('⚠️ No database connection string found');
+      dbError = 'No connection string provided';
     }
   } catch (error) {
     console.error("❌ Database connection error:", error);
     dbError = error.message;
-    // Don't crash, just continue without database
+    dbConnected = false;
   }
 };
 
-// Initialize database
+// Middleware to ensure database connection before API calls
+const ensureDBConnection = async (req, res, next) => {
+  if (!dbConnected && (process.env.MONGO_URI || process.env.Mongo_Conn)) {
+    try {
+      await initializeDatabase();
+    } catch (error) {
+      console.error('Failed to connect to database:', error);
+    }
+  }
+  next();
+};
+
+// Initialize database immediately
 initializeDatabase();
 
 // Import and register routes individually with error handling
@@ -109,6 +123,10 @@ function safeLoadRoute(routePath, mountPath, routeName) {
     return false;
   }
 }
+
+// Apply database connection middleware to API routes
+app.use('/api', ensureDBConnection);
+app.use('/auth', ensureDBConnection);
 
 // Load routes systematically
 console.log('🔄 Loading HRMS routes...');
@@ -158,6 +176,42 @@ app.get('/api/simple-test', (req, res) => {
   });
 });
 
+// Create default admin endpoint
+app.post('/api/setup/admin', async (req, res) => {
+  try {
+    if (!dbConnected) {
+      await initializeDatabase();
+    }
+
+    if (!dbConnected) {
+      return res.status(500).json({
+        success: false,
+        error: 'Database not connected',
+        timestamp: new Date().toISOString()
+      });
+    }
+
+    const { createDefaultAdmin } = require('./Models/db');
+    await createDefaultAdmin();
+
+    res.json({
+      success: true,
+      message: 'Default admin created successfully',
+      credentials: {
+        email: 'admin@hrms.com',
+        password: 'admin123'
+      },
+      timestamp: new Date().toISOString()
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: error.message,
+      timestamp: new Date().toISOString()
+    });
+  }
+});
+
 // Test file system access
 app.get('/api/debug/filesystem', (req, res) => {
   const fs = require('fs');
@@ -186,7 +240,16 @@ app.get('/api/debug/filesystem', (req, res) => {
 });
 
 // System info endpoint
-app.get('/api/info', (req, res) => {
+app.get('/api/info', async (req, res) => {
+  // Try to connect if not connected
+  if (!dbConnected && (process.env.MONGO_URI || process.env.Mongo_Conn)) {
+    try {
+      await initializeDatabase();
+    } catch (error) {
+      console.error('Failed to connect during info check:', error);
+    }
+  }
+
   res.status(200).json({
     success: true,
     system: {
@@ -194,7 +257,8 @@ app.get('/api/info', (req, res) => {
       version: "1.0.0",
       database: {
         status: dbConnected ? 'connected' : 'disconnected',
-        error: dbError || null
+        error: dbError || null,
+        hasConnectionString: !!(process.env.MONGO_URI || process.env.Mongo_Conn)
       },
       routes: {
         loaded: routesLoaded,
@@ -268,10 +332,16 @@ app.get('/', (req, res) => {
   });
 });
 
-// Public test endpoints for API verification
+// Enhanced database test endpoint
 app.get('/api/test-db', async (req, res) => {
   try {
     const mongoose = require('mongoose');
+
+    // Try to connect if not connected
+    if (!dbConnected) {
+      await initializeDatabase();
+    }
+
     const connectionState = mongoose.connection.readyState;
     const states = {
       0: 'disconnected',
@@ -286,7 +356,13 @@ app.get('/api/test-db', async (req, res) => {
         state: states[connectionState],
         readyState: connectionState,
         host: mongoose.connection.host,
-        name: mongoose.connection.name
+        name: mongoose.connection.name,
+        connected: dbConnected,
+        error: dbError
+      },
+      environment: {
+        hasMongoUri: !!(process.env.MONGO_URI || process.env.Mongo_Conn),
+        nodeEnv: process.env.NODE_ENV
       },
       timestamp: new Date().toISOString()
     });
@@ -294,6 +370,7 @@ app.get('/api/test-db', async (req, res) => {
     res.status(500).json({
       success: false,
       error: error.message,
+      dbError: dbError,
       timestamp: new Date().toISOString()
     });
   }
@@ -302,12 +379,27 @@ app.get('/api/test-db', async (req, res) => {
 // Public menu test (no auth required)
 app.get('/api/test-menus', async (req, res) => {
   try {
+    // Ensure database connection
+    if (!dbConnected) {
+      await initializeDatabase();
+    }
+
+    if (!dbConnected) {
+      return res.status(500).json({
+        success: false,
+        error: 'Database not connected',
+        dbError: dbError,
+        timestamp: new Date().toISOString()
+      });
+    }
+
     const Menu = require('./Models/Menu');
     const count = await Menu.countDocuments();
     const sample = await Menu.findOne().lean();
 
     res.json({
       success: true,
+      database: 'connected',
       menuCount: count,
       sampleMenu: sample ? {
         id: sample._id,
@@ -321,6 +413,8 @@ app.get('/api/test-menus', async (req, res) => {
     res.status(500).json({
       success: false,
       error: error.message,
+      dbConnected: dbConnected,
+      dbError: dbError,
       timestamp: new Date().toISOString()
     });
   }
@@ -329,12 +423,27 @@ app.get('/api/test-menus', async (req, res) => {
 // Public rooms test (no auth required)
 app.get('/api/test-rooms', async (req, res) => {
   try {
+    // Ensure database connection
+    if (!dbConnected) {
+      await initializeDatabase();
+    }
+
+    if (!dbConnected) {
+      return res.status(500).json({
+        success: false,
+        error: 'Database not connected',
+        dbError: dbError,
+        timestamp: new Date().toISOString()
+      });
+    }
+
     const Room = require('./Models/Room');
     const count = await Room.countDocuments();
     const sample = await Room.findOne().lean();
 
     res.json({
       success: true,
+      database: 'connected',
       roomCount: count,
       sampleRoom: sample ? {
         id: sample._id,
@@ -349,6 +458,8 @@ app.get('/api/test-rooms', async (req, res) => {
     res.status(500).json({
       success: false,
       error: error.message,
+      dbConnected: dbConnected,
+      dbError: dbError,
       timestamp: new Date().toISOString()
     });
   }
