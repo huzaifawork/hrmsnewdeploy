@@ -59,18 +59,14 @@ const initializeDatabase = async () => {
   try {
     require("dotenv").config();
     console.log('✅ Environment variables loaded');
-    console.log('🔍 Mongo_Conn:', process.env.Mongo_Conn ? 'Found' : 'Not found');
-    console.log('🔍 MONGO_URI:', process.env.MONGO_URI ? 'Found' : 'Not found');
+    console.log('🔍 Mongo_Conn:', process.env.Mongo_Conn ? process.env.Mongo_Conn.substring(0, 50) + '...' : 'Not found');
+    console.log('🔍 MONGO_URI:', process.env.MONGO_URI ? process.env.MONGO_URI.substring(0, 50) + '...' : 'Not found');
 
-    if (process.env.MONGO_URI || process.env.Mongo_Conn) {
-      const { connectDB } = require("./Models/db");
-      dbConnection = await connectDB();
-      dbConnected = true;
-      console.log('✅ Database connection established');
-    } else {
-      console.warn('⚠️ No database connection string found');
-      dbError = 'No connection string provided';
-    }
+    // ALWAYS try to connect - we have hardcoded connection string as fallback
+    const { connectDB } = require("./Models/db");
+    dbConnection = await connectDB();
+    dbConnected = true;
+    console.log('✅ Database connection established');
   } catch (error) {
     console.error("❌ Database connection error:", error);
     dbError = error.message;
@@ -180,14 +176,17 @@ app.get('/api/simple-test', (req, res) => {
 
 // Debug endpoint to check connection string
 app.get('/api/debug/connection', (req, res) => {
-  const mongo_url = process.env.Mongo_Conn || process.env.MONGO_URI || "mongodb+srv://mhuzaifatariq7:zqdaRL05TfaNgD8x@cluster0.kyswp.mongodb.net/hrms?retryWrites=true&w=majority";
+  // FORCE USE CORRECT CONNECTION STRING
+  const mongo_url = "mongodb+srv://mhuzaifatariq7:zqdaRL05TfaNgD8x@cluster0.kyswp.mongodb.net/hrms?retryWrites=true&w=majority";
 
   res.json({
     success: true,
     debug: {
       hasMongoConn: !!process.env.Mongo_Conn,
       hasMongoUri: !!process.env.MONGO_URI,
-      connectionPreview: mongo_url.substring(0, 50) + '...',
+      envMongoConn: process.env.Mongo_Conn ? process.env.Mongo_Conn.substring(0, 50) + '...' : 'Not found',
+      envMongoUri: process.env.MONGO_URI ? process.env.MONGO_URI.substring(0, 50) + '...' : 'Not found',
+      forcedConnection: mongo_url.substring(0, 50) + '...',
       clusterCheck: mongo_url.includes('cluster0.kyswp') ? 'CORRECT' : 'WRONG',
       environment: process.env.NODE_ENV
     },
