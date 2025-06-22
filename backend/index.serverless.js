@@ -52,53 +52,60 @@ try {
   console.error("Database connection error:", error);
 }
 
-// Import Routes with error handling
-let routesLoaded = false;
-try {
-  const menuRoutes = require("./Routes/menuRoutes");
-  const fileRoutes = require("./Routes/PicRoutes");
-  const tableRoutes = require("./Routes/tableRoutes");
-  const roomRoutes = require("./Routes/roomRoutes");
-  const staffRoutes = require("./Routes/staffRoutes");
-  const shiftRoutes = require("./Routes/shiftroutes");
-  const AuthRouter = require("./Routes/AuthRouter");
-  const ProductRouter = require("./Routes/ProductRouter");
-  const GoogleRoutes = require("./Routes/GoogleRoutes");
-  const bookingRoutes = require("./Routes/bookingRoutes");
-  const orderRoutes = require("./Routes/orderRoutes");
-  const reservationRoutes = require("./Routes/ReservationRoutes");
-  const userRoutes = require("./Routes/UserRoutes");
-  const feedbackRoutes = require("./Routes/feedbackRoutes");
-  const adminRoutes = require('./Routes/AdminRoutes');
-  const paymentRoutes = require('./Routes/paymentRoutes');
-  const recommendationRoutes = require('./Routes/recommendationRoutes');
+// Import and register routes individually with error handling
+let routesLoaded = 0;
+let totalRoutes = 0;
 
-  // Register Routes
-  app.use("/api/menus", menuRoutes);
-  app.use("/api/files", fileRoutes);
-  app.use("/api/tables", tableRoutes);
-  app.use("/api/rooms", roomRoutes);
-  app.use("/api/staff", staffRoutes);
-  app.use("/api/shift", shiftRoutes);
-  app.use("/auth", AuthRouter);
-  app.use("/api/products", ProductRouter);
-  app.use("/auth/google", GoogleRoutes);
-  app.use("/api/bookings", bookingRoutes);
-  app.use("/api/orders", orderRoutes);
-  app.use("/api/reservations", reservationRoutes);
-  app.use("/api/table-reservations", reservationRoutes);
-  app.use("/api/user", userRoutes);
-  app.use("/api/feedback", feedbackRoutes);
-  app.use("/api/admin", adminRoutes);
-  app.use("/api/payment", paymentRoutes);
-  app.use("/api/food-recommendations", recommendationRoutes);
-  app.use("/api/table-recommendations", tableRoutes);
-
-  routesLoaded = true;
-  console.log('All routes loaded successfully');
-} catch (error) {
-  console.error('Error loading routes:', error);
+// Helper function to safely load routes
+function safeLoadRoute(routePath, mountPath, routeName) {
+  try {
+    const route = require(routePath);
+    app.use(mountPath, route);
+    routesLoaded++;
+    console.log(`✅ ${routeName} loaded successfully`);
+    return true;
+  } catch (error) {
+    console.error(`❌ Failed to load ${routeName}:`, error.message);
+    return false;
+  }
 }
+
+// Load core routes first
+console.log('🔄 Loading routes...');
+
+// Essential routes
+safeLoadRoute("./Routes/menuRoutes", "/api/menus", "Menu Routes");
+safeLoadRoute("./Routes/roomRoutes", "/api/rooms", "Room Routes");
+safeLoadRoute("./Routes/tableRoutes", "/api/tables", "Table Routes");
+safeLoadRoute("./Routes/orderRoutes", "/api/orders", "Order Routes");
+safeLoadRoute("./Routes/bookingRoutes", "/api/bookings", "Booking Routes");
+safeLoadRoute("./Routes/AuthRouter", "/auth", "Auth Routes");
+
+// Additional routes
+safeLoadRoute("./Routes/PicRoutes", "/api/files", "File Routes");
+safeLoadRoute("./Routes/staffRoutes", "/api/staff", "Staff Routes");
+safeLoadRoute("./Routes/shiftroutes", "/api/shift", "Shift Routes");
+safeLoadRoute("./Routes/ProductRouter", "/api/products", "Product Routes");
+safeLoadRoute("./Routes/GoogleRoutes", "/auth/google", "Google Auth Routes");
+safeLoadRoute("./Routes/ReservationRoutes", "/api/reservations", "Reservation Routes");
+safeLoadRoute("./Routes/ReservationRoutes", "/api/table-reservations", "Table Reservation Routes");
+safeLoadRoute("./Routes/UserRoutes", "/api/user", "User Routes");
+safeLoadRoute("./Routes/feedbackRoutes", "/api/feedback", "Feedback Routes");
+safeLoadRoute("./Routes/AdminRoutes", "/api/admin", "Admin Routes");
+safeLoadRoute("./Routes/paymentRoutes", "/api/payment", "Payment Routes");
+safeLoadRoute("./Routes/recommendationRoutes", "/api/food-recommendations", "Food Recommendation Routes");
+
+totalRoutes = 17;
+console.log(`📊 Routes loaded: ${routesLoaded}/${totalRoutes}`);
+
+// Add a simple test route to verify routing works
+app.get('/api/simple-test', (req, res) => {
+  res.json({
+    success: true,
+    message: 'Simple routing test successful',
+    timestamp: new Date().toISOString()
+  });
+});
 
 // System info endpoint
 app.get('/api/info', (req, res) => {
@@ -106,7 +113,8 @@ app.get('/api/info', (req, res) => {
     success: true,
     system: {
       database: dbConnected ? 'connected' : 'disconnected',
-      routes: routesLoaded ? 'loaded' : 'failed',
+      routes: `${routesLoaded}/${totalRoutes} loaded`,
+      routesWorking: routesLoaded > 0,
       environment: process.env.NODE_ENV || 'production',
       timestamp: new Date().toISOString()
     }
@@ -118,6 +126,36 @@ app.get('/api/test', (req, res) => {
   res.status(200).json({
     success: true,
     message: 'API is working correctly',
+    timestamp: new Date().toISOString()
+  });
+});
+
+// Debug routes endpoint
+app.get('/api/debug/routes', (req, res) => {
+  const routes = [];
+  app._router.stack.forEach((middleware) => {
+    if (middleware.route) {
+      routes.push({
+        path: middleware.route.path,
+        methods: Object.keys(middleware.route.methods)
+      });
+    } else if (middleware.name === 'router') {
+      middleware.handle.stack.forEach((handler) => {
+        if (handler.route) {
+          routes.push({
+            path: handler.route.path,
+            methods: Object.keys(handler.route.methods)
+          });
+        }
+      });
+    }
+  });
+
+  res.json({
+    success: true,
+    routesLoaded: routesLoaded,
+    totalRoutes: totalRoutes,
+    registeredRoutes: routes,
     timestamp: new Date().toISOString()
   });
 });
