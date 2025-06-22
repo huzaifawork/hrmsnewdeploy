@@ -224,6 +224,92 @@ app.get('/', (req, res) => {
   });
 });
 
+// Public test endpoints for API verification
+app.get('/api/test-db', async (req, res) => {
+  try {
+    const mongoose = require('mongoose');
+    const connectionState = mongoose.connection.readyState;
+    const states = {
+      0: 'disconnected',
+      1: 'connected',
+      2: 'connecting',
+      3: 'disconnecting'
+    };
+
+    res.json({
+      success: true,
+      database: {
+        state: states[connectionState],
+        readyState: connectionState,
+        host: mongoose.connection.host,
+        name: mongoose.connection.name
+      },
+      timestamp: new Date().toISOString()
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: error.message,
+      timestamp: new Date().toISOString()
+    });
+  }
+});
+
+// Public menu test (no auth required)
+app.get('/api/test-menus', async (req, res) => {
+  try {
+    const Menu = require('./Models/Menu');
+    const count = await Menu.countDocuments();
+    const sample = await Menu.findOne().lean();
+
+    res.json({
+      success: true,
+      menuCount: count,
+      sampleMenu: sample ? {
+        id: sample._id,
+        name: sample.name,
+        category: sample.category,
+        price: sample.price
+      } : null,
+      timestamp: new Date().toISOString()
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: error.message,
+      timestamp: new Date().toISOString()
+    });
+  }
+});
+
+// Public rooms test (no auth required)
+app.get('/api/test-rooms', async (req, res) => {
+  try {
+    const Room = require('./Models/Room');
+    const count = await Room.countDocuments();
+    const sample = await Room.findOne().lean();
+
+    res.json({
+      success: true,
+      roomCount: count,
+      sampleRoom: sample ? {
+        id: sample._id,
+        roomType: sample.roomType,
+        roomNumber: sample.roomNumber,
+        price: sample.price,
+        status: sample.status
+      } : null,
+      timestamp: new Date().toISOString()
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: error.message,
+      timestamp: new Date().toISOString()
+    });
+  }
+});
+
 // Error handling middleware
 app.use((error, req, res, next) => {
   console.error('Unhandled error:', error);
