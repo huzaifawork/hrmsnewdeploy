@@ -49,6 +49,7 @@ const Dashboard = () => {
   const [openDropdown, setOpenDropdown] = useState(null);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [notifications, setNotifications] = useState(3);
+  const [isNotificationOpen, setIsNotificationOpen] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -70,6 +71,39 @@ const Dashboard = () => {
   const toggleDropdown = (module) => {
     setOpenDropdown(openDropdown === module ? null : module);
   };
+
+  const toggleNotification = () => {
+    setIsNotificationOpen(!isNotificationOpen);
+  };
+
+  // Close mobile menu when clicking outside or on escape
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (isMobileMenuOpen && !event.target.closest('.enhanced-sidebar') && !event.target.closest('.mobile-menu-toggle')) {
+        setIsMobileMenuOpen(false);
+      }
+    };
+
+    const handleEscape = (event) => {
+      if (event.key === 'Escape' && isMobileMenuOpen) {
+        setIsMobileMenuOpen(false);
+      }
+    };
+
+    if (isMobileMenuOpen) {
+      document.addEventListener('mousedown', handleClickOutside);
+      document.addEventListener('keydown', handleEscape);
+      document.body.style.overflow = 'hidden'; // Prevent background scroll
+    } else {
+      document.body.style.overflow = 'unset';
+    }
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener('keydown', handleEscape);
+      document.body.style.overflow = 'unset';
+    };
+  }, [isMobileMenuOpen]);
 
   const menuItems = [
     {
@@ -228,12 +262,11 @@ const Dashboard = () => {
   return (
     <div className="enhanced-dashboard-container">
       {/* Mobile Menu Overlay */}
-      {isMobileMenuOpen && (
-        <div
-          className="mobile-overlay"
-          onClick={() => setIsMobileMenuOpen(false)}
-        />
-      )}
+      <div
+        className={`mobile-overlay ${isMobileMenuOpen ? 'active' : ''}`}
+        onClick={() => setIsMobileMenuOpen(false)}
+        style={{ display: isMobileMenuOpen ? 'block' : 'none' }}
+      />
 
       {/* Enhanced Sidebar */}
       <aside className={`enhanced-sidebar ${isSidebarCollapsed ? "collapsed" : ""} ${isMobileMenuOpen ? "mobile-open" : ""}`}>
@@ -276,9 +309,17 @@ const Dashboard = () => {
                   <React.Fragment key={item.name}>
                     <li
                       className={`menu-item ${isActive ? "active" : ""} ${hasSubmenu ? "has-submenu" : ""}`}
-                      onClick={() =>
-                        hasSubmenu ? toggleDropdown(item.name) : setSelectedModule(item.component || item.name)
-                      }
+                      onClick={() => {
+                        if (hasSubmenu) {
+                          toggleDropdown(item.name);
+                        } else {
+                          setSelectedModule(item.component || item.name);
+                          // Close mobile menu when item is selected
+                          if (window.innerWidth <= 768) {
+                            setIsMobileMenuOpen(false);
+                          }
+                        }
+                      }}
                     >
                       <div className="menu-item-content">
                         <div className="menu-item-left">
@@ -331,6 +372,10 @@ const Dashboard = () => {
                               onClick={(e) => {
                                 e.stopPropagation();
                                 setSelectedModule(subItem.component);
+                                // Close mobile menu when submenu item is selected
+                                if (window.innerWidth <= 768) {
+                                  setIsMobileMenuOpen(false);
+                                }
                               }}
                             >
                               <div className="submenu-item-content">
@@ -362,8 +407,9 @@ const Dashboard = () => {
             <button
               className="mobile-menu-toggle"
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+              aria-label="Toggle mobile menu"
             >
-              <FiMenu />
+              {isMobileMenuOpen ? <FiX /> : <FiMenu />}
             </button>
             <div className="breadcrumb">
               <FiHome className="breadcrumb-icon" />
@@ -391,50 +437,54 @@ const Dashboard = () => {
 
           <div className="navbar-right">
             <div className="navbar-actions">
-              <button className="action-btn notification-btn">
-                <FiBell className="action-icon" />
-                {notifications > 0 && (
-                  <span className="notification-badge">{notifications}</span>
+              <div className="notification-btn">
+                <button className="action-btn" onClick={toggleNotification}>
+                  <FiBell className="action-icon" />
+                  {notifications > 0 && (
+                    <span className="notification-badge">{notifications}</span>
+                  )}
+                </button>
+                {isNotificationOpen && (
+                  <div className="notification-dropdown">
+                    <div className="notification-header">
+                      <h4>Notifications</h4>
+                      <span className="notification-count">{notifications} new</span>
+                    </div>
+                    <div className="notification-list">
+                      <div className="notification-item">
+                        <div className="notification-icon">
+                          <FiShoppingCart />
+                        </div>
+                        <div className="notification-content">
+                          <p>New order received</p>
+                          <span>2 minutes ago</span>
+                        </div>
+                      </div>
+                      <div className="notification-item">
+                        <div className="notification-icon">
+                          <FiCalendar />
+                        </div>
+                        <div className="notification-content">
+                          <p>Room booking confirmed</p>
+                          <span>5 minutes ago</span>
+                        </div>
+                      </div>
+                      <div className="notification-item">
+                        <div className="notification-icon">
+                          <FiUsers />
+                        </div>
+                        <div className="notification-content">
+                          <p>New staff member added</p>
+                          <span>10 minutes ago</span>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="notification-footer">
+                      <button className="view-all-btn">View All</button>
+                    </div>
+                  </div>
                 )}
-                <div className="notification-dropdown">
-                  <div className="notification-header">
-                    <h4>Notifications</h4>
-                    <span className="notification-count">{notifications} new</span>
-                  </div>
-                  <div className="notification-list">
-                    <div className="notification-item">
-                      <div className="notification-icon">
-                        <FiShoppingCart />
-                      </div>
-                      <div className="notification-content">
-                        <p>New order received</p>
-                        <span>2 minutes ago</span>
-                      </div>
-                    </div>
-                    <div className="notification-item">
-                      <div className="notification-icon">
-                        <FiCalendar />
-                      </div>
-                      <div className="notification-content">
-                        <p>Room booking confirmed</p>
-                        <span>5 minutes ago</span>
-                      </div>
-                    </div>
-                    <div className="notification-item">
-                      <div className="notification-icon">
-                        <FiUsers />
-                      </div>
-                      <div className="notification-content">
-                        <p>New staff member added</p>
-                        <span>10 minutes ago</span>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="notification-footer">
-                    <button className="view-all-btn">View All</button>
-                  </div>
-                </div>
-              </button>
+              </div>
 
               <button className="action-btn mail-btn">
                 <FiMail className="action-icon" />

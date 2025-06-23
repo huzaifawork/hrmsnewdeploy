@@ -170,6 +170,46 @@ const MostPopularItems = () => {
             0%, 100% { opacity: 1; transform: scale(1); }
             50% { opacity: 0.8; transform: scale(1.1); }
           }
+
+          /* Responsive Styles for MostPopularItems */
+          @media (max-width: 768px) {
+            .popular-items-container {
+              padding: 0 1rem !important;
+            }
+            .popular-items-grid {
+              grid-template-columns: 1fr !important;
+              gap: 1rem !important;
+              max-width: 100% !important;
+            }
+            .popular-items-title {
+              font-size: 2rem !important;
+            }
+            .popular-item-card {
+              max-width: 100% !important;
+              min-width: auto !important;
+              margin: 0 !important;
+            }
+            .popular-item-features {
+              grid-template-columns: repeat(2, 1fr) !important;
+              gap: 0.3rem !important;
+            }
+          }
+
+          @media (max-width: 480px) {
+            .popular-items-container {
+              padding: 0 0.75rem !important;
+            }
+            .popular-items-title {
+              font-size: 1.75rem !important;
+            }
+            .popular-item-features {
+              grid-template-columns: 1fr !important;
+              gap: 0.25rem !important;
+            }
+            .popular-item-content {
+              padding: 0.75rem !important;
+            }
+          }
         `}
       </style>
       <section style={{
@@ -207,7 +247,7 @@ const MostPopularItems = () => {
         zIndex: 0
       }} />
 
-      <div style={{
+      <div className="popular-items-container" style={{
         width: '100%',
         maxWidth: '1000px',
         margin: '0 auto',
@@ -216,7 +256,7 @@ const MostPopularItems = () => {
         zIndex: 1
       }}>
         <div style={{ textAlign: 'center', marginBottom: '2rem' }}>
-          <h2 style={{
+          <h2 className="popular-items-title" style={{
             fontSize: '2.5rem',
             fontWeight: '800',
             background: 'linear-gradient(135deg, #ffffff 0%, #bb86fc 100%)',
@@ -260,7 +300,7 @@ const MostPopularItems = () => {
           </Link>
         </div>
 
-        <div style={{
+        <div className="popular-items-grid" style={{
           display: 'grid',
           gridTemplateColumns: 'repeat(3, 1fr)',
           gap: '1rem',
@@ -272,6 +312,7 @@ const MostPopularItems = () => {
           {menuItems.map((item) => (
             <div
               key={item._id}
+              className="popular-item-card"
               style={{
                 background: 'linear-gradient(145deg, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0.02) 100%)',
                 backdropFilter: 'blur(20px)',
@@ -344,7 +385,7 @@ const MostPopularItems = () => {
               </div>
 
               {/* Content Section */}
-              <div style={{ padding: '1rem' }}>
+              <div className="popular-item-content" style={{ padding: '1rem' }}>
                 <h3 style={{
                   color: '#fff',
                   fontSize: '1rem',
@@ -386,7 +427,7 @@ const MostPopularItems = () => {
                 </p>
 
                 {/* Feature Badges */}
-                <div style={{
+                <div className="popular-item-features" style={{
                   display: 'grid',
                   gridTemplateColumns: 'repeat(3, 1fr)',
                   gap: '0.5rem',

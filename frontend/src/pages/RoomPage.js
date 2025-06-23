@@ -22,6 +22,114 @@ import RoomDetailsModal from '../components/RoomDetailsModal';
 import { getRoomImageUrl, handleImageError } from '../utils/imageUtils';
 // import RoomRecommendationExplainer from '../components/RoomRecommendationExplainer';
 
+// Add responsive styles for RoomPage
+const responsiveStyles = `
+  @media (max-width: 768px) {
+    .room-page-hero {
+      padding: 1.5rem 1rem 1rem !important;
+    }
+    .room-page-title {
+      font-size: 2rem !important;
+    }
+    .room-page-subtitle {
+      font-size: 0.9rem !important;
+    }
+    .room-page-tabs {
+      flex-direction: column !important;
+      gap: 0.5rem !important;
+    }
+    .room-page-tab-button {
+      padding: 0.625rem 1rem !important;
+      font-size: 0.8rem !important;
+    }
+    .room-page-filters {
+      margin: 0 1rem 1.5rem !important;
+      padding: 1rem !important;
+    }
+    .room-page-filters-grid {
+      grid-template-columns: 1fr !important;
+      gap: 0.75rem !important;
+    }
+    .room-page-grid {
+      grid-template-columns: 1fr !important;
+      gap: 1rem !important;
+      margin: 0 1rem !important;
+    }
+    .room-page-card {
+      margin: 0 !important;
+    }
+    .room-page-card-content {
+      padding: 1.25rem !important;
+    }
+    .room-page-card-title {
+      font-size: 1.1rem !important;
+    }
+    .room-page-card-description {
+      font-size: 0.85rem !important;
+    }
+    .room-page-badge {
+      padding: 0.375rem 0.625rem !important;
+      font-size: 0.75rem !important;
+    }
+    .room-page-button {
+      padding: 0.625rem 1rem !important;
+      font-size: 0.85rem !important;
+    }
+    .room-page-amenity {
+      font-size: 0.7rem !important;
+      padding: 0.25rem 0.5rem !important;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .room-page-hero {
+      padding: 1rem 0.75rem 0.75rem !important;
+    }
+    .room-page-title {
+      font-size: 1.75rem !important;
+    }
+    .room-page-subtitle {
+      font-size: 0.85rem !important;
+    }
+    .room-page-filters {
+      margin: 0 0.75rem 1.25rem !important;
+      padding: 0.75rem !important;
+    }
+    .room-page-grid {
+      margin: 0 0.75rem !important;
+      gap: 0.75rem !important;
+    }
+    .room-page-card-content {
+      padding: 1rem !important;
+    }
+    .room-page-card-title {
+      font-size: 1rem !important;
+    }
+    .room-page-card-description {
+      font-size: 0.8rem !important;
+    }
+    .room-page-badge {
+      padding: 0.25rem 0.5rem !important;
+      font-size: 0.7rem !important;
+    }
+    .room-page-button {
+      padding: 0.5rem 0.75rem !important;
+      font-size: 0.8rem !important;
+    }
+    .room-page-amenity {
+      font-size: 0.65rem !important;
+      padding: 0.2rem 0.4rem !important;
+    }
+  }
+`;
+
+// Inject styles
+if (typeof document !== 'undefined') {
+  const styleElement = document.createElement('style');
+  styleElement.textContent = responsiveStyles;
+  document.head.appendChild(styleElement);
+}
+
 const RoomPage = () => {
   const navigate = useNavigate();
   const [rooms, setRooms] = useState([]);
@@ -463,12 +571,12 @@ const RoomPage = () => {
           padding: '60px 1.5rem 1.5rem'
         }}>
           {/* Hero Section */}
-          <div style={{
+          <div className="room-page-hero" style={{
             textAlign: 'center',
             marginBottom: '2rem',
             padding: '1rem 0'
           }}>
-            <h1 style={{
+            <h1 className="room-page-title" style={{
               fontSize: '2.5rem',
               fontWeight: '700',
               background: 'linear-gradient(135deg, #ffffff 0%, #64ffda 30%, #bb86fc 70%, #ff6b9d 100%)',
@@ -482,7 +590,7 @@ const RoomPage = () => {
             }}>
               Luxury Accommodations
             </h1>
-            <p style={{
+            <p className="room-page-subtitle" style={{
               fontSize: '1rem',
               color: 'rgba(255, 255, 255, 0.8)',
               margin: '0',
@@ -512,7 +620,7 @@ const RoomPage = () => {
           )}
 
           {/* Modern Filters and Tabs */}
-          <div style={{
+          <div className="room-page-filters" style={{
             background: 'linear-gradient(145deg, rgba(17, 34, 64, 0.6) 0%, rgba(26, 35, 50, 0.4) 100%)',
             backdropFilter: 'blur(20px)',
             border: '1px solid rgba(255, 255, 255, 0.1)',
@@ -522,13 +630,14 @@ const RoomPage = () => {
             animation: 'slideInUp 0.8s ease-out 0.4s both'
           }}>
             {/* Tabs */}
-            <div style={{
+            <div className="room-page-tabs" style={{
               display: 'flex',
               gap: '0.75rem',
               marginBottom: '1.5rem',
               flexWrap: 'wrap'
             }}>
               <button
+                className="room-page-tab-button"
                 onClick={() => setActiveTab('all')}
                 style={{
                   padding: '0.5rem 1rem',
@@ -553,6 +662,7 @@ const RoomPage = () => {
 
               {user && (
                 <button
+                  className="room-page-tab-button"
                   onClick={() => setActiveTab('recommended')}
                   style={{
                     padding: '0.5rem 1rem',
@@ -587,6 +697,7 @@ const RoomPage = () => {
               )}
 
               <button
+                className="room-page-tab-button"
                 onClick={() => setActiveTab('popular')}
                 style={{
                   padding: '0.5rem 1rem',
@@ -611,7 +722,7 @@ const RoomPage = () => {
             </div>
 
             {/* Quick Filters */}
-            <div style={{
+            <div className="room-page-filters-grid" style={{
               display: 'grid',
               gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))',
               gap: '0.75rem',
@@ -1155,7 +1266,7 @@ const RoomPage = () => {
           </div>
 
           {/* Rooms Grid */}
-          <div style={{
+          <div className="room-page-grid" style={{
             display: 'grid',
             gridTemplateColumns: 'repeat(auto-fit, minmax(350px, 1fr))',
             gap: '1.5rem',
@@ -1215,6 +1326,7 @@ const RoomPage = () => {
                 return (
                   <div
                     key={room._id || roomItem.roomId}
+                    className="room-page-card"
                     style={{
                       background: 'linear-gradient(145deg, rgba(17, 34, 64, 0.6) 0%, rgba(26, 35, 50, 0.4) 100%)',
                       backdropFilter: 'blur(20px)',
@@ -1259,7 +1371,7 @@ const RoomPage = () => {
                       />
 
                       {/* Price Badge */}
-                      <div style={{
+                      <div className="room-page-badge" style={{
                         position: 'absolute',
                         top: '1rem',
                         right: '1rem',
@@ -1311,7 +1423,7 @@ const RoomPage = () => {
                       )}
                     </div>
                     {/* Card Content */}
-                    <div style={{
+                    <div className="room-page-card-content" style={{
                       padding: '1.5rem',
                       display: 'flex',
                       flexDirection: 'column',
@@ -1325,7 +1437,7 @@ const RoomPage = () => {
                         marginBottom: '1rem'
                       }}>
                         <div>
-                          <h3 style={{
+                          <h3 className="room-page-card-title" style={{
                             fontSize: '1.25rem',
                             fontWeight: '700',
                             color: '#fff',
@@ -1371,7 +1483,7 @@ const RoomPage = () => {
                       </div>
 
                       {/* Description */}
-                      <p style={{
+                      <p className="room-page-card-description" style={{
                         color: 'rgba(255, 255, 255, 0.8)',
                         fontSize: '0.9rem',
                         lineHeight: '1.5',
@@ -1395,6 +1507,7 @@ const RoomPage = () => {
                         {room.amenities && room.amenities.slice(0, 3).map((amenity, index) => (
                           <span
                             key={index}
+                            className="room-page-amenity"
                             style={{
                               padding: '0.25rem 0.75rem',
                               background: 'rgba(100, 255, 218, 0.1)',
@@ -1434,6 +1547,7 @@ const RoomPage = () => {
                         marginTop: 'auto'
                       }}>
                         <button
+                          className="room-page-button"
                           onClick={() => handleBookRoom(room)}
                           disabled={false}
                           style={{
@@ -1458,6 +1572,7 @@ const RoomPage = () => {
                         </button>
 
                         <button
+                          className="room-page-button"
                           onClick={() => handleViewDetails(room, roomItem)}
                           style={{
                             padding: '0.75rem 1rem',

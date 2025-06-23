@@ -16,7 +16,7 @@ export default function About() {
       boxSizing: 'border-box',
       overflow: 'hidden'
     }}>
-      <div style={{
+      <div className="about-section-mobile" style={{
         width: '100%',
         padding: '0 2rem',
         position: 'relative',

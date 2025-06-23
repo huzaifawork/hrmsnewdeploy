@@ -135,6 +135,46 @@ const TableReservation = () => {
             0%, 100% { opacity: 1; transform: scale(1); }
             50% { opacity: 0.8; transform: scale(1.1); }
           }
+
+          /* Responsive Styles for TableReservation */
+          @media (max-width: 768px) {
+            .table-reservation-container {
+              padding: 0 1rem !important;
+            }
+            .table-reservation-grid {
+              grid-template-columns: 1fr !important;
+              gap: 1rem !important;
+              max-width: 100% !important;
+            }
+            .table-reservation-title {
+              font-size: 2rem !important;
+            }
+            .table-card-mobile {
+              max-width: 100% !important;
+              min-width: auto !important;
+              margin: 0 !important;
+            }
+            .table-features-grid {
+              grid-template-columns: repeat(2, 1fr) !important;
+              gap: 0.3rem !important;
+            }
+          }
+
+          @media (max-width: 480px) {
+            .table-reservation-container {
+              padding: 0 0.75rem !important;
+            }
+            .table-reservation-title {
+              font-size: 1.75rem !important;
+            }
+            .table-features-grid {
+              grid-template-columns: 1fr !important;
+              gap: 0.25rem !important;
+            }
+            .table-card-content {
+              padding: 0.75rem !important;
+            }
+          }
         `}
       </style>
       <section style={{
@@ -172,7 +212,7 @@ const TableReservation = () => {
           zIndex: 0
         }} />
 
-        <div style={{
+        <div className="table-reservation-container" style={{
           width: '100%',
           maxWidth: '1400px',
           margin: '0 auto',
@@ -181,7 +221,7 @@ const TableReservation = () => {
           zIndex: 1
         }}>
           <div style={{ textAlign: 'center', marginBottom: '2rem' }}>
-            <h2 style={{
+            <h2 className="table-reservation-title" style={{
               fontSize: '2.5rem',
               fontWeight: '800',
               background: 'linear-gradient(135deg, #ffffff 0%, #bb86fc 100%)',
@@ -225,7 +265,7 @@ const TableReservation = () => {
             </Link>
           </div>
 
-          <div style={{
+          <div className="table-reservation-grid" style={{
             display: 'grid',
             gridTemplateColumns: 'repeat(3, 1fr)',
             gap: '1rem',
@@ -257,6 +297,7 @@ const TableReservation = () => {
               return (
                 <div
                   key={table._id || index}
+                  className="table-card-mobile"
                   style={{
                     background: hoveredTable === table._id 
                       ? 'linear-gradient(145deg, rgba(187, 134, 252, 0.08) 0%, rgba(255, 107, 157, 0.04) 100%)'
@@ -392,7 +433,7 @@ const TableReservation = () => {
                     </div>
                   </div>
 
-                  <div style={{
+                  <div className="table-card-content" style={{
                     padding: '1rem',
                     display: 'flex',
                     flexDirection: 'column',
@@ -431,7 +472,7 @@ const TableReservation = () => {
                       </div>
                     </div>
 
-                    <div style={{
+                    <div className="table-features-grid" style={{
                       display: 'grid',
                       gridTemplateColumns: 'repeat(3, 1fr)',
                       gap: '0.5rem'

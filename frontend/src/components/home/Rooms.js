@@ -193,6 +193,53 @@ const Rooms = () => {
             from { opacity: 0; transform: translateY(20px); }
             to { opacity: 1; transform: translateY(0); }
           }
+
+          /* Responsive Styles */
+          @media (max-width: 768px) {
+            .rooms-grid {
+              grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)) !important;
+              gap: 1rem !important;
+              padding: 0 0.5rem !important;
+            }
+            .room-card {
+              max-width: 100% !important;
+              min-width: 250px !important;
+            }
+            .room-image {
+              height: 160px !important;
+            }
+            .room-title {
+              font-size: 1rem !important;
+            }
+            .room-description {
+              font-size: 0.8rem !important;
+            }
+            .facility-grid {
+              grid-template-columns: repeat(2, 1fr) !important;
+              gap: 0.5rem !important;
+            }
+          }
+
+          @media (max-width: 480px) {
+            .rooms-grid {
+              grid-template-columns: 1fr !important;
+              gap: 0.75rem !important;
+              padding: 0 !important;
+            }
+            .room-card {
+              margin: 0 0.5rem !important;
+              min-width: auto !important;
+            }
+            .room-image {
+              height: 140px !important;
+            }
+            .room-content {
+              padding: 1rem !important;
+            }
+            .facility-grid {
+              grid-template-columns: 1fr !important;
+            }
+          }
         `}
       </style>
       <section style={{
@@ -283,9 +330,9 @@ const Rooms = () => {
           </Link>
         </div>
 
-        <div style={{
+        <div className="rooms-grid" style={{
           display: 'grid',
-          gridTemplateColumns: 'repeat(3, 1fr)',
+          gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
           gap: '1rem',
           width: '100%',
           maxWidth: '1000px',
@@ -298,6 +345,7 @@ const Rooms = () => {
             return (
             <div
               key={room._id || roomItem.roomId}
+              className="room-card"
               style={{
                 background: hoveredRoom === room._id
                   ? 'linear-gradient(145deg, rgba(100, 255, 218, 0.12) 0%, rgba(187, 134, 252, 0.08) 50%, rgba(255, 107, 157, 0.06) 100%)'

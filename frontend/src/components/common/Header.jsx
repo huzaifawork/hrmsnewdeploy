@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Navbar, Nav, Container, Button, Dropdown } from "react-bootstrap";
 import { BsCart } from "react-icons/bs";
-import { FiUser, FiShoppingBag, FiCalendar, FiHome, FiLogOut, FiLayout } from "react-icons/fi";
+import { FiUser, FiShoppingBag, FiCalendar, FiHome, FiLogOut, FiLayout, FiX } from "react-icons/fi";
 import { BiMessageSquare } from "react-icons/bi";
 import { navList } from "../data/Data";
 import "../../styles/simple-theme.css";
@@ -13,6 +13,7 @@ export default function Header() {
   const [userRole, setUserRole] = useState(null);
   const [cartItems, setCartItems] = useState(0);
   const [scrolled, setScrolled] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -63,6 +64,14 @@ export default function Header() {
     navigate("/login", { replace: true });
   };
 
+  const toggleMobileMenu = () => {
+    setMobileMenuOpen(!mobileMenuOpen);
+  };
+
+  const closeMobileMenu = () => {
+    setMobileMenuOpen(false);
+  };
+
   return (
     <Navbar
       expand="lg"
@@ -83,27 +92,55 @@ export default function Header() {
           </div>
         </Navbar.Brand>
 
-        <Navbar.Toggle aria-controls="main-nav" className="mobile-menu">
+        <Navbar.Toggle
+          aria-controls="main-nav"
+          className="mobile-menu"
+          onClick={toggleMobileMenu}
+        >
           <div className="hamburger">
-            <span />
-            <span />
-            <span />
+            {mobileMenuOpen ? (
+              <FiX size={24} />
+            ) : (
+              <>
+                <span />
+                <span />
+                <span />
+              </>
+            )}
           </div>
         </Navbar.Toggle>
 
-        <Navbar.Collapse id="main-nav">
+        <Navbar.Collapse id="main-nav" in={mobileMenuOpen}>
           <Nav className="navbar-nav">
+            {/* Close button for mobile menu */}
+            <div className="mobile-close-btn d-lg-none">
+              <Button
+                variant="link"
+                onClick={closeMobileMenu}
+                className="text-light p-2"
+                style={{ position: 'absolute', top: '10px', right: '15px' }}
+              >
+                <FiX size={24} />
+              </Button>
+            </div>
+
             {navList.map((item) => (
               <Nav.Link
                 key={item.id}
                 as={Link}
                 to={item.path}
                 className="nav-link"
+                onClick={closeMobileMenu}
               >
                 {item.text}
               </Nav.Link>
             ))}
-            <Nav.Link as={Link} to="/help" className="nav-link">
+            <Nav.Link
+              as={Link}
+              to="/help"
+              className="nav-link"
+              onClick={closeMobileMenu}
+            >
               Help
             </Nav.Link>
             {userName && (
@@ -111,6 +148,7 @@ export default function Header() {
                 as={Link}
                 to="/feedback"
                 className="nav-link"
+                onClick={closeMobileMenu}
               >
                 <BiMessageSquare className="me-1" />
                 Feedback
@@ -119,7 +157,11 @@ export default function Header() {
           </Nav>
 
           <div className="d-flex align-items-center gap-4 auth-section">
-            <Link to="/cart" className="cart-icon position-relative text-decoration-none">
+            <Link
+              to="/cart"
+              className="cart-icon position-relative text-decoration-none"
+              onClick={closeMobileMenu}
+            >
               <BsCart size={20} className="text-light" />
               {cartItems > 0 && (
                 <span className="cart-badge">{cartItems}</span>
@@ -145,29 +187,29 @@ export default function Header() {
                   </div>
 
                   {userRole === "admin" && (
-                    <Dropdown.Item as={Link} to="/dashboard" className="admin-item">
+                    <Dropdown.Item as={Link} to="/dashboard" className="admin-item" onClick={closeMobileMenu}>
                       <FiLayout className="dropdown-icon" />
                       Dashboard
                     </Dropdown.Item>
                   )}
-                  <Dropdown.Item as={Link} to="/profile">
+                  <Dropdown.Item as={Link} to="/profile" onClick={closeMobileMenu}>
                     <FiUser className="dropdown-icon" />
                     Profile
                   </Dropdown.Item>
-                  <Dropdown.Item as={Link} to="/my-orders">
+                  <Dropdown.Item as={Link} to="/my-orders" onClick={closeMobileMenu}>
                     <FiShoppingBag className="dropdown-icon" />
                     My Orders
                   </Dropdown.Item>
-                  <Dropdown.Item as={Link} to="/my-reservations">
+                  <Dropdown.Item as={Link} to="/my-reservations" onClick={closeMobileMenu}>
                     <FiCalendar className="dropdown-icon" />
                     My Reservations
                   </Dropdown.Item>
-                  <Dropdown.Item as={Link} to="/my-bookings">
+                  <Dropdown.Item as={Link} to="/my-bookings" onClick={closeMobileMenu}>
                     <FiHome className="dropdown-icon" />
                     My Bookings
                   </Dropdown.Item>
                   <Dropdown.Divider />
-                  <Dropdown.Item onClick={handleLogout} className="logout-item">
+                  <Dropdown.Item onClick={() => { handleLogout(); closeMobileMenu(); }} className="logout-item">
                     <FiLogOut className="dropdown-icon" />
                     Log Out
                   </Dropdown.Item>
@@ -175,7 +217,7 @@ export default function Header() {
               </Dropdown>
             ) : (
               <Button
-                onClick={() => navigate("/login")}
+                onClick={() => { navigate("/login"); closeMobileMenu(); }}
                 className="auth-button"
               >
                 Sign In

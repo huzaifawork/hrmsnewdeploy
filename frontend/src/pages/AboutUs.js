@@ -77,6 +77,64 @@ const AboutUs = () => {
             from { opacity: 0; transform: translateY(30px); }
             to { opacity: 1; transform: translateY(0); }
           }
+
+          /* Responsive Styles for About Us Page */
+          @media (max-width: 768px) {
+            .about-page-container {
+              padding: 2rem 1rem !important;
+            }
+            .about-page-title {
+              font-size: 2.5rem !important;
+            }
+            .about-page-subtitle {
+              font-size: 1rem !important;
+            }
+            .about-stats-grid {
+              grid-template-columns: repeat(2, 1fr) !important;
+              gap: 1rem !important;
+            }
+            .about-features-grid {
+              grid-template-columns: 1fr !important;
+              gap: 1rem !important;
+            }
+            .about-stat-card {
+              padding: 1.5rem 1rem !important;
+            }
+            .about-feature-card {
+              padding: 1.5rem !important;
+            }
+          }
+
+          @media (max-width: 480px) {
+            .about-page-container {
+              padding: 1.5rem 0.75rem !important;
+            }
+            .about-page-title {
+              font-size: 2rem !important;
+            }
+            .about-page-subtitle {
+              font-size: 0.9rem !important;
+            }
+            .about-stats-grid {
+              grid-template-columns: 1fr !important;
+              gap: 0.75rem !important;
+            }
+            .about-stat-card {
+              padding: 1.25rem 1rem !important;
+            }
+            .about-feature-card {
+              padding: 1.25rem !important;
+            }
+            .about-stat-number {
+              font-size: 2rem !important;
+            }
+            .about-feature-title {
+              font-size: 1.2rem !important;
+            }
+            .about-feature-description {
+              font-size: 0.9rem !important;
+            }
+          }
         `}
       </style>
 
@@ -117,7 +175,7 @@ const AboutUs = () => {
           zIndex: 0
         }} />
 
-        <div style={{
+        <div className="about-page-container" style={{
           width: '100%',
           maxWidth: '1200px',
           margin: '0 auto',
@@ -127,7 +185,7 @@ const AboutUs = () => {
         }}>
           {/* Header Section */}
           <div style={{ textAlign: 'center', marginBottom: '3rem' }}>
-            <h1 style={{
+            <h1 className="about-page-title" style={{
               fontSize: '3rem',
               fontWeight: '900',
               background: 'linear-gradient(135deg, #ffffff 0%, #64ffda 50%, #bb86fc 100%)',
@@ -140,7 +198,7 @@ const AboutUs = () => {
             }}>
               About Night Elegance
             </h1>
-            <p style={{
+            <p className="about-page-subtitle" style={{
               fontSize: '1.2rem',
               color: 'rgba(255, 255, 255, 0.8)',
               maxWidth: '600px',
@@ -153,7 +211,7 @@ const AboutUs = () => {
           </div>
 
           {/* Stats Section */}
-          <div style={{
+          <div className="about-stats-grid" style={{
             display: 'grid',
             gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
             gap: '1.5rem',
@@ -163,6 +221,7 @@ const AboutUs = () => {
             {stats.map((stat, index) => (
               <div
                 key={index}
+                className="about-stat-card"
                 style={{
                   background: 'linear-gradient(145deg, rgba(17, 34, 64, 0.8) 0%, rgba(26, 35, 50, 0.6) 100%)',
                   backdropFilter: 'blur(20px)',
@@ -202,7 +261,7 @@ const AboutUs = () => {
                 }}>
                   {stat.icon}
                 </div>
-                <div style={{
+                <div className="about-stat-number" style={{
                   fontSize: '2.5rem',
                   fontWeight: '900',
                   background: 'linear-gradient(135deg, #64ffda 0%, #bb86fc 100%)',
@@ -227,7 +286,7 @@ const AboutUs = () => {
           </div>
 
           {/* Features Section */}
-          <div style={{
+          <div className="about-features-grid" style={{
             display: 'grid',
             gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
             gap: '1.5rem',
@@ -236,6 +295,7 @@ const AboutUs = () => {
             {features.map((feature, index) => (
               <div
                 key={index}
+                className="about-feature-card"
                 style={{
                   background: 'linear-gradient(145deg, rgba(17, 34, 64, 0.6) 0%, rgba(26, 35, 50, 0.4) 100%)',
                   backdropFilter: 'blur(20px)',
@@ -274,7 +334,7 @@ const AboutUs = () => {
                 }}>
                   {feature.icon}
                 </div>
-                <h3 style={{
+                <h3 className="about-feature-title" style={{
                   fontSize: '1.4rem',
                   fontWeight: '800',
                   color: '#fff',
@@ -287,7 +347,7 @@ const AboutUs = () => {
                 }}>
                   {feature.title}
                 </h3>
-                <p style={{
+                <p className="about-feature-description" style={{
                   color: 'rgba(255, 255, 255, 0.8)',
                   fontSize: '1rem',
                   lineHeight: '1.6',

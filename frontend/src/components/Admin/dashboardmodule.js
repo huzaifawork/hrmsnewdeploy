@@ -585,7 +585,7 @@ export default function Dashboardmodule() {
           <div className="title-section">
             <div className="title-wrapper">
               <div className="title-icon-wrapper">
-                <FaChartBar className="title-icon" />
+                <FaChartLine className="title-icon" />
               </div>
               <div className="title-text">
                 <h1 className="dash-title-enhanced">

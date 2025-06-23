@@ -5,7 +5,7 @@
   import {
     FiImage, FiPlus, FiHome, FiDollarSign, FiUsers, FiMapPin,
     FiWifi, FiTv, FiCoffee, FiTruck, FiEye, FiCheck, FiX,
-    FiUpload, FiSave, FiRefreshCw, FiEdit, FiLayers
+    FiUpload, FiSave, FiRefreshCw, FiEdit, FiLayers, FiHeart
   } from "react-icons/fi";
   import "./AdminManageRooms.css";
 
@@ -403,25 +403,35 @@
                     </div>
                   </div>
 
-                <div className="form-group">
-                  <div style={{display: 'flex', gap: '20px'}}>
-                    <label style={{display: 'flex', alignItems: 'center', gap: '5px', color: 'white'}}>
+                <div className="form-group full-width">
+                  <div className="additional-options-grid">
+                    <label className="amenity-checkbox">
                       <input
                         type="checkbox"
                         name="smokingAllowed"
                         checked={formData.smokingAllowed}
                         onChange={handleInputChange}
+                        className="checkbox-input"
                       />
-                      Smoking Allowed
+                      <div className="checkbox-custom">
+                        <FiCheck className="check-icon" />
+                      </div>
+                      <FiHome className="amenity-icon" />
+                      <span className="amenity-text">Smoking Allowed</span>
                     </label>
-                    <label style={{display: 'flex', alignItems: 'center', gap: '5px', color: 'white'}}>
+                    <label className="amenity-checkbox">
                       <input
                         type="checkbox"
                         name="petFriendly"
                         checked={formData.petFriendly}
                         onChange={handleInputChange}
+                        className="checkbox-input"
                       />
-                      Pet Friendly
+                      <div className="checkbox-custom">
+                        <FiCheck className="check-icon" />
+                      </div>
+                      <FiHeart className="amenity-icon" />
+                      <span className="amenity-text">Pet Friendly</span>
                     </label>
                   </div>
                 </div>

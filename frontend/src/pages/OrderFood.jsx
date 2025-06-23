@@ -196,7 +196,7 @@ export default function OrderFood() {
                         </div>
 
                         {/* Loading Grid */}
-                        <div style={{
+                        <div className="order-food-loading-grid" style={{
                             display: 'grid',
                             gridTemplateColumns: 'repeat(auto-fit, minmax(350px, 1fr))',
                             gap: '1.5rem',
@@ -266,12 +266,12 @@ export default function OrderFood() {
                 padding: 0
             }}>
                 {/* Hero Section */}
-                <div style={{
+                <div className="order-food-hero" style={{
                     textAlign: 'center',
                     marginBottom: '2rem',
                     padding: '2rem 1.5rem 1rem'
                 }}>
-                    <h1 style={{
+                    <h1 className="order-food-title" style={{
                         fontSize: '2.5rem',
                         fontWeight: '700',
                         background: 'linear-gradient(135deg, #ffffff 0%, #64ffda 30%, #bb86fc 70%, #ff6b9d 100%)',
@@ -284,7 +284,7 @@ export default function OrderFood() {
                     }}>
                         🍽️ Order Delicious Food
                     </h1>
-                    <p style={{
+                    <p className="order-food-subtitle" style={{
                         fontSize: '1rem',
                         color: 'rgba(255, 255, 255, 0.8)',
                         margin: '0',
@@ -295,14 +295,14 @@ export default function OrderFood() {
                 </div>
 
                 {/* Search and Filters Section */}
-                <div style={{
+                <div className="order-food-filters" style={{
                     background: 'rgba(100, 255, 218, 0.05)',
                     borderRadius: '1rem',
                     padding: '1.5rem',
                     margin: '0 1.5rem 2rem',
                     border: '1px solid rgba(100, 255, 218, 0.1)'
                 }}>
-                    <div style={{
+                    <div className="order-food-filters-grid" style={{
                         display: 'grid',
                         gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))',
                         gap: '1rem',
@@ -409,7 +409,7 @@ export default function OrderFood() {
 
                 {/* Floating Cart */}
                 {cart.length > 0 && (
-                    <div style={{
+                    <div className="order-food-floating-cart" style={{
                         position: 'fixed',
                         bottom: '2rem',
                         right: '2rem',

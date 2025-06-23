@@ -3,6 +3,84 @@ import { useNavigate } from 'react-router-dom';
 import { FiUsers, FiClock, FiStar, FiHeart, FiCalendar } from 'react-icons/fi';
 import { tableRecommendationService, tableService, tableUtils } from '../../services/tableRecommendationService';
 
+// Add responsive styles for TableRecommendations
+const responsiveStyles = `
+  @media (max-width: 768px) {
+    .table-recommendations-filters {
+      margin: 0 1rem 1.5rem !important;
+      padding: 1rem !important;
+    }
+    .table-recommendations-filters-grid {
+      grid-template-columns: repeat(2, 1fr) !important;
+      gap: 0.75rem !important;
+    }
+    .table-recommendations-grid {
+      grid-template-columns: 1fr !important;
+      gap: 1rem !important;
+      margin: 0 1rem !important;
+    }
+    .table-recommendation-card {
+      margin: 0 !important;
+    }
+    .table-recommendation-content {
+      padding: 1.25rem !important;
+    }
+    .table-recommendation-title {
+      font-size: 1.1rem !important;
+    }
+    .table-recommendation-description {
+      font-size: 0.85rem !important;
+    }
+    .table-recommendation-badge {
+      padding: 0.375rem 0.625rem !important;
+      font-size: 0.75rem !important;
+    }
+    .table-recommendation-button {
+      padding: 0.625rem 1rem !important;
+      font-size: 0.85rem !important;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .table-recommendations-filters {
+      margin: 0 0.75rem 1.25rem !important;
+      padding: 0.75rem !important;
+    }
+    .table-recommendations-filters-grid {
+      grid-template-columns: 1fr !important;
+      gap: 0.5rem !important;
+    }
+    .table-recommendations-grid {
+      margin: 0 0.75rem !important;
+      gap: 0.75rem !important;
+    }
+    .table-recommendation-content {
+      padding: 1rem !important;
+    }
+    .table-recommendation-title {
+      font-size: 1rem !important;
+    }
+    .table-recommendation-description {
+      font-size: 0.8rem !important;
+    }
+    .table-recommendation-badge {
+      padding: 0.25rem 0.5rem !important;
+      font-size: 0.7rem !important;
+    }
+    .table-recommendation-button {
+      padding: 0.5rem 0.75rem !important;
+      font-size: 0.8rem !important;
+    }
+  }
+`;
+
+// Inject styles
+if (typeof document !== 'undefined') {
+  const styleElement = document.createElement('style');
+  styleElement.textContent = responsiveStyles;
+  document.head.appendChild(styleElement);
+}
+
 const TableRecommendations = () => {
   const navigate = useNavigate();
   const [recommendations, setRecommendations] = useState([]);
@@ -421,7 +499,7 @@ const TableRecommendations = () => {
         margin: '0 auto'
       }}>
         {/* Filters Section - Compact Design */}
-        <div style={{
+        <div className="table-recommendations-filters" style={{
           background: 'rgba(255, 255, 255, 0.05)',
           borderRadius: '1rem',
           padding: '1.2rem',
@@ -437,7 +515,7 @@ const TableRecommendations = () => {
           🎯 Customize Your Recommendations
         </h3>
 
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: '0.8rem', marginBottom: '0.8rem' }}>
+        <div className="table-recommendations-filters-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: '0.8rem', marginBottom: '0.8rem' }}>
           <div>
             <label style={{ display: 'block', color: '#fff', fontSize: '0.75rem', fontWeight: '500', marginBottom: '0.4rem' }}>
               🎉 Occasion
@@ -554,7 +632,7 @@ const TableRecommendations = () => {
       )}
 
       {/* Recommendations Grid - Exact Same as Rooms Page */}
-      <div style={{
+      <div className="table-recommendations-grid" style={{
         display: 'grid',
         gridTemplateColumns: 'repeat(auto-fit, minmax(350px, 1fr))',
         gap: '1.5rem',
@@ -601,6 +679,7 @@ const TableRecommendations = () => {
             return (
               <div
                 key={table._id || index}
+                className="table-recommendation-card"
                 style={{
                   background: 'linear-gradient(145deg, rgba(17, 34, 64, 0.6) 0%, rgba(26, 35, 50, 0.4) 100%)',
                   backdropFilter: 'blur(20px)',
@@ -634,7 +713,7 @@ const TableRecommendations = () => {
                   />
 
                   {/* Rank Badge */}
-                  <div style={{
+                  <div className="table-recommendation-badge" style={{
                     position: 'absolute',
                     top: '1rem',
                     left: '1rem',
@@ -653,7 +732,7 @@ const TableRecommendations = () => {
                   </div>
 
                   {/* Capacity Badge */}
-                  <div style={{
+                  <div className="table-recommendation-badge" style={{
                     position: 'absolute',
                     top: '1rem',
                     right: '1rem',
@@ -674,7 +753,7 @@ const TableRecommendations = () => {
 
                   {/* Rating Badge */}
                   {table.avgRating && (
-                    <div style={{
+                    <div className="table-recommendation-badge" style={{
                       position: 'absolute',
                       bottom: '1rem',
                       left: '1rem',
@@ -696,10 +775,10 @@ const TableRecommendations = () => {
                 </div>
 
                 {/* Card Content */}
-                <div style={{ padding: '1.2rem' }}>
+                <div className="table-recommendation-content" style={{ padding: '1.2rem' }}>
                   {/* Header with Title and Favorite */}
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '0.8rem' }}>
-                    <h3 style={{
+                    <h3 className="table-recommendation-title" style={{
                       color: '#64ffda',
                       fontSize: '1rem',
                       fontWeight: '600',
@@ -729,7 +808,7 @@ const TableRecommendations = () => {
 
                   {/* Recommendation Explanation */}
                   {recommendation.explanation && (
-                    <p style={{
+                    <p className="table-recommendation-description" style={{
                       color: 'rgba(255, 255, 255, 0.7)',
                       fontSize: '0.75rem',
                       lineHeight: '1.3',
@@ -790,6 +869,7 @@ const TableRecommendations = () => {
 
                   {/* Reserve Button */}
                   <button
+                    className="table-recommendation-button"
                     onClick={() => handleTableInquiry(table)}
                     style={{
                       width: '100%',

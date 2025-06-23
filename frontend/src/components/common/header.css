@@ -771,6 +771,7 @@ body {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  align-items: center;
 }
 
 .hamburger span {
@@ -778,6 +779,12 @@ body {
   background: var(--text-primary);
   transition: var(--transition-normal);
   border-radius: 1px;
+}
+
+/* Hamburger to X animation */
+.hamburger svg {
+  color: var(--text-primary);
+  transition: var(--transition-normal);
 }
 
 .hamburger span:nth-child(1) {
@@ -795,6 +802,28 @@ body {
 .mobile-menu:hover .hamburger span {
   background: var(--accent-primary);
   width: 100%;
+}
+
+/* Mobile Close Button */
+.mobile-close-btn {
+  position: relative;
+  width: 100%;
+  text-align: right;
+  margin-bottom: 1rem;
+}
+
+.mobile-close-btn .btn {
+  background: none !important;
+  border: none !important;
+  color: var(--text-primary) !important;
+  padding: 0.5rem !important;
+  border-radius: 50% !important;
+  transition: all 0.3s ease;
+}
+
+.mobile-close-btn .btn:hover {
+  background: rgba(0, 212, 170, 0.1) !important;
+  transform: rotate(90deg);
 }
 
 /* Enhanced Mobile Responsive Design */
@@ -815,6 +844,8 @@ body {
     border-radius: 0 0 20px 20px;
     box-shadow: 0 12px 40px rgba(0, 0, 0, 0.5);
     animation: mobileMenuSlideIn 0.3s ease-out;
+    max-height: 80vh;
+    overflow-y: auto;
   }
 
   @keyframes mobileMenuSlideIn {
