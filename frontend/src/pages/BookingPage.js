@@ -112,6 +112,17 @@ const BookingPage = () => {
     totalPrice: 0
   });
   const [showPayment, setShowPayment] = useState(false);
+  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+
+  // Handle window resize for responsive design
+  useEffect(() => {
+    const handleResize = () => {
+      setWindowWidth(window.innerWidth);
+    };
+
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   // Scroll to top utility function
   const scrollToTop = () => {
@@ -634,6 +645,10 @@ const BookingPage = () => {
     );
   }
 
+  // Helper function to check if screen is mobile
+  const isMobile = () => windowWidth <= 768;
+  const isTablet = () => windowWidth <= 1024 && windowWidth > 768;
+
   return (
     <div style={{
       background: '#0A192F',
@@ -651,7 +666,7 @@ const BookingPage = () => {
         background: 'rgba(10, 25, 47, 0.95)',
         backdropFilter: 'blur(20px)',
         borderBottom: '1px solid rgba(100, 255, 218, 0.1)',
-        padding: '1rem 2rem'
+        padding: isMobile() ? '0.75rem 1rem' : '1rem 2rem'
       }}>
         <div style={{
           display: 'flex',
@@ -666,26 +681,26 @@ const BookingPage = () => {
               background: 'rgba(100, 255, 218, 0.1)',
               border: '1px solid rgba(100, 255, 218, 0.3)',
               borderRadius: '0.5rem',
-              padding: '0.5rem',
+              padding: isMobile() ? '0.4rem 0.6rem' : '0.5rem',
               color: '#64ffda',
               cursor: 'pointer',
               display: 'flex',
               alignItems: 'center',
               gap: '0.5rem',
-              fontSize: '0.9rem',
+              fontSize: isMobile() ? '0.8rem' : '0.9rem',
               transition: 'all 0.3s ease'
             }}
           >
-            <FiArrowLeft size={16} />
-            Back to Rooms
+            <FiArrowLeft size={isMobile() ? 14 : 16} />
+            {isMobile() ? 'Back' : 'Back to Rooms'}
           </button>
           <h1 style={{
-            fontSize: '1.5rem',
+            fontSize: isMobile() ? '1.2rem' : '1.5rem',
             fontWeight: '600',
             color: '#fff',
             margin: 0
           }}>
-            Complete Your Booking
+            {isMobile() ? 'Book Room' : 'Complete Your Booking'}
           </h1>
         </div>
       </div>
@@ -694,10 +709,10 @@ const BookingPage = () => {
       <div style={{
         maxWidth: '1600px',
         margin: '0 auto',
-        padding: '2rem',
+        padding: isMobile() ? '1rem' : isTablet() ? '1.5rem' : '2rem',
         display: 'grid',
-        gridTemplateColumns: '1fr 400px',
-        gap: '2rem',
+        gridTemplateColumns: isMobile() ? '1fr' : isTablet() ? '1fr' : '1fr 400px',
+        gap: isMobile() ? '1.5rem' : '2rem',
         alignItems: 'start'
       }}>
         {/* Left Side - Booking Form */}
@@ -706,26 +721,30 @@ const BookingPage = () => {
           backdropFilter: 'blur(20px)',
           border: '1px solid rgba(100, 255, 218, 0.1)',
           borderRadius: '1rem',
-          padding: '2rem'
+          padding: isMobile() ? '1.25rem' : '2rem'
         }}>
           {/* Room Header */}
           <div style={{
-            display: 'grid',
-            gridTemplateColumns: '150px 1fr',
-            gap: '1rem',
+            display: isMobile() ? 'flex' : 'grid',
+            gridTemplateColumns: isMobile() ? 'none' : '150px 1fr',
+            flexDirection: isMobile() ? 'column' : 'row',
+            gap: isMobile() ? '0.75rem' : '1rem',
             marginBottom: '1.5rem',
-            padding: '0.75rem',
+            padding: isMobile() ? '1rem' : '0.75rem',
             background: 'rgba(10, 25, 47, 0.5)',
             borderRadius: '0.75rem',
             border: '1px solid rgba(100, 255, 218, 0.1)'
           }}>
-            <div style={{ position: 'relative' }}>
+            <div style={{
+              position: 'relative',
+              width: isMobile() ? '100%' : 'auto'
+            }}>
               <img
                 src={getImageUrl(room?.image)}
                 alt={room?.roomType}
                 style={{
                   width: '100%',
-                  height: '80px',
+                  height: isMobile() ? '200px' : '80px',
                   objectFit: 'cover',
                   borderRadius: '0.5rem'
                 }}
@@ -735,42 +754,45 @@ const BookingPage = () => {
                 }}
               />
             </div>
-            <div>
+            <div style={{
+              textAlign: isMobile() ? 'center' : 'left'
+            }}>
               <h2 style={{
-                fontSize: '1.25rem',
+                fontSize: isMobile() ? '1.4rem' : '1.25rem',
                 fontWeight: '600',
                 color: '#fff',
-                marginBottom: '0.25rem'
+                marginBottom: '0.5rem'
               }}>
                 {room?.roomType}
               </h2>
               <div style={{
                 display: 'flex',
                 alignItems: 'center',
+                justifyContent: isMobile() ? 'center' : 'flex-start',
                 gap: '0.25rem',
-                marginBottom: '0.25rem'
+                marginBottom: '0.5rem'
               }}>
                 {[...Array(5)].map((_, i) => (
-                  <FiStar key={i} style={{ color: '#64ffda', fontSize: '0.8rem' }} />
+                  <FiStar key={i} style={{ color: '#64ffda', fontSize: isMobile() ? '1rem' : '0.8rem' }} />
                 ))}
               </div>
               <div style={{
-                fontSize: '1.1rem',
+                fontSize: isMobile() ? '1.3rem' : '1.1rem',
                 fontWeight: '600',
                 color: '#64ffda'
               }}>
-                {formatPrice(room?.price)}<span style={{ fontSize: '0.7rem', opacity: 0.8 }}>/night</span>
+                {formatPrice(room?.price)}<span style={{ fontSize: isMobile() ? '0.9rem' : '0.7rem', opacity: 0.8 }}>/night</span>
               </div>
             </div>
           </div>
 
           {/* Booking Form */}
-          <form style={{ display: 'grid', gap: '1.5rem' }}>
+          <form style={{ display: 'grid', gap: isMobile() ? '1.25rem' : '1.5rem' }}>
             {/* Date and Guest Selection */}
             <div style={{
               display: 'grid',
-              gridTemplateColumns: 'repeat(3, 1fr)',
-              gap: '1rem'
+              gridTemplateColumns: isMobile() ? '1fr' : isTablet() ? 'repeat(2, 1fr)' : 'repeat(3, 1fr)',
+              gap: isMobile() ? '1rem' : '1rem'
             }}>
               <div>
                 <label style={{
@@ -795,12 +817,13 @@ const BookingPage = () => {
                   required
                   style={{
                     width: '100%',
-                    padding: '0.75rem',
+                    padding: isMobile() ? '1rem' : '0.75rem',
                     background: 'rgba(255, 255, 255, 0.05)',
                     border: '1px solid rgba(255, 255, 255, 0.1)',
                     borderRadius: '0.5rem',
                     color: '#fff',
-                    fontSize: '0.9rem'
+                    fontSize: isMobile() ? '1rem' : '0.9rem',
+                    minHeight: isMobile() ? '48px' : 'auto'
                   }}
                 />
               </div>
@@ -828,12 +851,13 @@ const BookingPage = () => {
                   required
                   style={{
                     width: '100%',
-                    padding: '0.75rem',
+                    padding: isMobile() ? '1rem' : '0.75rem',
                     background: 'rgba(255, 255, 255, 0.05)',
                     border: '1px solid rgba(255, 255, 255, 0.1)',
                     borderRadius: '0.5rem',
                     color: '#fff',
-                    fontSize: '0.9rem'
+                    fontSize: isMobile() ? '1rem' : '0.9rem',
+                    minHeight: isMobile() ? '48px' : 'auto'
                   }}
                 />
               </div>
@@ -862,12 +886,13 @@ const BookingPage = () => {
                   required
                   style={{
                     width: '100%',
-                    padding: '0.75rem',
+                    padding: isMobile() ? '1rem' : '0.75rem',
                     background: 'rgba(255, 255, 255, 0.05)',
                     border: '1px solid rgba(255, 255, 255, 0.1)',
                     borderRadius: '0.5rem',
                     color: '#fff',
-                    fontSize: '0.9rem'
+                    fontSize: isMobile() ? '1rem' : '0.9rem',
+                    minHeight: isMobile() ? '48px' : 'auto'
                   }}
                 />
               </div>
@@ -876,8 +901,8 @@ const BookingPage = () => {
             {/* Personal Information */}
             <div style={{
               display: 'grid',
-              gridTemplateColumns: 'repeat(2, 1fr)',
-              gap: '1rem'
+              gridTemplateColumns: isMobile() ? '1fr' : 'repeat(2, 1fr)',
+              gap: isMobile() ? '1rem' : '1rem'
             }}>
               <div>
                 <label style={{
@@ -902,12 +927,13 @@ const BookingPage = () => {
                   required
                   style={{
                     width: '100%',
-                    padding: '0.75rem',
+                    padding: isMobile() ? '1rem' : '0.75rem',
                     background: 'rgba(255, 255, 255, 0.05)',
                     border: '1px solid rgba(255, 255, 255, 0.1)',
                     borderRadius: '0.5rem',
                     color: '#fff',
-                    fontSize: '0.9rem'
+                    fontSize: isMobile() ? '1rem' : '0.9rem',
+                    minHeight: isMobile() ? '48px' : 'auto'
                   }}
                 />
               </div>
@@ -935,12 +961,13 @@ const BookingPage = () => {
                   required
                   style={{
                     width: '100%',
-                    padding: '0.75rem',
+                    padding: isMobile() ? '1rem' : '0.75rem',
                     background: 'rgba(255, 255, 255, 0.05)',
                     border: '1px solid rgba(255, 255, 255, 0.1)',
                     borderRadius: '0.5rem',
                     color: '#fff',
-                    fontSize: '0.9rem'
+                    fontSize: isMobile() ? '1rem' : '0.9rem',
+                    minHeight: isMobile() ? '48px' : 'auto'
                   }}
                 />
               </div>
@@ -968,12 +995,13 @@ const BookingPage = () => {
                   required
                   style={{
                     width: '100%',
-                    padding: '0.75rem',
+                    padding: isMobile() ? '1rem' : '0.75rem',
                     background: 'rgba(255, 255, 255, 0.05)',
                     border: '1px solid rgba(255, 255, 255, 0.1)',
                     borderRadius: '0.5rem',
                     color: '#fff',
-                    fontSize: '0.9rem'
+                    fontSize: isMobile() ? '1rem' : '0.9rem',
+                    minHeight: isMobile() ? '48px' : 'auto'
                   }}
                 />
               </div>
@@ -995,12 +1023,13 @@ const BookingPage = () => {
                   required
                   style={{
                     width: '100%',
-                    padding: '0.75rem',
+                    padding: isMobile() ? '1rem' : '0.75rem',
                     background: 'rgba(255, 255, 255, 0.05)',
                     border: '1px solid rgba(255, 255, 255, 0.1)',
                     borderRadius: '0.5rem',
                     color: '#fff',
-                    fontSize: '0.9rem'
+                    fontSize: isMobile() ? '1rem' : '0.9rem',
+                    minHeight: isMobile() ? '48px' : 'auto'
                   }}
                 >
                   <option value="card">Credit Card</option>
@@ -1025,16 +1054,17 @@ const BookingPage = () => {
                 value={formData.specialRequests}
                 onChange={handleChange}
                 placeholder="Any special requests or requirements?"
-                rows="3"
+                rows={isMobile() ? "4" : "3"}
                 style={{
                   width: '100%',
-                  padding: '0.75rem',
+                  padding: isMobile() ? '1rem' : '0.75rem',
                   background: 'rgba(255, 255, 255, 0.05)',
                   border: '1px solid rgba(255, 255, 255, 0.1)',
                   borderRadius: '0.5rem',
                   color: '#fff',
-                  fontSize: '0.9rem',
-                  resize: 'vertical'
+                  fontSize: isMobile() ? '1rem' : '0.9rem',
+                  resize: 'vertical',
+                  minHeight: isMobile() ? '100px' : 'auto'
                 }}
               />
             </div>
@@ -1047,10 +1077,11 @@ const BookingPage = () => {
           backdropFilter: 'blur(20px)',
           border: '1px solid rgba(100, 255, 218, 0.1)',
           borderRadius: '1rem',
-          padding: '1.5rem',
+          padding: isMobile() ? '1.25rem' : '1.5rem',
           height: 'fit-content',
-          position: 'sticky',
-          top: '180px'
+          position: isMobile() ? 'static' : 'sticky',
+          top: isMobile() ? 'auto' : '180px',
+          order: isMobile() ? -1 : 0
         }}>
           <h3 style={{
             fontSize: '1.25rem',
@@ -1187,8 +1218,8 @@ const BookingPage = () => {
               </h4>
               <div style={{
                 display: 'grid',
-                gridTemplateColumns: 'repeat(2, 1fr)',
-                gap: '0.5rem'
+                gridTemplateColumns: isMobile() ? '1fr' : 'repeat(2, 1fr)',
+                gap: isMobile() ? '0.75rem' : '0.5rem'
               }}>
                 {room.amenities.slice(0, 6).map((amenity, index) => (
                   <div key={index} style={{
@@ -1212,26 +1243,30 @@ const BookingPage = () => {
             onClick={() => {
               if (validateBooking()) {
                 setShowPayment(true);
+                if (isMobile()) {
+                  scrollToTop();
+                }
               }
             }}
             disabled={loading || bookingSummary.nights === 0}
             style={{
               width: '100%',
-              padding: '1rem',
+              padding: isMobile() ? '1.25rem' : '1rem',
               background: bookingSummary.nights === 0
                 ? 'rgba(255, 255, 255, 0.1)'
                 : 'linear-gradient(135deg, #64ffda 0%, #bb86fc 100%)',
               border: 'none',
               borderRadius: '0.75rem',
               color: bookingSummary.nights === 0 ? 'rgba(255, 255, 255, 0.5)' : '#0a0a0a',
-              fontSize: '1rem',
+              fontSize: isMobile() ? '1.1rem' : '1rem',
               fontWeight: '600',
               cursor: bookingSummary.nights === 0 ? 'not-allowed' : 'pointer',
               transition: 'all 0.3s ease',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              gap: '0.5rem'
+              gap: '0.5rem',
+              minHeight: isMobile() ? '56px' : 'auto'
             }}
           >
             {loading ? (

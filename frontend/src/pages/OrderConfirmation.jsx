@@ -44,12 +44,27 @@ const OrderConfirmation = () => {
   const [order, setOrder] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
   
+  // Helper functions for responsive design
+  const isMobile = () => windowWidth <= 768;
+  const isTablet = () => windowWidth <= 1024 && windowWidth > 768;
+
   // Log function to help with troubleshooting if needed
   const logInfo = (message, data) => {
     console.log(`[INFO] ${message}:`, data);
   };
   
+  // Handle window resize for responsive design
+  useEffect(() => {
+    const handleResize = () => {
+      setWindowWidth(window.innerWidth);
+    };
+
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
   // On component mount, fetch the most recent order
   useEffect(() => {
     logInfo('Component mounted', new Date().toISOString());
@@ -257,6 +272,11 @@ const OrderConfirmation = () => {
     if (!order || !order._id) {
       // toast.error("Order data missing");
       return;
+    }
+
+    // Scroll to top on mobile for better UX
+    if (isMobile()) {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     }
     
     // Clean up the order object to remove any MongoDB specific properties

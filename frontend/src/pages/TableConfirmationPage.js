@@ -18,7 +18,18 @@ const TableConfirmationPage = () => {
   const [error, setError] = useState(null);
   const [userData, setUserData] = useState(null);
   const [showInvoice, setShowInvoice] = useState(false);
+  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
   const invoiceRef = useRef(null);
+
+  // Handle window resize for responsive design
+  useEffect(() => {
+    const handleResize = () => {
+      setWindowWidth(window.innerWidth);
+    };
+
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   useEffect(() => {
     const fetchReservationData = async () => {
@@ -115,6 +126,10 @@ const TableConfirmationPage = () => {
 
   const handleViewInvoice = () => {
     setShowInvoice(true);
+    // Scroll to top on mobile for better UX
+    if (isMobile()) {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
   };
 
   const handleGeneratePDF = async () => {
@@ -182,6 +197,10 @@ const TableConfirmationPage = () => {
     return `INV-${reservation._id.substring(0, 8)}-${Math.floor(Math.random() * 1000)}`;
   };
 
+  // Helper functions for responsive design
+  const isMobile = () => windowWidth <= 768;
+  const isTablet = () => windowWidth <= 1024 && windowWidth > 768;
+
   if (loading) {
     return (
       <PageLayout>
@@ -231,10 +250,10 @@ const TableConfirmationPage = () => {
     // Display invoice view
     return (
       <PageLayout>
-        <div className="invoice-page">
+        <div className={`invoice-page ${isMobile() ? 'mobile-invoice' : ''}`} style={{ paddingTop: isMobile() ? '80px' : '2rem' }}>
           <div className="invoice-actions">
             <button className="action-button back" onClick={() => setShowInvoice(false)}>
-              <FiArrowLeft /> Back
+              <FiArrowLeft /> {isMobile() ? 'Back' : 'Back to Confirmation'}
             </button>
             <button
               className="action-button download"
@@ -245,7 +264,7 @@ const TableConfirmationPage = () => {
                 <>Loading...</>
               ) : (
                 <>
-                  <FiDownload /> Download PDF
+                  <FiDownload /> {isMobile() ? 'Download' : 'Download PDF'}
                 </>
               )}
             </button>
@@ -285,17 +304,17 @@ const TableConfirmationPage = () => {
                 </thead>
                 <tbody>
                   <tr>
-                    <td>
+                    <td data-label="Description">
                       <p>Table Reservation</p>
                       <small>Date: {formatDate(reservation.reservationDate)}</small>
                       <br />
                       <small>Time: {reservation.time} - {reservation.endTime}</small>
                     </td>
-                    <td>
+                    <td data-label="Details">
                       <p>Table: {reservation.tableNumber}</p>
                       <p>Guests: {reservation.guests}</p>
                     </td>
-                    <td>${reservation.totalPrice}</td>
+                    <td data-label="Amount">Rs. {parseInt(reservation.totalPrice).toLocaleString('en-PK')}</td>
                   </tr>
                   {reservation.specialRequests && (
                     <tr>

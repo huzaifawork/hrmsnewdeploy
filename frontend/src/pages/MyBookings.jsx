@@ -27,10 +27,6 @@ const MyBookings = () => {
   const [error, setError] = useState(null);
   const navigate = useNavigate();
 
-  useEffect(() => {
-    fetchBookings();
-  }, [fetchBookings]);
-
   const fetchBookings = useCallback(async () => {
     try {
       setLoading(true);
@@ -106,6 +102,10 @@ const MyBookings = () => {
       setLoading(false);
     }
   }, [navigate]);
+
+  useEffect(() => {
+    fetchBookings();
+  }, [fetchBookings]);
 
   const isUpcoming = (checkIn) => {
     return new Date(checkIn) >= new Date();

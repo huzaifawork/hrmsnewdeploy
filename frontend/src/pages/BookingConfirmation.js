@@ -12,7 +12,18 @@ const BookingConfirmation = () => {
   const [booking, setBooking] = useState(null);
   const [isDownloading, setIsDownloading] = useState(false);
   const [showInvoice, setShowInvoice] = useState(false);
+  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
   const invoiceRef = useRef(null);
+
+  // Handle window resize for responsive design
+  useEffect(() => {
+    const handleResize = () => {
+      setWindowWidth(window.innerWidth);
+    };
+
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   useEffect(() => {
     const bookingData = location.state?.booking;
@@ -30,8 +41,16 @@ const BookingConfirmation = () => {
     }
   }, [location.state, navigate]);
 
+  // Helper functions for responsive design
+  const isMobile = () => windowWidth <= 768;
+  const isTablet = () => windowWidth <= 1024 && windowWidth > 768;
+
   const handleViewInvoice = () => {
     setShowInvoice(true);
+    // Scroll to top on mobile for better UX
+    if (isMobile()) {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
   };
 
   const formatDate = (dateStr) => {

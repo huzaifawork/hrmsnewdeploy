@@ -14,6 +14,7 @@ export default function Header() {
   const [cartItems, setCartItems] = useState(0);
   const [scrolled, setScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [profileDropdownOpen, setProfileDropdownOpen] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -72,6 +73,64 @@ export default function Header() {
     setMobileMenuOpen(false);
   };
 
+  // Handle profile dropdown toggle with auto-scroll
+  const handleProfileDropdownToggle = (isOpen) => {
+    setProfileDropdownOpen(isOpen);
+
+    // Auto-scroll to top on mobile when dropdown opens
+    if (isOpen && window.innerWidth <= 991) {
+      setTimeout(() => {
+        window.scrollTo({
+          top: 0,
+          behavior: 'smooth'
+        });
+      }, 100); // Small delay to ensure dropdown is rendered
+    }
+  };
+
+  // Handle click on mobile menu overlay close button
+  useEffect(() => {
+    const handleMobileMenuClick = (e) => {
+      if (mobileMenuOpen && e.target.closest('.navbar-collapse::before')) {
+        closeMobileMenu();
+      }
+    };
+
+    if (mobileMenuOpen) {
+      document.addEventListener('click', handleMobileMenuClick);
+      return () => document.removeEventListener('click', handleMobileMenuClick);
+    }
+  }, [mobileMenuOpen]);
+
+  // Handle profile dropdown auto-scroll and body scroll prevention
+  useEffect(() => {
+    const handleProfileDropdownScroll = () => {
+      if (profileDropdownOpen && window.innerWidth <= 991) {
+        // Prevent body scroll when dropdown is open on mobile
+        document.body.classList.add('dropdown-open');
+        document.body.style.overflow = 'hidden';
+        document.body.style.position = 'fixed';
+        document.body.style.width = '100%';
+      } else {
+        // Restore body scroll
+        document.body.classList.remove('dropdown-open');
+        document.body.style.overflow = 'unset';
+        document.body.style.position = 'unset';
+        document.body.style.width = 'unset';
+      }
+    };
+
+    handleProfileDropdownScroll();
+
+    // Cleanup on unmount
+    return () => {
+      document.body.classList.remove('dropdown-open');
+      document.body.style.overflow = 'unset';
+      document.body.style.position = 'unset';
+      document.body.style.width = 'unset';
+    };
+  }, [profileDropdownOpen]);
+
   return (
     <Navbar
       expand="lg"
@@ -92,38 +151,43 @@ export default function Header() {
           </div>
         </Navbar.Brand>
 
-        <Navbar.Toggle
-          aria-controls="main-nav"
-          className="mobile-menu"
-          onClick={toggleMobileMenu}
-        >
-          <div className="hamburger">
-            {mobileMenuOpen ? (
-              <FiX size={24} />
-            ) : (
-              <>
-                <span />
-                <span />
-                <span />
-              </>
+        {/* Mobile Header Actions */}
+        <div className="d-flex align-items-center gap-3 d-lg-none mobile-header-actions">
+          <Link
+            to="/cart"
+            className="mobile-cart-icon position-relative text-decoration-none d-flex align-items-center justify-content-center"
+          >
+            <BsCart size={20} className="text-light" />
+            {cartItems > 0 && (
+              <span className="mobile-cart-badge">{cartItems}</span>
             )}
-          </div>
-        </Navbar.Toggle>
+          </Link>
+
+          <Navbar.Toggle
+            aria-controls="main-nav"
+            className="mobile-menu"
+            onClick={toggleMobileMenu}
+          >
+            <div className="hamburger">
+              {mobileMenuOpen ? (
+                <FiX size={24} />
+              ) : (
+                <>
+                  <span />
+                  <span />
+                  <span />
+                </>
+              )}
+            </div>
+          </Navbar.Toggle>
+        </div>
 
         <Navbar.Collapse id="main-nav" in={mobileMenuOpen}>
+          {/* Mobile menu close button */}
+          <div className="mobile-menu-close d-lg-none" onClick={closeMobileMenu}>
+            <FiX size={24} />
+          </div>
           <Nav className="navbar-nav">
-            {/* Close button for mobile menu */}
-            <div className="mobile-close-btn d-lg-none">
-              <Button
-                variant="link"
-                onClick={closeMobileMenu}
-                className="text-light p-2"
-                style={{ position: 'absolute', top: '10px', right: '15px' }}
-              >
-                <FiX size={24} />
-              </Button>
-            </div>
-
             {navList.map((item) => (
               <Nav.Link
                 key={item.id}
@@ -157,24 +221,33 @@ export default function Header() {
           </Nav>
 
           <div className="d-flex align-items-center gap-4 auth-section">
+            {/* Cart icon moved to header on mobile, keep for desktop */}
             <Link
               to="/cart"
-              className="cart-icon position-relative text-decoration-none"
+              className="cart-icon position-relative text-decoration-none d-flex align-items-center justify-content-center d-none d-lg-flex"
               onClick={closeMobileMenu}
             >
-              <BsCart size={20} className="text-light" />
+              <BsCart size={22} className="text-light" />
               {cartItems > 0 && (
                 <span className="cart-badge">{cartItems}</span>
               )}
             </Link>
 
             {userName ? (
-              <Dropdown>
+              <Dropdown onToggle={handleProfileDropdownToggle}>
                 <Dropdown.Toggle variant="link" className="user-greeting d-flex align-items-center gap-2">
                   <FiUser size={18} className="text-light" />
                   <span className="text-light">{userName}</span>
                 </Dropdown.Toggle>
                 <Dropdown.Menu className="dropdown-menu-custom">
+                  {/* Mobile Close Button */}
+                  <div className="d-lg-none mobile-dropdown-close" onClick={() => {
+                    setProfileDropdownOpen(false);
+                    closeMobileMenu();
+                  }}>
+                    <FiX size={24} />
+                  </div>
+
                   {/* Enhanced User Header */}
                   <div className="dropdown-header-custom">
                     <div className="user-avatar">
