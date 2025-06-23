@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { FiSearch, FiShoppingCart } from "react-icons/fi";
+import { useNavigate } from "react-router-dom";
 import PersonalizedRecommendations from '../components/recommendations/PersonalizedRecommendations';
 import { recommendationAPI, recommendationHelpers } from '../api/recommendations';
 import Header from "../components/common/Header";
@@ -9,6 +10,7 @@ import '../styles/simple-theme.css';
 import '../styles/OrderFood.css';
 
 export default function OrderFood() {
+    const navigate = useNavigate();
     const [menuItems, setMenuItems] = useState([]);
     const [filteredItems, setFilteredItems] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -104,14 +106,21 @@ export default function OrderFood() {
 
         if (itemIndex !== -1) {
             existingCart[itemIndex].quantity += 1;
+            toast.success(`${item.name} quantity updated! Click cart to checkout.`, {
+                onClick: handleGoToCart,
+                style: { cursor: 'pointer' }
+            });
         } else {
             existingCart.push({ ...item, quantity: 1 });
+            toast.success(`${item.name} added to cart! Click cart to checkout.`, {
+                onClick: handleGoToCart,
+                style: { cursor: 'pointer' }
+            });
         }
 
         localStorage.setItem("cart", JSON.stringify(existingCart));
         setCart(existingCart);
         window.dispatchEvent(new Event("cartUpdated"));
-        toast.success(`${item.name} added to cart!`);
 
         // Record interaction for recommendation system
         const userId = recommendationHelpers.getCurrentUserId();
@@ -139,6 +148,10 @@ export default function OrderFood() {
 
     const getCartTotal = () => {
         return cart.reduce((total, item) => total + (item.price * item.quantity), 0);
+    };
+
+    const handleGoToCart = () => {
+        navigate('/cart');
     };
 
 
@@ -409,32 +422,37 @@ export default function OrderFood() {
 
                 {/* Floating Cart */}
                 {cart.length > 0 && (
-                    <div className="order-food-floating-cart" style={{
-                        position: 'fixed',
-                        bottom: '2rem',
-                        right: '2rem',
-                        background: 'linear-gradient(135deg, #64ffda 0%, #4fd1c7 100%)',
-                        color: '#0a192f',
-                        padding: '1rem 1.5rem',
-                        borderRadius: '2rem',
-                        boxShadow: '0 8px 25px rgba(100, 255, 218, 0.4)',
-                        display: 'flex',
-                        alignItems: 'center',
-                        gap: '0.75rem',
-                        cursor: 'pointer',
-                        transition: 'all 0.3s ease',
-                        zIndex: 1000,
-                        fontSize: '0.9rem',
-                        fontWeight: '600'
-                    }}
-                    onMouseEnter={(e) => {
-                        e.currentTarget.style.transform = 'scale(1.05)';
-                        e.currentTarget.style.boxShadow = '0 12px 35px rgba(100, 255, 218, 0.5)';
-                    }}
-                    onMouseLeave={(e) => {
-                        e.currentTarget.style.transform = 'scale(1)';
-                        e.currentTarget.style.boxShadow = '0 8px 25px rgba(100, 255, 218, 0.4)';
-                    }}
+                    <div
+                        className="order-food-floating-cart"
+                        onClick={handleGoToCart}
+                        style={{
+                            position: 'fixed',
+                            bottom: '2rem',
+                            right: '2rem',
+                            background: 'linear-gradient(135deg, #64ffda 0%, #4fd1c7 100%)',
+                            color: '#0a192f',
+                            padding: '1rem 1.5rem',
+                            borderRadius: '2rem',
+                            boxShadow: '0 8px 25px rgba(100, 255, 218, 0.4)',
+                            display: 'flex',
+                            alignItems: 'center',
+                            gap: '0.75rem',
+                            cursor: 'pointer',
+                            transition: 'all 0.3s ease',
+                            zIndex: 1000,
+                            fontSize: '0.9rem',
+                            fontWeight: '600',
+                            userSelect: 'none'
+                        }}
+                        onMouseEnter={(e) => {
+                            e.currentTarget.style.transform = 'scale(1.05)';
+                            e.currentTarget.style.boxShadow = '0 12px 35px rgba(100, 255, 218, 0.5)';
+                        }}
+                        onMouseLeave={(e) => {
+                            e.currentTarget.style.transform = 'scale(1)';
+                            e.currentTarget.style.boxShadow = '0 8px 25px rgba(100, 255, 218, 0.4)';
+                        }}
+                        title="Click to view cart"
                     >
                         <FiShoppingCart size={18} />
                         <span>{cart.length} items</span>
