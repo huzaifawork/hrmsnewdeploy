@@ -3,6 +3,7 @@ import axios from "axios";
 import { Container,  Button, Spinner, Modal } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import "./AdminManageRooms.css";
 import "./AdminDeleteMenu.css";
 
 const AdminDeleteMenu = () => {

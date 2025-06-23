@@ -3,6 +3,7 @@ import axios from "axios";
 import { Container, Row, Col, Form, Button, Spinner } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import "./AdminManageRooms.css";
 import "./AdminUpdateMenu.css";
 
 const AdminUpdateMenu = () => {

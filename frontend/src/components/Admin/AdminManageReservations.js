@@ -9,6 +9,7 @@ import {
   FiXCircle, FiAlertCircle, FiDownload, FiMail, FiPhone
 } from "react-icons/fi";
 import "./AdminManageRooms.css";
+import "./AdminManageReservations.css";
 
 const AdminManageReservations = () => {
   const [reservations, setReservations] = useState([]);

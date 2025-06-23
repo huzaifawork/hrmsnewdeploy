@@ -8,6 +8,7 @@ import {
   FiImage, FiCheck, FiX, FiGrid, FiList, FiSearch
 } from "react-icons/fi";
 import "./AdminManageRooms.css";
+import "./AdminUpdateTable.css";
 
 const AdminUpdateTable = () => {
   const navigate = useNavigate();

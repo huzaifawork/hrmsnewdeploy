@@ -10,6 +10,7 @@ import {
 } from "react-icons/fi";
 import { getMenuImageUrl, handleImageError } from "../../utils/imageUtils";
 import "./AdminManageRooms.css";
+import "./AdminViewMenus.css";
 
 const AdminViewMenus = () => {
   const [menuItems, setMenuItems] = useState([]);

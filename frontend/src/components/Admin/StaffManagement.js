@@ -9,6 +9,7 @@ import {
   FiStar, FiAward, FiShield, FiBriefcase
 } from "react-icons/fi";
 import "./AdminManageRooms.css";
+import "./StaffManagement.css";
 
 const StaffManagement = () => {
   const navigate = useNavigate();

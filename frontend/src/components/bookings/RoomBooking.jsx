@@ -107,9 +107,24 @@ const RoomBooking = () => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
+    // Scroll to top utility function
+    const scrollToTop = () => {
+        window.scrollTo({
+            top: 0,
+            behavior: 'smooth'
+        });
+    };
+
     // Add debug logging
     React.useEffect(() => {
         console.log('Payment form visibility:', showPayment);
+    }, [showPayment]);
+
+    // Scroll to top when payment form is shown
+    React.useEffect(() => {
+        if (showPayment) {
+            scrollToTop();
+        }
     }, [showPayment]);
 
     React.useEffect(() => {

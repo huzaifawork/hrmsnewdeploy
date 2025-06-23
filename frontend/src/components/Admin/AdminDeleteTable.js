@@ -3,7 +3,8 @@ import { Card, Button, Spinner, Table } from "react-bootstrap";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import "./AdminManageTables.css";
+import "./AdminManageRooms.css";
+import "./AdminDeleteTable.css";
 
 const AdminDeleteTable = () => {
   const navigate = useNavigate();

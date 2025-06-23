@@ -113,6 +113,29 @@ const BookingPage = () => {
   });
   const [showPayment, setShowPayment] = useState(false);
 
+  // Scroll to top utility function
+  const scrollToTop = () => {
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth'
+    });
+  };
+
+  // Scroll to top when payment form is shown and manage body scroll
+  useEffect(() => {
+    if (showPayment) {
+      scrollToTop();
+      document.body.classList.add('payment-open');
+    } else {
+      document.body.classList.remove('payment-open');
+    }
+
+    // Cleanup on unmount
+    return () => {
+      document.body.classList.remove('payment-open');
+    };
+  }, [showPayment]);
+
   const getImageUrl = (imagePath) => {
     if (!imagePath) return '/images/placeholder-room.jpg';
     try {
@@ -578,8 +601,15 @@ const BookingPage = () => {
         display: 'flex',
         alignItems: 'flex-start',
         justifyContent: 'center',
-        paddingTop: '500px',
-        paddingBottom: '50px'
+        paddingTop: '80px',
+        paddingBottom: '50px',
+        position: 'fixed',
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: 0,
+        zIndex: 1000,
+        overflowY: 'auto'
       }}>
         <div style={{
           background: 'linear-gradient(145deg, rgba(17, 34, 64, 0.6) 0%, rgba(26, 35, 50, 0.4) 100%)',
@@ -588,7 +618,9 @@ const BookingPage = () => {
           borderRadius: '1rem',
           padding: '2rem',
           maxWidth: '500px',
-          width: '100%'
+          width: '100%',
+          margin: '2rem 1rem',
+          position: 'relative'
         }}>
           <Elements stripe={stripePromise}>
             <PaymentForm

@@ -108,7 +108,20 @@ const TableReservationPage = () => {
   });
   const [showPaymentForm, setShowPaymentForm] = useState(false);
 
+  // Scroll to top utility function
+  const scrollToTop = () => {
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth'
+    });
+  };
 
+  // Scroll to top when payment form is shown
+  useEffect(() => {
+    if (showPaymentForm) {
+      scrollToTop();
+    }
+  }, [showPaymentForm]);
 
   useEffect(() => {
     const storedDetails = localStorage.getItem('reservationDetails');

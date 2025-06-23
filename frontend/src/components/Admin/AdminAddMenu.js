@@ -8,6 +8,7 @@ import {
   FiToggleLeft, FiToggleRight, FiPackage, FiStar
 } from "react-icons/fi";
 import "./AdminManageRooms.css";
+import "./AdminAddMenu.css";
 
 const AdminAddMenu = () => {
   const navigate = useNavigate();

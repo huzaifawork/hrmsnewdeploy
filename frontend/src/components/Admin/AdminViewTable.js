@@ -3,6 +3,7 @@ import axios from 'axios';
 import { Container, Row, Col, Card, Spinner } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
+import './AdminManageRooms.css';
 import './AdminViewTable.css';
 
 const AdminViewTable = () => {
@@ -66,6 +67,7 @@ const AdminViewTable = () => {
   }
 
   return (
+    <div className="enhanced-view-tables-module-container">
     <Container fluid className="view-table-container">
       <div className="view-table-header">
         <h2>View Tables</h2>
@@ -112,6 +114,7 @@ const AdminViewTable = () => {
         </div>
       )}
     </Container>
+    </div>
   );
 };
 

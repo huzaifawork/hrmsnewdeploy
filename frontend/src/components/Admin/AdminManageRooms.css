@@ -1594,10 +1594,22 @@
   box-shadow: 0 8px 25px rgba(100, 255, 218, 0.3) !important;
 }
 
-/* EMERGENCY FIX: Force ALL form inputs to be visible */
+/* EMERGENCY FIX: Force ALL form inputs to be visible - ROOMS & TABLES */
 .enhanced-add-room-module-container input,
 .enhanced-add-room-module-container textarea,
-.enhanced-add-room-module-container select {
+.enhanced-add-room-module-container select,
+.enhanced-add-table-module-container input,
+.enhanced-add-table-module-container textarea,
+.enhanced-add-table-module-container select,
+.enhanced-view-tables-module-container input,
+.enhanced-view-tables-module-container textarea,
+.enhanced-view-tables-module-container select,
+.enhanced-update-table-module-container input,
+.enhanced-update-table-module-container textarea,
+.enhanced-update-table-module-container select,
+.enhanced-delete-table-module-container input,
+.enhanced-delete-table-module-container textarea,
+.enhanced-delete-table-module-container select {
   display: block !important;
   visibility: visible !important;
   opacity: 1 !important;
@@ -1615,12 +1627,24 @@
 }
 
 .enhanced-add-room-module-container input::placeholder,
-.enhanced-add-room-module-container textarea::placeholder {
+.enhanced-add-room-module-container textarea::placeholder,
+.enhanced-add-table-module-container input::placeholder,
+.enhanced-add-table-module-container textarea::placeholder,
+.enhanced-view-tables-module-container input::placeholder,
+.enhanced-view-tables-module-container textarea::placeholder,
+.enhanced-update-table-module-container input::placeholder,
+.enhanced-update-table-module-container textarea::placeholder,
+.enhanced-delete-table-module-container input::placeholder,
+.enhanced-delete-table-module-container textarea::placeholder {
   color: rgba(255, 255, 255, 0.6) !important;
   opacity: 1 !important;
 }
 
-.enhanced-add-room-module-container label {
+.enhanced-add-room-module-container label,
+.enhanced-add-table-module-container label,
+.enhanced-view-tables-module-container label,
+.enhanced-update-table-module-container label,
+.enhanced-delete-table-module-container label {
   display: flex !important;
   visibility: visible !important;
   color: rgba(255, 255, 255, 0.95) !important;
@@ -3884,7 +3908,7 @@ textarea.cosmic-input {
 }
 
 @media (max-width: 768px) {
-    /* Critical Mobile Override - Force Full Width */
+    /* Critical Mobile Override - Force Full Width for ALL Room Management */
     .enhanced-add-room-module-container,
     .enhanced-view-rooms-module-container,
     .enhanced-update-room-module-container,
@@ -3908,6 +3932,11 @@ textarea.cosmic-input {
     div[class*="enhanced-view-rooms-container"],
     div[class*="enhanced-update-room-container"],
     div[class*="enhanced-delete-room-container"],
+    /* Additional specific selectors for room management */
+    div[class*="enhanced-view-rooms-module"],
+    div[class*="enhanced-update-room-module"],
+    div[class*="enhanced-delete-room-module"],
+    div[class*="room-analytics"],
     .enhanced-manage-bookings-module-container,
     .enhanced-manage-reservations-module-container,
     .enhanced-staff-management-module-container,
@@ -3935,11 +3964,35 @@ textarea.cosmic-input {
         margin: 0 !important;
         padding: 0 !important;
         padding-left: 0 !important;
+        padding-right: 0 !important;
         background: #0A192F !important;
         overflow-x: hidden !important;
         overflow-y: auto !important;
-        z-index: 999 !important;
+        z-index: 9999 !important;
         box-sizing: border-box !important;
+        margin-left: 0 !important;
+        transform: none !important;
+    }
+
+    /* CRITICAL: Override desktop padding-left for mobile */
+    .enhanced-view-rooms-module-container,
+    .enhanced-update-room-module-container,
+    .enhanced-delete-room-module-container,
+    .enhanced-content-wrapper .enhanced-view-rooms-module-container,
+    .content-container .enhanced-view-rooms-module-container,
+    .enhanced-main-content .enhanced-view-rooms-module-container,
+    .enhanced-content-wrapper .enhanced-update-room-module-container,
+    .content-container .enhanced-update-room-module-container,
+    .enhanced-main-content .enhanced-update-room-module-container,
+    .enhanced-content-wrapper .enhanced-delete-room-module-container,
+    .content-container .enhanced-delete-room-module-container,
+    .enhanced-main-content .enhanced-delete-room-module-container {
+        padding-left: 0 !important;
+        padding-right: 0 !important;
+        margin-left: 0 !important;
+        margin-right: 0 !important;
+        left: 0 !important;
+        right: 0 !important;
     }
 
     .admin-manage-rooms {
@@ -4346,6 +4399,61 @@ textarea.cosmic-input {
 
     .amenity-text {
         font-size: 0.75rem;
+    }
+
+    /* TABLE FORM SPECIFIC MOBILE FIXES */
+    .table-form-layout,
+    .menu-form-layout {
+        flex-direction: column !important;
+        gap: 1rem !important;
+    }
+
+    .enhanced-table-form,
+    .enhanced-menu-form {
+        width: 100% !important;
+        max-width: 100% !important;
+    }
+
+    /* Features Grid Mobile */
+    .features-grid {
+        grid-template-columns: 1fr 1fr !important;
+        gap: 0.75rem !important;
+    }
+
+    .feature-checkbox {
+        padding: 0.75rem !important;
+        font-size: 0.9rem !important;
+        flex-direction: column !important;
+        text-align: center !important;
+    }
+
+    .feature-text {
+        font-size: 0.8rem !important;
+        margin-top: 0.25rem !important;
+    }
+
+    /* Table Preview Mobile */
+    .table-preview,
+    .menu-item-preview {
+        padding: 1rem !important;
+    }
+
+    .preview-table-visual {
+        margin-bottom: 1rem !important;
+    }
+
+    /* Action Buttons Mobile */
+    .action-btn {
+        width: 100% !important;
+        padding: 1rem !important;
+        font-size: 1rem !important;
+        margin-bottom: 0.5rem !important;
+    }
+
+    .form-actions {
+        flex-direction: column !important;
+        gap: 0.75rem !important;
+        width: 100% !important;
     }
 }
 

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
+import "./AdminManageRooms.css";
 import "./ShiftManagement.css";
 
 const ShiftManagement = () => {

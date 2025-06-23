@@ -8,6 +8,7 @@ import {
   FiEye, FiGrid, FiLayers
 } from 'react-icons/fi';
 import './AdminManageRooms.css';
+import './AdminAddTable.css';
 
 const AdminAddTable = () => {
   const navigate = useNavigate();

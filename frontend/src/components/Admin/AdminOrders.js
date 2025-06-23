@@ -9,6 +9,7 @@ import {
   FiDownload, FiMail, FiPhone, FiMapPin, FiCreditCard
 } from 'react-icons/fi';
 import { apiConfig } from '../../config/api';
+import "./AdminManageRooms.css";
 import "./AdminOrders.css";
 
 const AdminOrders = () => {

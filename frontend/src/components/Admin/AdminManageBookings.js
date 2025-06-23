@@ -8,6 +8,7 @@ import {
   FiMapPin, FiClock, FiDollarSign, FiHome, FiCheckCircle,
   FiXCircle, FiAlertCircle, FiDownload, FiMail
 } from "react-icons/fi";
+import "./AdminManageRooms.css";
 import "./AdminManageBookings.css";
 
 const AdminManageBookings = () => {

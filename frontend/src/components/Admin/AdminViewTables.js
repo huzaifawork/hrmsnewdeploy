@@ -9,6 +9,7 @@ import {
 } from "react-icons/fi";
 import { tableRecommendationService } from "../../services/tableRecommendationService";
 import "./AdminManageRooms.css";
+import "./AdminViewTables.css";
 
 const AdminViewTables = () => {
   const [tables, setTables] = useState([]);

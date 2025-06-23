@@ -181,7 +181,7 @@ const Dashboard = () => {
       submenu: [
         { name: "Business Reports", component: "ReportingAnalytics", icon: FiPieChart },
         { name: "Sentiment Analysis", component: "SentimentAnalysis", icon: FiActivity },
-        { name: "Recommendations", component: "RecommendationSystem", icon: FiTarget },
+
         { name: "ML Evaluation", component: "RecommendationEvaluation", icon: FiStar }
       ]
     },
@@ -235,6 +235,7 @@ const Dashboard = () => {
       case "Reporting":
         return <ReportingAnalytics />;
       case "Settings":
+      case "AdminSettings":
         return <AdminSettings />;
       case "AdminOrders":
         return <AdminOrders />;

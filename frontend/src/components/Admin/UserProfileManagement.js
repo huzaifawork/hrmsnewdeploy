@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { FiUser, FiUsers, FiMail, FiLock, FiEdit2, FiTrash2, FiSearch, FiFilter, FiToggleLeft, FiToggleRight, FiUserPlus, FiUserCheck, FiUserX } from "react-icons/fi";
 import { toast } from "react-toastify";
+import "./AdminManageRooms.css";
 import "./UserProfileTable.css";
 
 const UserProfileManagement = () => {
