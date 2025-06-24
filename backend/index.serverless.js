@@ -154,7 +154,7 @@ const additionalRoutes = [
   ["./Routes/staffRoutes", "/api/staff", "Staff Management"],
   ["./Routes/paymentRoutes", "/api/payment", "Payment Processing"],
   ["./Routes/recommendationRoutes", "/api/food-recommendations", "Food Recommendations"],
-  ["./Routes/GoogleRoutes", "/auth/google", "Google Authentication"],
+  ["./Routes/GoogleRoutes", "/auth", "Google Authentication"],
   ["./Routes/PicRoutes", "/api/files", "File Upload"],
 ];
 

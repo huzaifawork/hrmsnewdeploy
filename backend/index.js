@@ -5,7 +5,7 @@ const path = require("path");
 const fs = require("fs");
 const { spawn } = require("child_process");
 require("dotenv").config();
-require("./Models/db");
+const { connectDB, createDefaultAdmin } = require("./Models/db");
 
 // Initialize ML models
 const mlModelLoader = require('./utils/mlModelLoader');
@@ -242,8 +242,13 @@ const io = socketModule.init(server);
 
 // 🔹 CORS Setup for Express
 const corsOptions = {
-  origin: "*",  // Allow all origins during development
-  methods: ["GET", "POST", "PUT", "DELETE"],
+  origin: [
+    "https://hrms-frontend-swart.vercel.app",  // Production frontend
+    "http://localhost:3000",  // Local development
+    "http://localhost:3001",  // Alternative local port
+    "*"  // Allow all origins for development
+  ],
+  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
   allowedHeaders: ["Content-Type", "Authorization"],
   credentials: true,
 };
@@ -288,7 +293,7 @@ app.use("/api/staff", staffRoutes);
 app.use("/api/shift", shiftRoutes);
 app.use("/auth", AuthRouter);
 app.use("/api/products", ProductRouter);
-app.use("/auth/google", GoogleRoutes);
+app.use("/auth", GoogleRoutes);
 app.use("/api/bookings", bookingRoutes);
 app.use("/api/orders", orderRoutes);
 app.use("/api/reservations", reservationRoutes);
@@ -308,6 +313,26 @@ app.get('/api/health', (req, res) => {
     timestamp: new Date().toISOString(),
     message: 'Server is running'
   });
+});
+
+// Force reconnect endpoint for MongoDB
+app.post('/api/force-reconnect', async (req, res) => {
+  try {
+    console.log('🔄 Force reconnecting to MongoDB...');
+    await connectDB();
+    res.status(200).json({
+      success: true,
+      message: 'Database reconnected successfully',
+      timestamp: new Date().toISOString()
+    });
+  } catch (error) {
+    console.error('❌ Force reconnect failed:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Failed to reconnect to database',
+      error: error.message
+    });
+  }
 });
 
 // API status endpoint for debugging
@@ -350,11 +375,33 @@ app.get('/api/ml-info', (req, res) => {
   });
 });
 
-// 🔹 Start Server
+// 🔹 Initialize Database and Start Server
 const PORT = process.env.PORT || 8080;
-server.listen(PORT, () => {
-  console.log(`🌍 Server running on port ${PORT}`);
-});
+
+async function startServer() {
+  try {
+    // Connect to database first
+    console.log('🔄 Connecting to MongoDB...');
+    await connectDB();
+    console.log('✅ Database connected successfully');
+
+    // Create default admin if needed
+    await createDefaultAdmin();
+
+    // Start the server
+    server.listen(PORT, () => {
+      console.log(`🌍 Server running on port ${PORT}`);
+      console.log(`🔗 Frontend should connect to: http://localhost:${PORT}`);
+    });
+
+  } catch (error) {
+    console.error('❌ Failed to start server:', error);
+    process.exit(1);
+  }
+}
+
+// Start the server
+startServer();
 
 // Graceful shutdown handling
 function gracefulShutdown(signal) {

@@ -47,7 +47,7 @@ app.use("/api/staff", staffRoutes);
 app.use("/api/shift", shiftRoutes);
 app.use("/auth", AuthRouter);
 app.use("/api/products", ProductRouter);
-app.use("/auth/google", GoogleRoutes);
+app.use("/auth", GoogleRoutes);
 app.use("/api/bookings", bookingRoutes);
 app.use("/api/orders", orderRoutes);
 app.use("/api/reservations", reservationRoutes);
