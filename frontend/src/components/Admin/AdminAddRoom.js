@@ -7,7 +7,7 @@
     FiWifi, FiTv, FiCoffee, FiTruck, FiEye, FiCheck, FiX,
     FiUpload, FiSave, FiRefreshCw, FiEdit, FiLayers, FiHeart
   } from "react-icons/fi";
-  import "./AdminManageRooms.css";
+  import "./AdminAddRoom.css";
 
   const AdminAddRoom = () => {
     const navigate = useNavigate();
@@ -294,8 +294,15 @@
                         placeholder="Describe the room features, amenities, and unique selling points..."
                         value={formData.description}
                         onChange={handleInputChange}
-                        rows="4"
                         required
+                        style={{
+                          minHeight: '120px',
+                          height: 'auto',
+                          resize: 'vertical',
+                          width: '100%',
+                          maxWidth: '800px',
+                          margin: '0 auto'
+                        }}
                       />
                     </div>
                   </div>

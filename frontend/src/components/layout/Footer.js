@@ -178,7 +178,7 @@ const Footer = () => {
                   backgroundClip: 'text',
                   margin: 0
                 }}>
-                  Night Elegance
+                  {hotelInfo.hotelName}
                 </h3>
               </div>
 
@@ -188,7 +188,7 @@ const Footer = () => {
                 lineHeight: '1.5',
                 marginBottom: '1.5rem'
               }}>
-                Experience luxury and comfort at our premier hotel with world-class amenities and exceptional service.
+                {hotelInfo.description}
               </p>
 
               {/* Contact Info */}
@@ -225,7 +225,7 @@ const Footer = () => {
                     <FiPhone style={{ color: '#bb86fc', fontSize: '0.8rem' }} />
                   </div>
                   <span style={{ color: 'rgba(255, 255, 255, 0.8)', fontSize: '0.8rem' }}>
-                    +92 336 945 769
+                    {contactInfo.phone}
                   </span>
                 </div>
 
@@ -243,7 +243,7 @@ const Footer = () => {
                     <FiMail style={{ color: '#ff6b9d', fontSize: '0.8rem' }} />
                   </div>
                   <span style={{ color: 'rgba(255, 255, 255, 0.8)', fontSize: '0.8rem' }}>
-                    info@nightelegance.com
+                    {contactInfo.email}
                   </span>
                 </div>
               </div>
@@ -571,7 +571,7 @@ const Footer = () => {
               fontSize: '0.8rem'
             }}>
               <p style={{ margin: 0 }}>
-                © {new Date().getFullYear()} Night Elegance. All rights reserved. |
+                © {new Date().getFullYear()} {hotelInfo.hotelName}. All rights reserved. |
                 <span style={{ color: '#64ffda', marginLeft: '0.5rem' }}>
                   Made with <FiHeart style={{ color: '#ff6b9d', display: 'inline' }} /> for luxury hospitality
                 </span>

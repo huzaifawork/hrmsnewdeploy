@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { FiHome, FiCoffee, FiCalendar, FiStar } from "react-icons/fi";
 import { BsShieldCheck, BsAward, BsClock } from "react-icons/bs";
+import { useHotelInfo, useHeroContent } from "../../hooks/useHotelInfo";
 import './MainContentCarousel.css';
 
 const MainContentCarousel = () => {
@@ -9,6 +10,10 @@ const MainContentCarousel = () => {
   const [isLoaded, setIsLoaded] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
+
+  // Get dynamic hotel content
+  const hotelInfo = useHotelInfo();
+  const heroContent = useHeroContent();
 
   // Debug: Check if router context is available
   useEffect(() => {
@@ -32,21 +37,21 @@ const MainContentCarousel = () => {
   const heroSlides = [
     {
       image: "https://images.unsplash.com/photo-1566073771259-6a8506099945?q=80&w=2070&auto=format&fit=crop",
-      title: "Luxury Hotel Experience",
-      subtitle: "WELCOME TO LUXURY",
-      description: "Premium accommodations with Pakistani heritage"
+      title: heroContent.mainTitle,
+      subtitle: heroContent.subtitle,
+      description: heroContent.description
     },
     {
       image: "https://images.unsplash.com/photo-1414235077428-338989a2e8c0?q=80&w=2070&auto=format&fit=crop",
       title: "Culinary Excellence Awaits",
       subtitle: "AUTHENTIC FLAVORS",
-      description: "Finest Pakistani and international cuisine"
+      description: `Finest cuisine at ${hotelInfo.hotelName}`
     },
     {
       image: "https://images.unsplash.com/photo-1551632811-561732d1e306?q=80&w=2070&auto=format&fit=crop",
       title: "Elegant Dining Experience",
       subtitle: "RESERVE YOUR TABLE",
-      description: "Beautiful restaurants with city views"
+      description: `Beautiful restaurants with city views at ${hotelInfo.hotelName}`
     }
   ];
 

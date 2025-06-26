@@ -30,6 +30,538 @@
     padding: 0;
     box-sizing: border-box;
   }
+
+  /* Hotel Settings Specific Styles */
+  .settings-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+  }
+
+  .setting-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .setting-group.full-width {
+    grid-column: 1 / -1;
+  }
+
+  .setting-label {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-weight: 600;
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+  }
+
+  .label-icon {
+    color: var(--accent-primary);
+    font-size: 1rem;
+  }
+
+  .enhanced-input {
+    padding: 0.75rem 1rem;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--border-color);
+    border-radius: 0.5rem;
+    color: var(--text-primary);
+    font-size: 0.9rem;
+    transition: var(--transition-smooth);
+    width: 100%;
+    box-sizing: border-box;
+    min-height: 44px;
+  }
+
+  .enhanced-input:focus {
+    outline: none;
+    border-color: var(--accent-primary);
+    background: rgba(255, 255, 255, 0.08);
+    box-shadow: 0 0 0 3px rgba(100, 255, 218, 0.1);
+  }
+
+  .enhanced-input::placeholder {
+    color: var(--text-muted);
+  }
+
+  .enhanced-input[readonly] {
+    background: rgba(255, 255, 255, 0.02);
+    cursor: not-allowed;
+  }
+
+  .enhanced-textarea {
+    padding: 0.75rem 1rem;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--border-color);
+    border-radius: 0.5rem;
+    color: var(--text-primary);
+    font-size: 0.9rem;
+    font-family: inherit;
+    resize: vertical;
+    min-height: 120px;
+    max-height: 300px;
+    width: 100%;
+    box-sizing: border-box;
+    transition: var(--transition-smooth);
+    line-height: 1.5;
+    overflow-y: auto;
+  }
+
+  .enhanced-textarea:focus {
+    outline: none;
+    border-color: var(--accent-primary);
+    background: rgba(255, 255, 255, 0.08);
+    box-shadow: 0 0 0 3px rgba(100, 255, 218, 0.1);
+  }
+
+  .enhanced-textarea::placeholder {
+    color: var(--text-muted);
+  }
+
+  .section-actions {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-top: 1.5rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--border-color);
+  }
+
+  .enhanced-btn-secondary {
+    background: rgba(255, 255, 255, 0.05);
+    color: var(--text-secondary);
+    border: 1px solid var(--border-color);
+  }
+
+  .enhanced-btn-secondary:hover {
+    background: rgba(255, 255, 255, 0.1);
+    color: var(--text-primary);
+    border-color: var(--accent-primary);
+  }
+
+  .enhanced-btn-primary {
+    background: linear-gradient(135deg, var(--accent-primary), #4ecdc4);
+    color: var(--bg-primary);
+    border: 1px solid var(--accent-primary);
+    padding: 0.75rem 1.5rem;
+    border-radius: 0.5rem;
+    font-weight: 600;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: var(--transition-smooth);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    min-height: 44px;
+    box-shadow: 0 2px 8px rgba(100, 255, 218, 0.2);
+  }
+
+  .enhanced-btn-primary:hover {
+    background: linear-gradient(135deg, #4ecdc4, var(--accent-primary));
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(100, 255, 218, 0.3);
+  }
+
+  .enhanced-btn-primary:disabled {
+    background: rgba(255, 255, 255, 0.1);
+    color: var(--text-muted);
+    border-color: var(--border-color);
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+  }
+
+  .enhanced-btn {
+    background: rgba(255, 255, 255, 0.05);
+    color: var(--text-primary);
+    border: 1px solid var(--border-color);
+    padding: 0.75rem 1.5rem;
+    border-radius: 0.5rem;
+    font-weight: 500;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: var(--transition-smooth);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    min-height: 44px;
+  }
+
+  .enhanced-btn:hover {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: var(--accent-primary);
+  }
+
+  .enhanced-btn:disabled {
+    background: rgba(255, 255, 255, 0.02);
+    color: var(--text-muted);
+    border-color: rgba(255, 255, 255, 0.05);
+    cursor: not-allowed;
+  }
+
+  .pulse {
+    animation: pulse 2s infinite;
+  }
+
+  @keyframes pulse {
+    0% { box-shadow: 0 0 0 0 rgba(100, 255, 218, 0.4); }
+    70% { box-shadow: 0 0 0 10px rgba(100, 255, 218, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(100, 255, 218, 0); }
+  }
+
+  .spinning {
+    animation: spin 1s linear infinite;
+  }
+
+  @keyframes spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+  }
+
+  /* Tab Navigation Styling */
+  .settings-navigation {
+    background: rgba(255, 255, 255, 0.03);
+    border-radius: 0.75rem;
+    padding: 0.5rem;
+    margin-bottom: 2rem;
+    border: 1px solid var(--border-color);
+  }
+
+  .nav-tabs {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+  }
+
+  /* Hotel Branding Settings Navigation Layout */
+  .settings-layout {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    width: 100%;
+  }
+
+  .settings-nav {
+    background: rgba(255, 255, 255, 0.03);
+    border-radius: 0.75rem;
+    padding: 0.5rem;
+    border: 1px solid var(--border-color);
+    margin-bottom: 1rem;
+  }
+
+  .nav-header {
+    padding: 0.75rem 1rem;
+    border-bottom: 1px solid var(--border-color);
+    margin-bottom: 0.5rem;
+  }
+
+  .nav-header h3 {
+    color: var(--text-primary);
+    font-size: 1rem;
+    font-weight: 600;
+    margin: 0;
+  }
+
+  .nav-items {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    padding: 0.5rem;
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  /* Enhanced Settings Layout Styles */
+  .enhanced-settings-header {
+    background: rgba(255, 255, 255, 0.02);
+    border-bottom: 1px solid var(--border-color);
+    padding: 1.5rem 2rem;
+    width: 100%;
+  }
+
+  .enhanced-settings-content {
+    padding: 2rem;
+    width: 100%;
+    flex: 1;
+  }
+
+  .content-container {
+    width: 100%;
+    max-width: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  /* Override enhanced-content-wrapper padding for HotelBrandingSettings */
+  .enhanced-content-wrapper:has(.enhanced-admin-settings-module-container) {
+    padding: 0 !important;
+  }
+
+  .enhanced-content-wrapper:has(.enhanced-admin-settings-module-container) .content-container {
+    width: 100% !important;
+    max-width: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  .nav-item {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1.25rem;
+    background: transparent;
+    border: 1px solid transparent;
+    border-radius: 0.5rem;
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: var(--transition-smooth);
+    white-space: nowrap;
+    min-height: 44px;
+    flex: 1;
+    text-align: center;
+  }
+
+  .nav-item:hover {
+    background: rgba(255, 255, 255, 0.05);
+    color: var(--text-primary);
+    border-color: rgba(100, 255, 218, 0.2);
+  }
+
+  .nav-item.active {
+    background: linear-gradient(135deg, var(--accent-primary), #4ecdc4);
+    color: var(--bg-primary);
+    border-color: var(--accent-primary);
+    box-shadow: 0 4px 12px rgba(100, 255, 218, 0.3);
+  }
+
+  .nav-item.active:hover {
+    background: linear-gradient(135deg, #4ecdc4, var(--accent-primary));
+    color: var(--bg-primary);
+  }
+
+  .nav-icon {
+    font-size: 1rem;
+    flex-shrink: 0;
+  }
+
+  /* Settings Content Styling */
+  .settings-content {
+    background: rgba(255, 255, 255, 0.02);
+    border-radius: 0.75rem;
+    border: 1px solid var(--border-color);
+    overflow: hidden;
+  }
+
+  .settings-section {
+    padding: 2rem;
+  }
+
+  .section-header {
+    margin-bottom: 2rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid var(--border-color);
+  }
+
+  .section-header h2 {
+    color: var(--text-primary);
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin: 0 0 0.5rem 0;
+  }
+
+  .section-header p {
+    color: var(--text-secondary);
+    font-size: 0.95rem;
+    margin: 0;
+    line-height: 1.5;
+  }
+
+  /* Settings Grid Layout */
+  .settings-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.5rem;
+    align-items: start;
+  }
+
+  .setting-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .setting-group.full-width {
+    grid-column: 1 / -1;
+  }
+
+  .setting-label {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--text-primary);
+    font-weight: 500;
+    font-size: 0.9rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .label-icon {
+    color: var(--accent-primary);
+    font-size: 1rem;
+  }
+
+  .input-help {
+    color: var(--text-muted);
+    font-size: 0.8rem;
+    margin-top: 0.25rem;
+    line-height: 1.4;
+  }
+
+  /* Header Actions Styling */
+  .header-actions {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  /* Responsive Design for Admin Settings */
+  @media (max-width: 768px) {
+    .nav-tabs {
+      flex-direction: column;
+      gap: 0.25rem;
+    }
+
+    .nav-item {
+      justify-content: center;
+      padding: 0.75rem 1rem;
+      width: 100%;
+    }
+
+    .settings-grid {
+      grid-template-columns: 1fr;
+      gap: 1rem;
+    }
+
+    .settings-section {
+      padding: 1.5rem;
+    }
+
+    .section-header h2 {
+      font-size: 1.25rem;
+    }
+
+    .enhanced-textarea {
+      min-height: 100px;
+    }
+
+    .header-actions {
+      flex-direction: column;
+      gap: 0.75rem;
+      width: 100%;
+    }
+
+    .enhanced-btn,
+    .enhanced-btn-primary,
+    .enhanced-btn-secondary {
+      width: 100%;
+      justify-content: center;
+    }
+
+    /* Hotel Branding Settings Tablet Responsive */
+    .nav-items {
+      gap: 0.375rem;
+      width: 100%;
+    }
+
+    .nav-item {
+      padding: 0.625rem 1rem;
+      font-size: 0.875rem;
+      flex: 1;
+    }
+
+    .nav-header h3 {
+      font-size: 0.95rem;
+    }
+
+    .enhanced-settings-content {
+      padding: 1.5rem;
+    }
+
+    .enhanced-settings-header {
+      padding: 1.25rem 1.5rem;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .settings-navigation {
+      padding: 0.25rem;
+    }
+
+    .nav-item {
+      padding: 0.5rem 0.75rem;
+      font-size: 0.85rem;
+    }
+
+    .nav-icon {
+      font-size: 0.9rem;
+    }
+
+    .settings-section {
+      padding: 1rem;
+    }
+
+    .section-header {
+      margin-bottom: 1.5rem;
+    }
+
+    .section-header h2 {
+      font-size: 1.1rem;
+    }
+
+    .section-header p {
+      font-size: 0.9rem;
+    }
+
+    /* Hotel Branding Settings Mobile Responsive */
+    .settings-nav {
+      padding: 0.25rem;
+    }
+
+    .nav-header {
+      padding: 0.5rem 0.75rem;
+    }
+
+    .nav-header h3 {
+      font-size: 0.9rem;
+    }
+
+    .nav-items {
+      flex-direction: column;
+      gap: 0.25rem;
+      padding: 0.25rem;
+      width: 100%;
+    }
+
+    .nav-item {
+      justify-content: center;
+      text-align: center;
+      flex: none;
+      width: 100%;
+    }
+
+    .enhanced-settings-content {
+      padding: 1rem;
+    }
+
+    .enhanced-settings-header {
+      padding: 1rem;
+    }
+  }
   
   body {
     font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
@@ -1061,9 +1593,18 @@
     margin: 0 auto;
   }
 
+  /* Override content-container for admin settings */
+  .enhanced-content-wrapper:has(.enhanced-admin-settings-module-container) .content-container {
+    max-width: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    width: 100% !important;
+  }
+
   /* Ensure enhanced containers take full space */
   .content-container .enhanced-dash-module-container,
-  .content-container .enhanced-user-module-container {
+  .content-container .enhanced-user-module-container,
+  .content-container .enhanced-admin-settings-module-container {
     width: 100%;
     max-width: 100%;
     margin: 0;

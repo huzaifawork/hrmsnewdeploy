@@ -8,7 +8,7 @@ import {
   FiClock, FiCalendar, FiHome, FiInfo, FiImage, FiType
 } from 'react-icons/fi';
 import { useHotelSettings } from '../../contexts/HotelSettingsContext';
-import './AdminManageRooms.css';
+import './HotelBrandingSettings.css';
 
 const HotelBrandingSettings = () => {
   const navigate = useNavigate();
@@ -56,12 +56,12 @@ const HotelBrandingSettings = () => {
     if (!localSettings) return;
 
     const updatedSettings = { ...localSettings };
-    
+
     if (section) {
       if (!updatedSettings[section]) {
         updatedSettings[section] = {};
       }
-      
+
       // Handle nested objects
       if (field.includes('.')) {
         const [parentField, childField] = field.split('.');
@@ -69,6 +69,22 @@ const HotelBrandingSettings = () => {
           updatedSettings[section][parentField] = {};
         }
         updatedSettings[section][parentField][childField] = value;
+
+        // Auto-generate full address when address components change
+        if (section === 'contact' && parentField === 'address' &&
+            ['street', 'city', 'country'].includes(childField)) {
+          const address = updatedSettings.contact.address;
+          const fullAddress = [
+            address.street,
+            address.city,
+            address.country
+          ].filter(Boolean).join(', ');
+
+          if (!updatedSettings.contact.address) {
+            updatedSettings.contact.address = {};
+          }
+          updatedSettings.contact.address.fullAddress = fullAddress;
+        }
       } else {
         updatedSettings[section][field] = value;
       }
@@ -93,6 +109,71 @@ const HotelBrandingSettings = () => {
       return;
     }
 
+    // Contact validation
+    if (!localSettings.contact?.phone?.primary?.trim()) {
+      toast.error('Primary phone number is required');
+      return;
+    }
+
+    if (!localSettings.contact?.phone?.whatsapp?.trim()) {
+      toast.error('WhatsApp number is required');
+      return;
+    }
+
+    if (!localSettings.contact?.email?.primary?.trim()) {
+      toast.error('Primary email is required');
+      return;
+    }
+
+    if (!localSettings.contact?.address?.street?.trim()) {
+      toast.error('Street address is required');
+      return;
+    }
+
+    if (!localSettings.contact?.address?.city?.trim()) {
+      toast.error('City is required');
+      return;
+    }
+
+    if (!localSettings.contact?.address?.country?.trim()) {
+      toast.error('Country is required');
+      return;
+    }
+
+    // Email validation
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(localSettings.contact.email.primary)) {
+      toast.error('Please enter a valid primary email address');
+      return;
+    }
+
+    if (localSettings.contact.email.support && !emailRegex.test(localSettings.contact.email.support)) {
+      toast.error('Please enter a valid support email address');
+      return;
+    }
+
+    if (localSettings.contact.email.reservations && !emailRegex.test(localSettings.contact.email.reservations)) {
+      toast.error('Please enter a valid reservations email address');
+      return;
+    }
+
+    // Phone validation (basic)
+    const phoneRegex = /^\+?[\d\s\-\(\)]+$/;
+    if (!phoneRegex.test(localSettings.contact.phone.primary)) {
+      toast.error('Please enter a valid primary phone number');
+      return;
+    }
+
+    if (!phoneRegex.test(localSettings.contact.phone.whatsapp)) {
+      toast.error('Please enter a valid WhatsApp number');
+      return;
+    }
+
+    if (localSettings.contact.phone.secondary && !phoneRegex.test(localSettings.contact.phone.secondary)) {
+      toast.error('Please enter a valid secondary phone number');
+      return;
+    }
+
     setSaving(true);
     try {
       const result = await updateSettings(localSettings);
@@ -105,6 +186,78 @@ const HotelBrandingSettings = () => {
       }
     } catch (error) {
       toast.error('Error saving settings: ' + error.message);
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  // Save specific section
+  const saveSection = async (sectionName) => {
+    if (!localSettings || !adminMode) {
+      toast.error('Admin access required');
+      return;
+    }
+
+    setSaving(true);
+    try {
+      let sectionData = {};
+
+      switch (sectionName) {
+        case 'contact':
+          // Validate contact fields before saving
+          if (!localSettings.contact?.phone?.primary?.trim()) {
+            toast.error('Primary phone number is required');
+            setSaving(false);
+            return;
+          }
+          if (!localSettings.contact?.email?.primary?.trim()) {
+            toast.error('Primary email is required');
+            setSaving(false);
+            return;
+          }
+          sectionData = { contact: localSettings.contact };
+          break;
+        case 'basic':
+          sectionData = {
+            hotelName: localSettings.hotelName,
+            hotelSubtitle: localSettings.hotelSubtitle,
+            description: localSettings.description
+          };
+          break;
+        case 'branding':
+          sectionData = { branding: localSettings.branding };
+          break;
+        case 'social':
+          sectionData = { socialMedia: localSettings.socialMedia };
+          break;
+        case 'business':
+          sectionData = {
+            business: localSettings.business,
+            statistics: localSettings.statistics
+          };
+          break;
+        case 'content':
+          sectionData = {
+            heroContent: localSettings.heroContent,
+            seo: localSettings.seo
+          };
+          break;
+        default:
+          toast.error('Invalid section');
+          setSaving(false);
+          return;
+      }
+
+      const result = await updateSection(sectionName, sectionData);
+
+      if (result.success) {
+        toast.success(`${sectionName.charAt(0).toUpperCase() + sectionName.slice(1)} settings saved successfully!`);
+        setHasChanges(false);
+      } else {
+        toast.error(result.error || `Failed to save ${sectionName} settings`);
+      }
+    } catch (error) {
+      toast.error(`Error saving ${sectionName} settings: ` + error.message);
     } finally {
       setSaving(false);
     }
@@ -166,14 +319,13 @@ const HotelBrandingSettings = () => {
           </div>
         )}
       </div>
+
       <div className="enhanced-settings-content">
-        <div className="content-container">
-          <div className="settings-layout">
-            <div className="settings-nav">
-              <div className="nav-header">
-                <h3>Settings Categories</h3>
-              </div>
-              <div className="nav-items">
+        <div className="settings-nav">
+          <div className="nav-header">
+            <h3>Settings Categories</h3>
+          </div>
+          <div className="nav-items">
                 <button
                   className={`nav-item ${activeTab === 'basic' ? 'active' : ''}`}
                   onClick={() => setActiveTab('basic')}
@@ -197,6 +349,7 @@ const HotelBrandingSettings = () => {
                 </button>
               </div>
             </div>
+
             <div className="settings-content">
               {activeTab === 'branding' && (
                 <div className="settings-section">
@@ -331,10 +484,18 @@ const HotelBrandingSettings = () => {
                       </label>
                       <textarea
                         className="enhanced-textarea"
-                        rows="4"
                         value={localSettings.description || ''}
                         onChange={(e) => handleChange(null, 'description', e.target.value)}
                         placeholder="Enter hotel description"
+                        style={{
+                          minHeight: '120px',
+                          height: 'auto',
+                          resize: 'vertical',
+                          display: 'block',
+                          width: '100%',
+                          maxWidth: '800px',
+                          margin: '0 auto'
+                        }}
                       />
                     </div>
                   </div>
@@ -347,6 +508,7 @@ const HotelBrandingSettings = () => {
                     <p>Manage your hotel's contact details and address</p>
                   </div>
                   <div className="settings-grid">
+                    {/* Phone Numbers */}
                     <div className="setting-group">
                       <label className="setting-label">
                         <FiPhone className="label-icon" />
@@ -363,6 +525,35 @@ const HotelBrandingSettings = () => {
                     </div>
                     <div className="setting-group">
                       <label className="setting-label">
+                        <FiPhone className="label-icon" />
+                        WhatsApp Number *
+                      </label>
+                      <input
+                        type="tel"
+                        className="enhanced-input"
+                        value={localSettings.contact?.phone?.whatsapp || ''}
+                        onChange={(e) => handleChange('contact', 'phone.whatsapp', e.target.value)}
+                        placeholder="Enter WhatsApp number"
+                        required
+                      />
+                    </div>
+                    <div className="setting-group">
+                      <label className="setting-label">
+                        <FiPhone className="label-icon" />
+                        Secondary Phone
+                      </label>
+                      <input
+                        type="tel"
+                        className="enhanced-input"
+                        value={localSettings.contact?.phone?.secondary || ''}
+                        onChange={(e) => handleChange('contact', 'phone.secondary', e.target.value)}
+                        placeholder="Enter secondary phone"
+                      />
+                    </div>
+
+                    {/* Email Addresses */}
+                    <div className="setting-group">
+                      <label className="setting-label">
                         <FiMail className="label-icon" />
                         Primary Email *
                       </label>
@@ -375,14 +566,161 @@ const HotelBrandingSettings = () => {
                         required
                       />
                     </div>
+                    <div className="setting-group">
+                      <label className="setting-label">
+                        <FiMail className="label-icon" />
+                        Support Email
+                      </label>
+                      <input
+                        type="email"
+                        className="enhanced-input"
+                        value={localSettings.contact?.email?.support || ''}
+                        onChange={(e) => handleChange('contact', 'email.support', e.target.value)}
+                        placeholder="Enter support email"
+                      />
+                    </div>
+                    <div className="setting-group">
+                      <label className="setting-label">
+                        <FiMail className="label-icon" />
+                        Reservations Email
+                      </label>
+                      <input
+                        type="email"
+                        className="enhanced-input"
+                        value={localSettings.contact?.email?.reservations || ''}
+                        onChange={(e) => handleChange('contact', 'email.reservations', e.target.value)}
+                        placeholder="Enter reservations email"
+                      />
+                    </div>
+
+                    {/* Address Information */}
+                    <div className="setting-group full-width">
+                      <label className="setting-label">
+                        <FiMapPin className="label-icon" />
+                        Street Address *
+                      </label>
+                      <input
+                        type="text"
+                        className="enhanced-input"
+                        value={localSettings.contact?.address?.street || ''}
+                        onChange={(e) => handleChange('contact', 'address.street', e.target.value)}
+                        placeholder="Enter street address"
+                        required
+                        style={{
+                          width: '100%',
+                          maxWidth: '800px',
+                          margin: '0 auto'
+                        }}
+                      />
+                    </div>
+                    <div className="setting-group">
+                      <label className="setting-label">
+                        <FiMapPin className="label-icon" />
+                        City *
+                      </label>
+                      <input
+                        type="text"
+                        className="enhanced-input"
+                        value={localSettings.contact?.address?.city || ''}
+                        onChange={(e) => handleChange('contact', 'address.city', e.target.value)}
+                        placeholder="Enter city"
+                        required
+                      />
+                    </div>
+                    <div className="setting-group">
+                      <label className="setting-label">
+                        <FiMapPin className="label-icon" />
+                        Country *
+                      </label>
+                      <input
+                        type="text"
+                        className="enhanced-input"
+                        value={localSettings.contact?.address?.country || ''}
+                        onChange={(e) => handleChange('contact', 'address.country', e.target.value)}
+                        placeholder="Enter country"
+                        required
+                      />
+                    </div>
+                    <div className="setting-group full-width">
+                      <label className="setting-label">
+                        <FiMapPin className="label-icon" />
+                        Full Address (Auto-generated)
+                      </label>
+                      <input
+                        type="text"
+                        className="enhanced-input"
+                        value={`${localSettings.contact?.address?.street || ''}, ${localSettings.contact?.address?.city || ''}, ${localSettings.contact?.address?.country || ''}`.replace(/^,\s*|,\s*$/g, '').replace(/,\s*,/g, ',')}
+                        onChange={(e) => handleChange('contact', 'address.fullAddress', e.target.value)}
+                        placeholder="Full address will be auto-generated"
+                        readOnly
+                        style={{
+                          backgroundColor: 'rgba(255, 255, 255, 0.05)',
+                          width: '100%',
+                          maxWidth: '800px',
+                          margin: '0 auto'
+                        }}
+                      />
+                    </div>
+
+                    {/* Website */}
+                    <div className="setting-group full-width">
+                      <label className="setting-label">
+                        <FiGlobe className="label-icon" />
+                        Website URL
+                      </label>
+                      <input
+                        type="url"
+                        className="enhanced-input"
+                        value={localSettings.contact?.website || ''}
+                        onChange={(e) => handleChange('contact', 'website', e.target.value)}
+                        placeholder="Enter website URL"
+                        style={{
+                          width: '100%',
+                          maxWidth: '800px',
+                          margin: '0 auto'
+                        }}
+                      />
+                    </div>
+                  </div>
+
+                  {/* Contact Section Save Button */}
+                  <div className="section-actions" style={{
+                    marginTop: '2rem',
+                    paddingTop: '1rem',
+                    borderTop: '1px solid var(--border-color)',
+                    display: 'flex',
+                    justifyContent: 'flex-end',
+                    gap: '1rem'
+                  }}>
+                    <button
+                      className="enhanced-btn enhanced-btn-secondary"
+                      onClick={() => {
+                        setLocalSettings(JSON.parse(JSON.stringify(settings)));
+                        setHasChanges(false);
+                        toast.info('Contact settings reset to saved values');
+                      }}
+                      disabled={saving || !hasChanges}
+                    >
+                      <FiRefreshCw />
+                      Reset
+                    </button>
+                    <button
+                      className={`enhanced-btn enhanced-btn-primary ${hasChanges ? 'pulse' : ''}`}
+                      onClick={() => saveSection('contact')}
+                      disabled={saving || !hasChanges}
+                    >
+                      {saving ? <FiRefreshCw className="spinning" /> : <FiSave />}
+                      {saving ? 'Saving...' : 'Save Contact Info'}
+                    </button>
                   </div>
                 </div>
               )}
             </div>
           </div>
         </div>
-      </div>
-    </div>
+      
+      
+    
   );
 };
 
