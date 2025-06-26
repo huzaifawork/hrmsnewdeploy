@@ -282,27 +282,20 @@
                       />
                     </div>
 
-                    <div className="form-group full-width">
+                    <div className="form-group">
                       <label className="form-label">
                         <FiEdit className="label-icon" />
                         Description
                         <span className="required">*</span>
                       </label>
-                      <textarea
+                      <input
+                        type="text"
                         name="description"
-                        className="enhanced-textarea"
-                        placeholder="Describe the room features, amenities, and unique selling points..."
+                        className="enhanced-input"
+                        placeholder="Describe the room features and amenities"
                         value={formData.description}
                         onChange={handleInputChange}
                         required
-                        style={{
-                          minHeight: '120px',
-                          height: 'auto',
-                          resize: 'vertical',
-                          width: '100%',
-                          maxWidth: '800px',
-                          margin: '0 auto'
-                        }}
                       />
                     </div>
                   </div>
@@ -410,87 +403,86 @@
                     </div>
                   </div>
 
-                <div className="form-group full-width">
-                  <div className="additional-options-grid">
-                    <label className="amenity-checkbox">
-                      <input
-                        type="checkbox"
+                    <div className="form-group">
+                      <label className="form-label">
+                        <FiHome className="label-icon" />
+                        Smoking Allowed
+                      </label>
+                      <select
                         name="smokingAllowed"
-                        checked={formData.smokingAllowed}
+                        className="enhanced-select"
+                        value={formData.smokingAllowed}
                         onChange={handleInputChange}
-                        className="checkbox-input"
-                      />
-                      <div className="checkbox-custom">
-                        <FiCheck className="check-icon" />
-                      </div>
-                      <FiHome className="amenity-icon" />
-                      <span className="amenity-text">Smoking Allowed</span>
-                    </label>
-                    <label className="amenity-checkbox">
-                      <input
-                        type="checkbox"
+                      >
+                        <option value={false}>No</option>
+                        <option value={true}>Yes</option>
+                      </select>
+                    </div>
+
+                    <div className="form-group">
+                      <label className="form-label">
+                        <FiHeart className="label-icon" />
+                        Pet Friendly
+                      </label>
+                      <select
                         name="petFriendly"
-                        checked={formData.petFriendly}
+                        className="enhanced-select"
+                        value={formData.petFriendly}
                         onChange={handleInputChange}
-                        className="checkbox-input"
+                      >
+                        <option value={false}>No</option>
+                        <option value={true}>Yes</option>
+                      </select>
+                    </div>
+
+                    <div className="form-group">
+                      <label className="form-label">
+                        <FiImage className="label-icon" />
+                        Image URL
+                      </label>
+                      <input
+                        type="url"
+                        value={imageUrl}
+                        onChange={(e) => {
+                          setImageUrl(e.target.value);
+                          if (e.target.value) {
+                            setImagePreview(e.target.value);
+                          }
+                        }}
+                        className="enhanced-input"
+                        placeholder="https://images.unsplash.com/..."
                       />
-                      <div className="checkbox-custom">
-                        <FiCheck className="check-icon" />
-                      </div>
-                      <FiHeart className="amenity-icon" />
-                      <span className="amenity-text">Pet Friendly</span>
-                    </label>
+                    </div>
+
+                    <div className="form-group">
+                      <label className="form-label">
+                        <FiUpload className="label-icon" />
+                        Upload File
+                      </label>
+                      <input
+                        type="file"
+                        name="image"
+                        className="enhanced-input"
+                        onChange={handleImageChange}
+                        accept="image/*"
+                      />
+                    </div>
+
+                  <div className="form-actions">
+                    <button type="submit" className="enhanced-btn enhanced-btn-primary" disabled={loading}>
+                      {loading ? (
+                        <>
+                          <FiRefreshCw className="spinner" />
+                          <span>Adding Room...</span>
+                        </>
+                      ) : (
+                        <>
+                          <FiSave />
+                          <span>Add Room</span>
+                        </>
+                      )}
+                    </button>
                   </div>
-                </div>
-
-                <div className="form-group full-width">
-                  <label className="form-label">
-                    <FiImage className="label-icon" />
-                    Room Image
-                  </label>
-
-                  {/* Image URL Input */}
-                  <div className="form-group">
-                    <label className="form-label">Image URL (Recommended)</label>
-                    <input
-                      type="url"
-                      value={imageUrl}
-                      onChange={(e) => {
-                        setImageUrl(e.target.value);
-                        if (e.target.value) {
-                          setImagePreview(e.target.value);
-                        }
-                      }}
-                      className="enhanced-input"
-                      placeholder="https://images.unsplash.com/... or any image URL"
-                    />
-                    <small className="form-text">Paste an image URL for instant preview</small>
-                  </div>
-
-                  {/* OR File Upload */}
-                  <div className="form-group">
-                    <label className="form-label">OR Upload File</label>
-                    <input
-                      type="file"
-                      name="image"
-                      className="enhanced-input"
-                      onChange={handleImageChange}
-                      accept="image/*"
-                    />
-                    <small className="form-text">File upload (works in development only)</small>
-                  </div>
-                </div>
-
-                  <button type="submit" className="cosmic-button" disabled={loading}>
-                    {loading ? (
-                      <>
-                        <span className="spinner"></span>
-                        <span>Adding Room...</span>
-                      </>
-                    ) : (
-                      <span>Add Room</span>
-                    )}
-                  </button>
                 </form>
               </div>
             </div>
