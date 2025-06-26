@@ -3,6 +3,7 @@ import { GoogleLogin } from "@react-oauth/google";
 import { useNavigate } from "react-router-dom";
 import { FiMail, FiLock, FiUser, FiEye, FiEyeOff, FiShield, FiCheckCircle, FiHome, FiUsers, FiStar, FiArrowRight } from "react-icons/fi";
 import { apiConfig } from "../../config/api";
+import { useHotelInfo, useLogos } from "../../hooks/useHotelInfo";
 import "./Login.css";
 
 const AuthPage = () => {
@@ -14,6 +15,10 @@ const AuthPage = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [passwordStrength, setPasswordStrength] = useState({ score: 0, text: '', checks: {} });
   const navigate = useNavigate();
+
+  // Get dynamic hotel information and logos
+  const hotelInfo = useHotelInfo();
+  const logos = useLogos();
 
   const handleToggle = () => {
     setIsLogin(!isLogin);
@@ -165,14 +170,25 @@ const AuthPage = () => {
       <div className="login-branding">
         <div className="branding-content">
           <div className="brand-logo">
-            <div className="professional-logo">
-              <span className="logo-text">HR</span>
+            {logos.loginLogo && logos.loginLogo !== '/images/logo-login.png' ? (
+              <img
+                src={logos.loginLogo}
+                alt={`${hotelInfo.hotelName} Logo`}
+                className="login-logo-image"
+                onError={(e) => {
+                  e.target.style.display = 'none';
+                  e.target.nextSibling.style.display = 'flex';
+                }}
+              />
+            ) : null}
+            <div className="professional-logo" style={{ display: logos.loginLogo && logos.loginLogo !== '/images/logo-login.png' ? 'none' : 'flex' }}>
+              <span className="logo-text">{hotelInfo.hotelName.substring(0, 2).toUpperCase()}</span>
               <span className="logo-accent">MS</span>
             </div>
           </div>
-          <h1 className="brand-title">HRMS Portal</h1>
+          <h1 className="brand-title">{hotelInfo.hotelName} Portal</h1>
           <p className="brand-subtitle">
-            Hotel & Restaurant Management System
+            {hotelInfo.hotelSubtitle || 'Hotel & Restaurant Management System'}
           </p>
 
           <div className="features-list">

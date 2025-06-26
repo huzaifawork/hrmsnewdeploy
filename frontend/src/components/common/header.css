@@ -183,6 +183,18 @@ body {
   position: relative;
 }
 
+/* Header Logo Image */
+.header-logo-image {
+  max-height: 40px;
+  width: auto;
+  object-fit: contain;
+  transition: all 0.3s ease;
+}
+
+.navbar-scrolled .header-logo-image {
+  max-height: 35px;
+}
+
 /* Add animated underline effect */
 .brand-link::after {
   content: '';

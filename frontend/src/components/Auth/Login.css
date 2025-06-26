@@ -185,6 +185,20 @@ h1.brand-title {
   padding: 0.5rem;
 }
 
+/* Login Logo Image */
+.login-logo-image {
+  max-width: 200px;
+  max-height: 80px;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+  border: none !important;
+  outline: none !important;
+  box-shadow: none !important;
+  background: transparent;
+  border-radius: 8px;
+}
+
 /* Removed background effects and hover states for cleaner appearance */
 
 .logo-text {

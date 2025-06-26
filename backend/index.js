@@ -280,6 +280,7 @@ const adminRoutes = require('./Routes/AdminRoutes');
 const paymentRoutes = require('./Routes/paymentRoutes');
 const recommendationRoutes = require('./Routes/recommendationRoutes');
 const fixImagesRoute = require('./Routes/fixImagesRoute');
+const hotelSettingsRoutes = require('./Routes/hotelSettingsRoutes');
 
 // 📌 Serve Uploaded Files
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
@@ -305,6 +306,7 @@ app.use("/api/payment", paymentRoutes);
 app.use("/api/food-recommendations", recommendationRoutes);
 app.use("/api/table-recommendations", tableRoutes); // Table recommendations use same routes as tables
 app.use("/api/fix", fixImagesRoute);
+app.use("/api/hotel-settings", hotelSettingsRoutes);
 
 // Health check route to test the server
 app.get('/api/health', (req, res) => {

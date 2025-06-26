@@ -6,6 +6,7 @@ import Footer from "./components/layout/Footer";
 import ScrollToTop from "./components/common/ScrollToTop";
 import LoginPage from "./components/Auth/Login";
 import { GoogleOAuthProvider } from "@react-oauth/google";
+import { HotelSettingsProvider } from "./contexts/HotelSettingsContext";
 import Dashboard from "./components/Admin/Sidebar";
 import BookRoom from "./pages/BookRoom";
 import OrderFood from "./pages/OrderFood";
@@ -145,18 +146,19 @@ const AdminOnlyRoute = ({ children }) => {
 function App() {
   return (
     <GoogleOAuthProvider clientId={process.env.REACT_APP_GOOGLE_CLIENT_ID || "940737064009-sf2stfd9kf6dq9e6s188l2pe1hh6q75o.apps.googleusercontent.com"}>
-      <Toaster
-        position="top-right"
-        toastOptions={{
-          duration: 3000,
-          style: {
-            background: 'rgba(17, 34, 64, 0.9)',
-            color: '#f0f4fc',
-            border: '1px solid rgba(100, 255, 218, 0.1)',
-          },
-        }}
-      />
-      <Router>
+      <HotelSettingsProvider>
+        <Toaster
+          position="top-right"
+          toastOptions={{
+            duration: 3000,
+            style: {
+              background: 'rgba(17, 34, 64, 0.9)',
+              color: '#f0f4fc',
+              border: '1px solid rgba(100, 255, 218, 0.1)',
+            },
+          }}
+        />
+        <Router>
         <ScrollToTop />
         <Routes>
           {/* Public routes - Admins are redirected to dashboard */}
@@ -341,7 +343,8 @@ function App() {
           pauseOnHover
           theme="light"
         />
-      </Router>
+        </Router>
+      </HotelSettingsProvider>
     </GoogleOAuthProvider>
   );
 }

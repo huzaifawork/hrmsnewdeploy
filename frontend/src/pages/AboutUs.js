@@ -1,9 +1,14 @@
 import React, { useState } from 'react';
 import { FiAward, FiUsers, FiCoffee, FiMapPin, FiStar, FiHeart, FiShield } from 'react-icons/fi';
 import PageLayout from '../components/layout/PageLayout';
+import { useHotelInfo, useHotelStats } from '../hooks/useHotelInfo';
 
 const AboutUs = () => {
   const [hoveredFeature, setHoveredFeature] = useState(null);
+
+  // Get dynamic hotel information
+  const hotelInfo = useHotelInfo();
+  const stats = useHotelStats();
 
   const features = [
     {
@@ -50,7 +55,7 @@ const AboutUs = () => {
     }
   ];
 
-  const stats = [
+  const achievementStats = [
     { number: '500+', label: 'Happy Guests', icon: <FiUsers /> },
     { number: '4.9', label: 'Rating', icon: <FiStar /> },
     { number: '15+', label: 'Years Experience', icon: <FiAward /> },
@@ -196,7 +201,7 @@ const AboutUs = () => {
               lineHeight: '1.1',
               animation: 'slideInUp 0.8s ease-out'
             }}>
-              About Night Elegance
+              About {hotelInfo.hotelName}
             </h1>
             <p className="about-page-subtitle" style={{
               fontSize: '1.2rem',
@@ -218,7 +223,7 @@ const AboutUs = () => {
             marginBottom: '4rem',
             animation: 'slideInUp 0.8s ease-out 0.4s both'
           }}>
-            {stats.map((stat, index) => (
+            {achievementStats.map((stat, index) => (
               <div
                 key={index}
                 className="about-stat-card"

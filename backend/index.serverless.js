@@ -156,6 +156,7 @@ const additionalRoutes = [
   ["./Routes/recommendationRoutes", "/api/food-recommendations", "Food Recommendations"],
   ["./Routes/GoogleRoutes", "/auth", "Google Authentication"],
   ["./Routes/PicRoutes", "/api/files", "File Upload"],
+  ["./Routes/hotelSettingsRoutes", "/api/hotel-settings", "Hotel Settings"],
 ];
 
 // Load additional routes

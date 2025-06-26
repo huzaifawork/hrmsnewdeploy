@@ -3828,6 +3828,117 @@ textarea.cosmic-input {
   scroll-behavior: smooth;
 }
 
+/* Hotel Branding Settings Specific Styles */
+.enhanced-admin-settings-module-container .changes-indicator {
+  background: rgba(255, 193, 7, 0.1);
+  border: 1px solid rgba(255, 193, 7, 0.3);
+  border-radius: 8px;
+  padding: 0.75rem 1rem;
+  margin-top: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: #ffc107;
+  font-size: 0.9rem;
+}
+
+.enhanced-admin-settings-module-container .section-actions {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.enhanced-admin-settings-module-container .services-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.enhanced-admin-settings-module-container .service-item {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  padding: 1.5rem;
+  transition: all 0.3s ease;
+}
+
+.enhanced-admin-settings-module-container .service-item:hover {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(100, 255, 218, 0.3);
+}
+
+.enhanced-admin-settings-module-container .service-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.enhanced-admin-settings-module-container .service-header h4 {
+  color: #64ffda;
+  margin: 0;
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+.enhanced-admin-settings-module-container .service-fields {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+.enhanced-admin-settings-module-container .service-fields .full-width {
+  grid-column: 1 / -1;
+}
+
+.enhanced-admin-settings-module-container .empty-state {
+  text-align: center;
+  padding: 3rem 2rem;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.enhanced-admin-settings-module-container .empty-state svg {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+  color: rgba(100, 255, 218, 0.5);
+}
+
+.enhanced-admin-settings-module-container .empty-state h3 {
+  margin-bottom: 0.5rem;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.enhanced-admin-settings-module-container .pulse {
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(100, 255, 218, 0.7);
+  }
+  70% {
+    box-shadow: 0 0 0 10px rgba(100, 255, 218, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(100, 255, 218, 0);
+  }
+}
+
+.enhanced-admin-settings-module-container .spinning {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
 /* Adjust for collapsed sidebar */
 .enhanced-sidebar.collapsed ~ .enhanced-main-content .enhanced-staff-management-module-container,
 .enhanced-sidebar.collapsed ~ .enhanced-main-content .enhanced-shift-management-module-container,

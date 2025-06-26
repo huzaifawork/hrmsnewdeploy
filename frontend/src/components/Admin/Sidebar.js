@@ -7,7 +7,7 @@ import {
   FiBarChart, FiSettings, FiMenu, FiX, FiChevronDown, FiChevronRight,
   FiLogOut, FiSearch, FiBell, FiMail, FiCalendar, FiTrendingUp,
   FiActivity, FiStar, FiHeart, FiBookOpen, FiCoffee, FiMapPin,
-  FiClock, FiDollarSign, FiPieChart, FiTarget,
+  FiClock, FiDollarSign, FiPieChart, FiTarget, FiGlobe,
   FiPlus, FiEdit, FiTrash
 } from "react-icons/fi";
 import "./EnhancedDashboardModule.css";
@@ -31,6 +31,7 @@ import UserProfileManagement from "./UserProfileManagement";
 import RecommendationSystem from "./RecommendationSystem";
 import MenuManagement from "./MenuManagement";
 import AdminSettings from "./Setting";
+import HotelBrandingSettings from "./HotelBrandingSettings";
 import AdminDeleteRoom from "./AdminDeleteRoom";
 import AdminOrders from "./AdminOrders";
 import AdminViewMenus from "./AdminViewMenus";
@@ -188,7 +189,10 @@ const Dashboard = () => {
     {
       name: "Settings",
       icon: FiSettings,
-      component: "AdminSettings"
+      submenu: [
+        { name: "System Settings", component: "AdminSettings", icon: FiSettings },
+        { name: "Hotel Branding", component: "HotelBrandingSettings", icon: FiGlobe }
+      ]
     }
   ];
 
@@ -237,6 +241,8 @@ const Dashboard = () => {
       case "Settings":
       case "AdminSettings":
         return <AdminSettings />;
+      case "HotelBrandingSettings":
+        return <HotelBrandingSettings />;
       case "AdminOrders":
         return <AdminOrders />;
       case "AdminViewMenus":

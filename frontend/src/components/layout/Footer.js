@@ -9,12 +9,18 @@ import {
   FaDumbbell, FaWifi
 } from "react-icons/fa";
 import { Link } from "react-router-dom";
+import { useHotelInfo, useContactInfo, useSocialMedia } from "../../hooks/useHotelInfo";
 import "./Footer.css";
 
 const Footer = () => {
   const [email, setEmail] = useState('');
   const [isSubscribed, setIsSubscribed] = useState(false);
   const [hoveredSocial, setHoveredSocial] = useState(null);
+
+  // Get dynamic hotel information
+  const hotelInfo = useHotelInfo();
+  const contactInfo = useContactInfo();
+  const socialMedia = useSocialMedia();
 
   const handleSubscribe = (e) => {
     e.preventDefault();
@@ -43,11 +49,11 @@ const Footer = () => {
   ];
 
   const socialLinks = [
-    { icon: <FiTwitter />, name: 'Twitter', color: '#1DA1F2', href: 'https://twitter.com' },
-    { icon: <FiInstagram />, name: 'Instagram', color: '#E4405F', href: 'https://instagram.com' },
-    { icon: <FiFacebook />, name: 'Facebook', color: '#1877F2', href: 'https://facebook.com' },
-    { icon: <FiLinkedin />, name: 'LinkedIn', color: '#0A66C2', href: 'https://linkedin.com' },
-    { icon: <FiYoutube />, name: 'YouTube', color: '#FF0000', href: 'https://youtube.com' },
+    { icon: <FiTwitter />, name: 'Twitter', color: '#1DA1F2', href: socialMedia.twitter },
+    { icon: <FiInstagram />, name: 'Instagram', color: '#E4405F', href: socialMedia.instagram },
+    { icon: <FiFacebook />, name: 'Facebook', color: '#1877F2', href: socialMedia.facebook },
+    { icon: <FiLinkedin />, name: 'LinkedIn', color: '#0A66C2', href: socialMedia.linkedin },
+    { icon: <FiYoutube />, name: 'YouTube', color: '#FF0000', href: socialMedia.youtube },
     { icon: <FiGithub />, name: 'GitHub', color: '#333', href: 'https://github.com' }
   ];
 

@@ -88,21 +88,23 @@ export const carouselData = [
     btn2: "Reserve Table",
   }
 ];
+// Note: This data is now dynamic and should be replaced with useHotelStats() hook in components
+// Keeping this as fallback data only
 export const about = [
   {
     icon: <i class="fa fa-hotel fa-2x text-primary mb-2"></i>,
     text: "Rooms",
-    count: "7861",
+    count: "150", // Fallback - use useHotelStats().totalRooms in components
   },
   {
     icon: <i class="fa fa-users fa-2x text-primary mb-2"></i>,
     text: "Staffs",
-    count: "1234",
+    count: "85", // Fallback - use useHotelStats().totalStaff in components
   },
   {
     icon: <i class="fa fa-users-cog fa-2x text-primary mb-2"></i>,
     text: "Clients",
-    count: "4321",
+    count: "2500", // Fallback - use useHotelStats().totalClients in components
   },
 ];
 
@@ -202,18 +204,20 @@ export const footerItem = [
   },
 ];
 
+// Note: This data is now dynamic and should be replaced with useContactInfo() hook in components
+// Keeping this as fallback data only
 export const footerContact = [
   {
     icon: <i className="fa fa-map-marker-alt me-3"></i>,
-    name: "123 STREET LAHORE PAKISTAN",
+    name: "123 Luxury Street, Lahore, Pakistan", // Fallback - use useContactInfo().address in components
   },
   {
     icon: <i className="fa fa-phone-alt me-3"></i>,
-    name: "0336945769",
+    name: "+92 336 945 769", // Fallback - use useContactInfo().phone in components
   },
   {
     icon: <i className="fa fa-envelope me-3"></i>,
-    name: "info@example.com",
+    name: "info@hotelroyal.com", // Fallback - use useContactInfo().email in components
   },
 ];
 

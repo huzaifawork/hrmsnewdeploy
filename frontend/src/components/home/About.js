@@ -2,9 +2,14 @@ import React from "react";
 import { about } from "../data/Data";
 import { FiArrowUpRight, FiStar, FiTrendingUp, FiUsers } from "react-icons/fi";
 import { Link } from "react-router-dom";
+import { useHotelInfo, useHotelStats } from "../../hooks/useHotelInfo";
 import "./About-responsive.css";
 
 export default function About() {
+  // Get dynamic hotel information
+  const hotelInfo = useHotelInfo();
+  const stats = useHotelStats();
+
   return (
     <div className="about-section-mobile" style={{
       width: '100vw',
@@ -50,7 +55,7 @@ export default function About() {
                 letterSpacing: '1px'
               }}>
                 <FiStar size={14} />
-                <span>About HRMS Platform</span>
+                <span>About {hotelInfo.hotelName}</span>
               </div>
 
               <h2 style={{
@@ -60,7 +65,7 @@ export default function About() {
                 marginBottom: '1rem',
                 color: '#f0f4fc'
               }}>
-                Comprehensive <span style={{ color: '#64ffda' }}>Hotel & Restaurant</span> Management System
+                {hotelInfo.hotelName} <span style={{ color: '#64ffda' }}>Management</span> System
               </h2>
 
               <p style={{
@@ -69,8 +74,7 @@ export default function About() {
                 color: 'rgba(240, 244, 252, 0.8)',
                 marginBottom: '1.5rem'
               }}>
-                HRMS is a comprehensive platform designed to simplify hotel and restaurant management,
-                enabling seamless operations and exceptional guest experiences.
+                {hotelInfo.description}
               </p>
             </div>
 
@@ -112,7 +116,11 @@ export default function About() {
               gap: '0.75rem',
               marginBottom: '1.5rem'
             }}>
-              {about.map((item, index) => (
+              {[
+                { icon: <i className="fa fa-hotel fa-2x text-primary mb-2"></i>, text: "Rooms", count: stats.totalRooms },
+                { icon: <i className="fa fa-users fa-2x text-primary mb-2"></i>, text: "Staff", count: stats.totalStaff },
+                { icon: <i className="fa fa-users-cog fa-2x text-primary mb-2"></i>, text: "Clients", count: stats.totalClients }
+              ].map((item, index) => (
                 <div key={index} style={{
                   display: 'flex',
                   flexDirection: 'column',

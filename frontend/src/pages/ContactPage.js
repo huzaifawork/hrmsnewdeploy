@@ -13,6 +13,7 @@ import {
   FaPaperPlane,
   FaCheckCircle
 } from "react-icons/fa";
+import { useHotelInfo, useContactInfo } from "../hooks/useHotelInfo";
 import "./ContactPage.css";
 
 export default function Contact() {
@@ -26,6 +27,10 @@ export default function Contact() {
   });
   const [loading, setLoading] = useState(false);
   const [submitted, setSubmitted] = useState(false);
+
+  // Get dynamic hotel information
+  const hotelInfo = useHotelInfo();
+  const contactInfo = useContactInfo();
 
   const handleInputChange = (e) => {
     const { id, value } = e.target;
@@ -75,33 +80,33 @@ export default function Contact() {
     {
       icon: <FaPhone />,
       title: "Call Us",
-      content: "+92 123 456 7890",
-      description: "Available 24/7 for your convenience",
-      link: "tel:+921234567890",
+      content: contactInfo.phone,
+      description: `Available ${hotelInfo.businessHours} for your convenience`,
+      link: `tel:${contactInfo.phone.replace(/\s+/g, '')}`,
       color: "#4CAF50"
     },
     {
       icon: <FaEnvelope />,
       title: "Email Us",
-      content: "info@hotelmanagement.com",
+      content: contactInfo.email,
       description: "We'll respond within 24 hours",
-      link: "mailto:info@hotelmanagement.com",
+      link: `mailto:${contactInfo.email}`,
       color: "#2196F3"
     },
     {
       icon: <FaWhatsapp />,
       title: "WhatsApp",
-      content: "+92 123 456 7890",
+      content: contactInfo.whatsapp,
       description: "Quick support via WhatsApp",
-      link: "https://wa.me/921234567890",
+      link: `https://wa.me/${contactInfo.whatsapp.replace(/\s+/g, '').replace('+', '')}`,
       color: "#25D366"
     },
     {
       icon: <FaMapMarkerAlt />,
       title: "Visit Us",
-      content: "123 Main Street, Islamabad",
-      description: "Pakistan - Open 24/7",
-      link: "https://goo.gl/maps/your-location",
+      content: contactInfo.address,
+      description: `${hotelInfo.businessHours}`,
+      link: `https://maps.google.com/?q=${encodeURIComponent(contactInfo.address)}`,
       color: "#FF5722"
     }
   ];

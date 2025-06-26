@@ -5,6 +5,7 @@ import { BsCart } from "react-icons/bs";
 import { FiUser, FiShoppingBag, FiCalendar, FiHome, FiLogOut, FiLayout, FiX } from "react-icons/fi";
 import { BiMessageSquare } from "react-icons/bi";
 import { navList } from "../data/Data";
+import { useHotelInfo, useLogos } from "../../hooks/useHotelInfo";
 import "../../styles/simple-theme.css";
 import "./header.css";
 
@@ -16,6 +17,10 @@ export default function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [profileDropdownOpen, setProfileDropdownOpen] = useState(false);
   const navigate = useNavigate();
+
+  // Get dynamic hotel information and logos
+  const hotelInfo = useHotelInfo();
+  const logos = useLogos();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -145,9 +150,20 @@ export default function Header() {
           to="/"
           className="d-flex align-items-center gap-2 brand-link"
         >
-          <div className="logo-glow">
-            <span className="text-accent">HOTEL</span>
-            <span className="text-light">ROYAL</span>
+          {logos.primary && logos.primary !== '/images/logo-primary.png' ? (
+            <img
+              src={logos.primary}
+              alt={`${hotelInfo.hotelName} Logo`}
+              className="header-logo-image"
+              onError={(e) => {
+                e.target.style.display = 'none';
+                e.target.nextSibling.style.display = 'block';
+              }}
+            />
+          ) : null}
+          <div className="logo-glow" style={{ display: logos.primary && logos.primary !== '/images/logo-primary.png' ? 'none' : 'block' }}>
+            <span className="text-accent">{hotelInfo.hotelName.split(' ')[0]?.toUpperCase() || 'HOTEL'}</span>
+            <span className="text-light">{hotelInfo.hotelName.split(' ')[1]?.toUpperCase() || 'ROYAL'}</span>
           </div>
         </Navbar.Brand>
 

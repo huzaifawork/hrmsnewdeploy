@@ -49,7 +49,14 @@ export const apiConfig = {
     // Staff endpoints
     staff: `${API_BASE_URL}/staff`,
     shift: `${API_BASE_URL}/shift`,
-    
+
+    // Hotel Settings endpoints
+    hotelSettings: `${API_BASE_URL}/hotel-settings`,
+    hotelSettingsPublic: `${API_BASE_URL}/hotel-settings/public`,
+    hotelSettingsSection: `${API_BASE_URL}/hotel-settings/section`,
+    hotelSettingsMetadata: `${API_BASE_URL}/hotel-settings/metadata`,
+    hotelSettingsReset: `${API_BASE_URL}/hotel-settings/reset`,
+
     // Health check
     health: `${API_BASE_URL}/health`,
     status: `${API_BASE_URL}/status`
