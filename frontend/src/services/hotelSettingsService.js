@@ -81,7 +81,16 @@ class HotelSettingsService {
    */
   async updateSettings(settingsData) {
     try {
+      // Clear cache before updating to ensure fresh data
+      this.clearCache();
+
       const response = await api.put('/hotel-settings', settingsData);
+
+      // Cache the new settings
+      if (response.data.data) {
+        this.cacheSettings(response.data.data);
+      }
+
       return {
         success: true,
         data: response.data.data,
@@ -101,7 +110,16 @@ class HotelSettingsService {
    */
   async updateSection(section, sectionData) {
     try {
+      // Clear cache before updating to ensure fresh data
+      this.clearCache();
+
       const response = await api.put(`/hotel-settings/section/${section}`, sectionData);
+
+      // Cache the updated settings
+      if (response.data.data) {
+        this.cacheSettings(response.data.data);
+      }
+
       return {
         success: true,
         data: response.data.data,

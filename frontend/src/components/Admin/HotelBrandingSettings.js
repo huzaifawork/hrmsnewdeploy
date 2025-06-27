@@ -181,6 +181,8 @@ const HotelBrandingSettings = () => {
       if (result.success) {
         toast.success('Hotel settings saved successfully!');
         setHasChanges(false);
+        // Force reload settings to ensure all components get updated data
+        await loadSettings(true);
       } else {
         toast.error(result.error || 'Failed to save settings');
       }

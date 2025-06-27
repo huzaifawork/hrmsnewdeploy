@@ -22,6 +22,12 @@ export default function Header() {
   const hotelInfo = useHotelInfo();
   const logos = useLogos();
 
+  // Debug logging to check if data is loading
+  console.log('Header.jsx - Hotel Info:', hotelInfo);
+  console.log('Header.jsx - Loading state:', hotelInfo.loading);
+  console.log('Header.jsx - Hotel Name:', hotelInfo.hotelName);
+  console.log('Header.jsx - Logos:', logos);
+
   useEffect(() => {
     const handleScroll = () => {
       const isScrolled = window.scrollY > 50;
@@ -163,7 +169,7 @@ export default function Header() {
           ) : null}
           <div className="logo-glow" style={{ display: logos.primary && logos.primary !== '/images/logo-primary.png' ? 'none' : 'block' }}>
             <span className="text-accent">{hotelInfo.hotelName.split(' ')[0]?.toUpperCase() || 'HOTEL'}</span>
-            <span className="text-light">{hotelInfo.hotelName.split(' ')[1]?.toUpperCase() || 'ROYAL'}</span>
+            <span className="text-light">{hotelInfo.hotelName.split(' ').slice(1).join(' ').toUpperCase() || ''}</span>
           </div>
         </Navbar.Brand>
 

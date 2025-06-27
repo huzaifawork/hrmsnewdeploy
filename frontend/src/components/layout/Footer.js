@@ -207,7 +207,7 @@ const Footer = () => {
                     <FiMapPin style={{ color: '#64ffda', fontSize: '0.8rem' }} />
                   </div>
                   <span style={{ color: 'rgba(255, 255, 255, 0.8)', fontSize: '0.8rem' }}>
-                    123 Luxury Street, Lahore
+                    {contactInfo.address}
                   </span>
                 </div>
 

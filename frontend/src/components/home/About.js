@@ -10,6 +10,12 @@ export default function About() {
   const hotelInfo = useHotelInfo();
   const stats = useHotelStats();
 
+  // Debug logging to check if data is loading
+  console.log('About.js - Hotel Info:', hotelInfo);
+  console.log('About.js - Loading state:', hotelInfo.loading);
+  console.log('About.js - Hotel Name:', hotelInfo.hotelName);
+  console.log('About.js - Description:', hotelInfo.description);
+
   return (
     <div className="about-section-mobile" style={{
       width: '100vw',

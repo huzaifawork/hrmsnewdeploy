@@ -163,7 +163,6 @@ export const HotelSettingsProvider = ({ children }) => {
       
       if (result.success) {
         dispatch({ type: actionTypes.SET_SETTINGS, payload: result.data });
-        hotelSettingsService.cacheSettings(result.data);
         return { success: true, data: result.data, message: result.message };
       } else {
         dispatch({ type: actionTypes.SET_ERROR, payload: result.error });
@@ -185,11 +184,7 @@ export const HotelSettingsProvider = ({ children }) => {
       const result = await hotelSettingsService.updateSection(section, sectionData);
       
       if (result.success) {
-        dispatch({ 
-          type: actionTypes.UPDATE_SECTION, 
-          payload: { section, data: sectionData } 
-        });
-        hotelSettingsService.cacheSettings(result.data);
+        dispatch({ type: actionTypes.SET_SETTINGS, payload: result.data });
         return { success: true, data: result.data, message: result.message };
       } else {
         dispatch({ type: actionTypes.SET_ERROR, payload: result.error });
