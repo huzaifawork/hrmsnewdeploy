@@ -16,11 +16,31 @@ export default function Header() {
   const [scrolled, setScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [profileDropdownOpen, setProfileDropdownOpen] = useState(false);
+  const [forceUpdate, setForceUpdate] = useState(0);
   const navigate = useNavigate();
 
   // Get dynamic hotel information and logos
   const hotelInfo = useHotelInfo();
   const logos = useLogos();
+
+  // Force re-render when hotel settings change
+  useEffect(() => {
+    const handleSettingsChange = () => {
+      // Force component re-render by updating state
+      setForceUpdate(prev => prev + 1);
+    };
+
+    window.addEventListener('hotelSettingsChanged', handleSettingsChange);
+
+    return () => {
+      window.removeEventListener('hotelSettingsChanged', handleSettingsChange);
+    };
+  }, []);
+
+  // Also listen for hotelInfo changes
+  useEffect(() => {
+    // This will trigger a re-render when hotelInfo changes
+  }, [hotelInfo.hotelName, hotelInfo.loading]);
 
   // Debug logging to check if data is loading
   console.log('Header.jsx - Hotel Info:', hotelInfo);
@@ -155,6 +175,7 @@ export default function Header() {
           as={Link}
           to="/"
           className="d-flex align-items-center gap-2 brand-link"
+          key={hotelInfo.hotelName}
         >
           {logos.primary && logos.primary !== '/images/logo-primary.png' ? (
             <img
@@ -168,8 +189,10 @@ export default function Header() {
             />
           ) : null}
           <div className="logo-glow" style={{ display: logos.primary && logos.primary !== '/images/logo-primary.png' ? 'none' : 'block' }}>
-            <span className="text-accent">{hotelInfo.hotelName.split(' ')[0]?.toUpperCase() || 'HOTEL'}</span>
-            <span className="text-light">{hotelInfo.hotelName.split(' ').slice(1).join(' ').toUpperCase() || ''}</span>
+            <span className="text-accent">{hotelInfo.hotelName?.split(' ')[0]?.toUpperCase() || 'HOTEL'}</span>
+            {hotelInfo.hotelName?.split(' ').length > 1 && (
+              <span className="text-light">{hotelInfo.hotelName.split(' ').slice(1).join(' ').toUpperCase()}</span>
+            )}
           </div>
         </Navbar.Brand>
 

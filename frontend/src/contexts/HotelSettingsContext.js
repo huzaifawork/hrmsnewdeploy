@@ -148,7 +148,7 @@ export const HotelSettingsProvider = ({ children }) => {
         return { success: false, data: defaults, fromDefaults: true, error: error.message };
       }
     }
-  }, [state.isOnline]);
+  }, []);
 
   // Update settings (admin only)
   const updateSettings = useCallback(async (settingsData) => {
@@ -163,6 +163,11 @@ export const HotelSettingsProvider = ({ children }) => {
       
       if (result.success) {
         dispatch({ type: actionTypes.SET_SETTINGS, payload: result.data });
+        // Clear cache and force refresh
+        hotelSettingsService.clearCache();
+        hotelSettingsService.cacheSettings(result.data);
+        // Notify all components that settings have changed
+        window.dispatchEvent(new CustomEvent('hotelSettingsChanged', { detail: result.data }));
         return { success: true, data: result.data, message: result.message };
       } else {
         dispatch({ type: actionTypes.SET_ERROR, payload: result.error });
@@ -185,6 +190,11 @@ export const HotelSettingsProvider = ({ children }) => {
       
       if (result.success) {
         dispatch({ type: actionTypes.SET_SETTINGS, payload: result.data });
+        // Clear cache and force refresh
+        hotelSettingsService.clearCache();
+        hotelSettingsService.cacheSettings(result.data);
+        // Notify all components that settings have changed
+        window.dispatchEvent(new CustomEvent('hotelSettingsChanged', { detail: result.data }));
         return { success: true, data: result.data, message: result.message };
       } else {
         dispatch({ type: actionTypes.SET_ERROR, payload: result.error });
@@ -264,7 +274,7 @@ export const HotelSettingsProvider = ({ children }) => {
   useEffect(() => {
     checkAdminMode();
     loadSettings();
-  }, [checkAdminMode, loadSettings]);
+  }, []);
 
   // Context value
   const value = {

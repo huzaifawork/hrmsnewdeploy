@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { about } from "../data/Data";
 import { FiArrowUpRight, FiStar, FiTrendingUp, FiUsers } from "react-icons/fi";
 import { Link } from "react-router-dom";
@@ -9,15 +9,49 @@ export default function About() {
   // Get dynamic hotel information
   const hotelInfo = useHotelInfo();
   const stats = useHotelStats();
+  const [forceUpdate, setForceUpdate] = useState(0);
 
-  // Debug logging to check if data is loading
-  console.log('About.js - Hotel Info:', hotelInfo);
-  console.log('About.js - Loading state:', hotelInfo.loading);
-  console.log('About.js - Hotel Name:', hotelInfo.hotelName);
-  console.log('About.js - Description:', hotelInfo.description);
+  // Force re-render when hotel settings change
+  useEffect(() => {
+    const handleSettingsChange = () => {
+      // Force component re-render by updating state
+      setForceUpdate(prev => prev + 1);
+    };
+
+    window.addEventListener('hotelSettingsChanged', handleSettingsChange);
+
+    return () => {
+      window.removeEventListener('hotelSettingsChanged', handleSettingsChange);
+    };
+  }, []);
+
+  // Also listen for hotelInfo changes
+  useEffect(() => {
+    // This will trigger a re-render when hotelInfo changes
+  }, [hotelInfo.hotelName, hotelInfo.description, hotelInfo.loading]);
+
+  // Show loading state while data is being fetched
+  if (hotelInfo.loading) {
+    return (
+      <div className="about-section-mobile" style={{
+        width: '100vw',
+        background: 'linear-gradient(135deg, #0A192F 0%, #112240 50%, #0A192F 100%)',
+        position: 'relative',
+        marginLeft: 'calc(50% - 50vw)',
+        marginRight: 'calc(50% - 50vw)',
+        padding: '4rem 0',
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        color: '#64ffda'
+      }}>
+        <div>Loading hotel information...</div>
+      </div>
+    );
+  }
 
   return (
-    <div className="about-section-mobile" style={{
+    <div key={hotelInfo.hotelName} className="about-section-mobile" style={{
       width: '100vw',
       background: 'linear-gradient(135deg, #0A192F 0%, #112240 50%, #0A192F 100%)',
       position: 'relative',
