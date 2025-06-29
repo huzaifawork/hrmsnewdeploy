@@ -134,17 +134,10 @@ class HotelSettingsService {
         updatedSettings.description = sectionData.description;
       } else if (section === 'contact') {
         // Update contact section
-        console.log('=== SERVICE LAYER CONTACT DEBUG ===');
-        console.log('Original contact:', updatedSettings.contact);
-        console.log('Section data received:', sectionData);
-
         updatedSettings.contact = {
           ...updatedSettings.contact,
           ...sectionData
         };
-
-        console.log('Final contact after merge:', updatedSettings.contact);
-        console.log('=== END SERVICE DEBUG ===');
       } else if (section === 'branding') {
         // Update branding fields
         if (sectionData.logoUrls) {

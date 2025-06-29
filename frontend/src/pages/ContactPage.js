@@ -176,22 +176,7 @@ export default function Contact() {
     }
   ];
 
-  // Debug logging and manual refresh function
-  console.log('ContactPage - All contact info:', contactInfo);
-  console.log('ContactPage - Website:', contactInfo.website);
-  console.log('ContactPage - Support Email:', contactInfo.emailSupport);
-  console.log('ContactPage - Secondary Phone:', contactInfo.phoneSecondary);
-  console.log('ContactPage - Additional methods count:', additionalContactMethods.length);
 
-  // Manual refresh function for testing
-  const handleManualRefresh = () => {
-    console.log('Manual refresh triggered');
-    clearHotelCache();
-    hotelSettingsService.clearCache();
-    loadSettings(true);
-    setForceUpdate(prev => prev + 1);
-    toast.info('Contact data refreshed!');
-  };
 
   const businessHours = [
     { day: "Monday - Friday", hours: "24/7 Available" },
@@ -237,22 +222,7 @@ export default function Contact() {
             We're here to help and answer any questions you might have.
             We look forward to hearing from you.
           </p>
-          {/* Debug refresh button - remove in production */}
-          <button
-            onClick={handleManualRefresh}
-            style={{
-              marginTop: '1rem',
-              padding: '0.5rem 1rem',
-              backgroundColor: '#007bff',
-              color: 'white',
-              border: 'none',
-              borderRadius: '4px',
-              cursor: 'pointer',
-              fontSize: '0.9rem'
-            }}
-          >
-            🔄 Refresh Contact Data
-          </button>
+
         </div>
       </section>
 

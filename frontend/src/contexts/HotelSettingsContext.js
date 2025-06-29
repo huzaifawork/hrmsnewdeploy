@@ -158,10 +158,8 @@ export const HotelSettingsProvider = ({ children }) => {
 
     try {
       dispatch({ type: actionTypes.SET_LOADING, payload: true });
-      console.log('Updating settings with data:', settingsData);
 
       const result = await hotelSettingsService.updateSettings(settingsData);
-      console.log('Settings update result:', result);
 
       if (result.success) {
         dispatch({ type: actionTypes.SET_SETTINGS, payload: result.data });
@@ -170,7 +168,6 @@ export const HotelSettingsProvider = ({ children }) => {
         hotelSettingsService.cacheSettings(result.data);
         // Notify all components that settings have changed
         window.dispatchEvent(new CustomEvent('hotelSettingsChanged', { detail: result.data }));
-        console.log('Settings updated successfully, event dispatched');
 
         // Force reload settings to ensure all components get fresh data
         setTimeout(() => {
@@ -197,9 +194,7 @@ export const HotelSettingsProvider = ({ children }) => {
     }
 
     try {
-      console.log('Updating section:', section, 'with data:', sectionData);
       const result = await hotelSettingsService.updateSection(section, sectionData);
-      console.log('Update result:', result);
 
       if (result.success) {
         dispatch({ type: actionTypes.SET_SETTINGS, payload: result.data });
@@ -208,7 +203,6 @@ export const HotelSettingsProvider = ({ children }) => {
         hotelSettingsService.cacheSettings(result.data);
         // Notify all components that settings have changed
         window.dispatchEvent(new CustomEvent('hotelSettingsChanged', { detail: result.data }));
-        console.log('Settings updated successfully, event dispatched');
 
         // Force reload settings to ensure all components get fresh data
         setTimeout(() => {
