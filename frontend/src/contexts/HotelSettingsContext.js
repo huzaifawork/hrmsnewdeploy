@@ -158,9 +158,11 @@ export const HotelSettingsProvider = ({ children }) => {
 
     try {
       dispatch({ type: actionTypes.SET_LOADING, payload: true });
-      
+      console.log('Updating settings with data:', settingsData);
+
       const result = await hotelSettingsService.updateSettings(settingsData);
-      
+      console.log('Settings update result:', result);
+
       if (result.success) {
         dispatch({ type: actionTypes.SET_SETTINGS, payload: result.data });
         // Clear cache and force refresh
@@ -168,16 +170,25 @@ export const HotelSettingsProvider = ({ children }) => {
         hotelSettingsService.cacheSettings(result.data);
         // Notify all components that settings have changed
         window.dispatchEvent(new CustomEvent('hotelSettingsChanged', { detail: result.data }));
+        console.log('Settings updated successfully, event dispatched');
+
+        // Force reload settings to ensure all components get fresh data
+        setTimeout(() => {
+          loadSettings(true);
+        }, 100);
+
         return { success: true, data: result.data, message: result.message };
       } else {
+        console.error('Settings update failed:', result.error);
         dispatch({ type: actionTypes.SET_ERROR, payload: result.error });
         return { success: false, error: result.error };
       }
     } catch (error) {
+      console.error('Settings update error:', error);
       dispatch({ type: actionTypes.SET_ERROR, payload: error.message });
       return { success: false, error: error.message };
     }
-  }, [state.adminMode]);
+  }, [state.adminMode, loadSettings]);
 
   // Update specific section
   const updateSection = useCallback(async (section, sectionData) => {
@@ -186,8 +197,10 @@ export const HotelSettingsProvider = ({ children }) => {
     }
 
     try {
+      console.log('Updating section:', section, 'with data:', sectionData);
       const result = await hotelSettingsService.updateSection(section, sectionData);
-      
+      console.log('Update result:', result);
+
       if (result.success) {
         dispatch({ type: actionTypes.SET_SETTINGS, payload: result.data });
         // Clear cache and force refresh
@@ -195,16 +208,25 @@ export const HotelSettingsProvider = ({ children }) => {
         hotelSettingsService.cacheSettings(result.data);
         // Notify all components that settings have changed
         window.dispatchEvent(new CustomEvent('hotelSettingsChanged', { detail: result.data }));
+        console.log('Settings updated successfully, event dispatched');
+
+        // Force reload settings to ensure all components get fresh data
+        setTimeout(() => {
+          loadSettings(true);
+        }, 100);
+
         return { success: true, data: result.data, message: result.message };
       } else {
+        console.error('Update failed:', result.error);
         dispatch({ type: actionTypes.SET_ERROR, payload: result.error });
         return { success: false, error: result.error };
       }
     } catch (error) {
+      console.error('Update error:', error);
       dispatch({ type: actionTypes.SET_ERROR, payload: error.message });
       return { success: false, error: error.message };
     }
-  }, [state.adminMode]);
+  }, [state.adminMode, loadSettings]);
 
   // Reset settings to defaults (admin only)
   const resetSettings = useCallback(async () => {

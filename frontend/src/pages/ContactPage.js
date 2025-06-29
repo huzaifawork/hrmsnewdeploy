@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { toast } from "react-toastify";
 import {
   FaPhone,
@@ -11,9 +11,13 @@ import {
   FaTwitter,
   FaInstagram,
   FaPaperPlane,
-  FaCheckCircle
+  FaCheckCircle,
+  FaGlobe
 } from "react-icons/fa";
 import { useHotelInfo, useContactInfo } from "../hooks/useHotelInfo";
+import { useHotelSettings } from "../contexts/HotelSettingsContext";
+import hotelSettingsService from "../services/hotelSettingsService";
+import { clearHotelCache } from "../utils/clearCache";
 import "./ContactPage.css";
 
 export default function Contact() {
@@ -27,10 +31,40 @@ export default function Contact() {
   });
   const [loading, setLoading] = useState(false);
   const [submitted, setSubmitted] = useState(false);
+  const [forceUpdate, setForceUpdate] = useState(0);
 
   // Get dynamic hotel information
   const hotelInfo = useHotelInfo();
   const contactInfo = useContactInfo();
+  const { loadSettings } = useHotelSettings();
+
+  // Clear cache and force refresh on component mount
+  useEffect(() => {
+    // Clear cached settings to ensure fresh data
+    hotelSettingsService.clearCache();
+    // Force reload settings
+    loadSettings(true);
+  }, [loadSettings]);
+
+  // Force re-render when hotel settings change
+  useEffect(() => {
+    const handleSettingsChange = () => {
+      setForceUpdate(prev => prev + 1);
+    };
+
+    window.addEventListener('hotelSettingsChanged', handleSettingsChange);
+
+    return () => {
+      window.removeEventListener('hotelSettingsChanged', handleSettingsChange);
+    };
+  }, []);
+
+  // Also listen for contactInfo changes
+  useEffect(() => {
+    // Debug logging (remove in production)
+    // console.log('ContactPage - Contact Info Updated:', contactInfo);
+    // console.log('ContactPage - Hotel Info Updated:', hotelInfo);
+  }, [contactInfo.phone, contactInfo.email, contactInfo.address, contactInfo.whatsapp, hotelInfo.hotelName]);
 
   const handleInputChange = (e) => {
     const { id, value } = e.target;
@@ -111,6 +145,54 @@ export default function Contact() {
     }
   ];
 
+  // Additional contact methods (show if data exists)
+  const additionalContactMethods = [
+    // Website
+    {
+      icon: <FaGlobe />,
+      title: "Website",
+      content: contactInfo.website ? contactInfo.website.replace(/^https?:\/\//, '') : 'hotelroyal.com',
+      description: "Visit our official website",
+      link: contactInfo.website || 'https://hotelroyal.com',
+      color: "#9C27B0"
+    },
+    // Support Email
+    {
+      icon: <FaHeadset />,
+      title: "Support Email",
+      content: contactInfo.emailSupport || 'support@hotelroyal.com',
+      description: "Technical support and assistance",
+      link: `mailto:${contactInfo.emailSupport || 'support@hotelroyal.com'}`,
+      color: "#FF9800"
+    },
+    // Secondary Phone
+    {
+      icon: <FaPhone />,
+      title: "Secondary Phone",
+      content: contactInfo.phoneSecondary || '+92 123 456 7890',
+      description: "Alternative contact number",
+      link: `tel:${(contactInfo.phoneSecondary || '+92 123 456 7890').replace(/\s+/g, '')}`,
+      color: "#607D8B"
+    }
+  ];
+
+  // Debug logging and manual refresh function
+  console.log('ContactPage - All contact info:', contactInfo);
+  console.log('ContactPage - Website:', contactInfo.website);
+  console.log('ContactPage - Support Email:', contactInfo.emailSupport);
+  console.log('ContactPage - Secondary Phone:', contactInfo.phoneSecondary);
+  console.log('ContactPage - Additional methods count:', additionalContactMethods.length);
+
+  // Manual refresh function for testing
+  const handleManualRefresh = () => {
+    console.log('Manual refresh triggered');
+    clearHotelCache();
+    hotelSettingsService.clearCache();
+    loadSettings(true);
+    setForceUpdate(prev => prev + 1);
+    toast.info('Contact data refreshed!');
+  };
+
   const businessHours = [
     { day: "Monday - Friday", hours: "24/7 Available" },
     { day: "Saturday - Sunday", hours: "24/7 Available" },
@@ -143,7 +225,7 @@ export default function Contact() {
   }
 
   return (
-    <div className="modern-contact-page">
+    <div key={`${contactInfo.phone}-${contactInfo.email}-${forceUpdate}`} className="modern-contact-page">
       {/* Hero Section */}
       <section className="contact-hero">
         <div className="hero-background">
@@ -155,6 +237,22 @@ export default function Contact() {
             We're here to help and answer any questions you might have.
             We look forward to hearing from you.
           </p>
+          {/* Debug refresh button - remove in production */}
+          <button
+            onClick={handleManualRefresh}
+            style={{
+              marginTop: '1rem',
+              padding: '0.5rem 1rem',
+              backgroundColor: '#007bff',
+              color: 'white',
+              border: 'none',
+              borderRadius: '4px',
+              cursor: 'pointer',
+              fontSize: '0.9rem'
+            }}
+          >
+            🔄 Refresh Contact Data
+          </button>
         </div>
       </section>
 
@@ -180,6 +278,40 @@ export default function Contact() {
               </a>
             ))}
           </div>
+
+          {/* Additional Contact Methods */}
+          {additionalContactMethods.length > 0 && (
+            <div className="additional-contact-methods" style={{ marginTop: '2rem' }}>
+              <h3 style={{
+                textAlign: 'center',
+                marginBottom: '1.5rem',
+                color: '#333',
+                fontSize: '1.5rem',
+                fontWeight: '600'
+              }}>
+                More Ways to Reach Us
+              </h3>
+              <div className="contact-methods-grid">
+                {additionalContactMethods.map((method, index) => (
+                  <a
+                    key={`additional-${index}`}
+                    href={method.link}
+                    className="contact-method-card"
+                    target={method.link.startsWith('http') ? '_blank' : '_self'}
+                    rel={method.link.startsWith('http') ? 'noopener noreferrer' : ''}
+                    style={{ '--accent-color': method.color }}
+                  >
+                    <div className="method-icon">
+                      {method.icon}
+                    </div>
+                    <h3 className="method-title">{method.title}</h3>
+                    <p className="method-content">{method.content}</p>
+                    <span className="method-description">{method.description}</span>
+                  </a>
+                ))}
+              </div>
+            </div>
+          )}
         </div>
       </section>
 

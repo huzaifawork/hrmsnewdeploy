@@ -47,7 +47,37 @@ const HotelBrandingSettings = () => {
   // Initialize local settings when hotel settings are loaded
   useEffect(() => {
     if (settings && !localSettings) {
-      setLocalSettings(JSON.parse(JSON.stringify(settings)));
+      const initialSettings = JSON.parse(JSON.stringify(settings));
+
+      // Ensure all contact fields exist with default values
+      if (!initialSettings.contact) {
+        initialSettings.contact = {};
+      }
+      if (!initialSettings.contact.phone) {
+        initialSettings.contact.phone = {};
+      }
+      if (!initialSettings.contact.email) {
+        initialSettings.contact.email = {};
+      }
+      if (!initialSettings.contact.address) {
+        initialSettings.contact.address = {};
+      }
+
+      // Set default values for optional fields if they don't exist
+      if (!initialSettings.contact.phone.secondary) {
+        initialSettings.contact.phone.secondary = '';
+      }
+      if (!initialSettings.contact.email.support) {
+        initialSettings.contact.email.support = '';
+      }
+      if (!initialSettings.contact.email.reservations) {
+        initialSettings.contact.email.reservations = '';
+      }
+      if (!initialSettings.contact.website) {
+        initialSettings.contact.website = '';
+      }
+
+      setLocalSettings(initialSettings);
     }
   }, [settings, localSettings]);
 
@@ -217,7 +247,30 @@ const HotelBrandingSettings = () => {
             setSaving(false);
             return;
           }
-          sectionData = { contact: localSettings.contact };
+          // Send contact data directly, not wrapped in contact object
+          // Ensure all optional fields are included even if empty
+          sectionData = {
+            address: localSettings.contact.address || {},
+            phone: {
+              primary: localSettings.contact.phone?.primary || '',
+              whatsapp: localSettings.contact.phone?.whatsapp || '',
+              secondary: localSettings.contact.phone?.secondary || ''
+            },
+            email: {
+              primary: localSettings.contact.email?.primary || '',
+              support: localSettings.contact.email?.support || '',
+              reservations: localSettings.contact.email?.reservations || ''
+            },
+            website: localSettings.contact.website || ''
+          };
+          console.log('=== CONTACT SECTION SAVE DEBUG ===');
+          console.log('Local settings contact:', localSettings.contact);
+          console.log('Section data being sent:', sectionData);
+          console.log('Secondary phone:', sectionData.phone.secondary);
+          console.log('Support email:', sectionData.email.support);
+          console.log('Reservations email:', sectionData.email.reservations);
+          console.log('Website:', sectionData.website);
+          console.log('=== END DEBUG ===');
           break;
         case 'basic':
           sectionData = {
@@ -508,6 +561,21 @@ const HotelBrandingSettings = () => {
                   <div className="section-header">
                     <h2>Contact Information</h2>
                     <p>Manage your hotel's contact details and address</p>
+                    {/* Debug info - remove in production */}
+                    <div style={{
+                      background: '#f0f0f0',
+                      padding: '1rem',
+                      margin: '1rem 0',
+                      borderRadius: '4px',
+                      fontSize: '0.8rem',
+                      color: '#333'
+                    }}>
+                      <strong>Debug - Current Values:</strong><br/>
+                      Secondary Phone: {localSettings.contact?.phone?.secondary || 'empty'}<br/>
+                      Support Email: {localSettings.contact?.email?.support || 'empty'}<br/>
+                      Reservations Email: {localSettings.contact?.email?.reservations || 'empty'}<br/>
+                      Website: {localSettings.contact?.website || 'empty'}
+                    </div>
                   </div>
                   <div className="settings-grid">
                     {/* Phone Numbers */}
@@ -683,6 +751,37 @@ const HotelBrandingSettings = () => {
                         }}
                       />
                     </div>
+                  </div>
+
+                  {/* Test Button - remove in production */}
+                  <div style={{ marginTop: '1rem', textAlign: 'center' }}>
+                    <button
+                      className="enhanced-btn enhanced-btn-secondary"
+                      onClick={() => {
+                        // Fill with test data
+                        const testData = {
+                          ...localSettings,
+                          contact: {
+                            ...localSettings.contact,
+                            phone: {
+                              ...localSettings.contact?.phone,
+                              secondary: '+92 300 TEST 123'
+                            },
+                            email: {
+                              ...localSettings.contact?.email,
+                              support: 'test-support@example.com',
+                              reservations: 'test-reservations@example.com'
+                            },
+                            website: 'https://test-website.com'
+                          }
+                        };
+                        setLocalSettings(testData);
+                        setHasChanges(true);
+                        toast.info('Test data filled!');
+                      }}
+                    >
+                      🧪 Fill Test Data
+                    </button>
                   </div>
 
                   {/* Contact Section Save Button */}

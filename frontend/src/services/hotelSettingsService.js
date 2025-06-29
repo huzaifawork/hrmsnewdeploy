@@ -110,14 +110,63 @@ class HotelSettingsService {
    */
   async updateSection(section, sectionData) {
     try {
+      console.log(`Updating section ${section} with data:`, sectionData);
+
+      // For the hotel settings, we need to use the main update endpoint instead of section-specific
+      // because the model structure doesn't match the section-based approach
+
+      console.log('Transforming data for direct model update');
+
       // Clear cache before updating to ensure fresh data
       this.clearCache();
 
-      const response = await api.put(`/hotel-settings/section/${section}`, sectionData);
+      // Get current settings first
+      const currentResponse = await api.get('/hotel-settings');
+      const currentSettings = currentResponse.data.data || {};
+
+      // Merge the section data with current settings
+      let updatedSettings = { ...currentSettings };
+
+      if (section === 'basic') {
+        // Update basic fields directly at root level
+        updatedSettings.hotelName = sectionData.hotelName;
+        updatedSettings.hotelSubtitle = sectionData.hotelSubtitle;
+        updatedSettings.description = sectionData.description;
+      } else if (section === 'contact') {
+        // Update contact section
+        console.log('=== SERVICE LAYER CONTACT DEBUG ===');
+        console.log('Original contact:', updatedSettings.contact);
+        console.log('Section data received:', sectionData);
+
+        updatedSettings.contact = {
+          ...updatedSettings.contact,
+          ...sectionData
+        };
+
+        console.log('Final contact after merge:', updatedSettings.contact);
+        console.log('=== END SERVICE DEBUG ===');
+      } else if (section === 'branding') {
+        // Update branding fields
+        if (sectionData.logoUrls) {
+          updatedSettings.logoUrls = { ...updatedSettings.logoUrls, ...sectionData.logoUrls };
+        }
+        if (sectionData.colors) {
+          updatedSettings.colors = { ...updatedSettings.colors, ...sectionData.colors };
+        }
+        if (sectionData.fonts) {
+          updatedSettings.fonts = { ...updatedSettings.fonts, ...sectionData.fonts };
+        }
+      }
+
+      console.log('Updated settings to send:', updatedSettings);
+
+      const response = await api.put('/hotel-settings', updatedSettings);
+      console.log(`Section ${section} update response:`, response.data);
 
       // Cache the updated settings
       if (response.data.data) {
         this.cacheSettings(response.data.data);
+        console.log('Settings cached successfully');
       }
 
       return {
@@ -127,6 +176,7 @@ class HotelSettingsService {
       };
     } catch (error) {
       console.error(`Error updating ${section} section:`, error);
+      console.error('Error details:', error.response?.data);
       return {
         success: false,
         error: error.response?.data?.message || `Failed to update ${section} section`

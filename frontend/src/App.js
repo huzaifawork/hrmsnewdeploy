@@ -7,6 +7,7 @@ import ScrollToTop from "./components/common/ScrollToTop";
 import LoginPage from "./components/Auth/Login";
 import { GoogleOAuthProvider } from "@react-oauth/google";
 import { HotelSettingsProvider } from "./contexts/HotelSettingsContext";
+import "./utils/clearCache"; // Make clearHotelCache available globally
 import Dashboard from "./components/Admin/Sidebar";
 import BookRoom from "./pages/BookRoom";
 import OrderFood from "./pages/OrderFood";

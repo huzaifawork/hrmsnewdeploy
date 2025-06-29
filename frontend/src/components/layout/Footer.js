@@ -1,12 +1,12 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   FiMapPin, FiPhone, FiMail, FiTwitter, FiInstagram, FiFacebook,
   FiLinkedin, FiHeart, FiGithub, FiYoutube,
-  FiSend, FiExternalLink
+  FiSend, FiExternalLink, FiGlobe
 } from "react-icons/fi";
 import {
   FaHotel, FaUtensils, FaConciergeBell, FaSwimmingPool,
-  FaDumbbell, FaWifi
+  FaDumbbell, FaWifi, FaWhatsapp
 } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import { useHotelInfo, useContactInfo, useSocialMedia } from "../../hooks/useHotelInfo";
@@ -16,11 +16,32 @@ const Footer = () => {
   const [email, setEmail] = useState('');
   const [isSubscribed, setIsSubscribed] = useState(false);
   const [hoveredSocial, setHoveredSocial] = useState(null);
+  const [forceUpdate, setForceUpdate] = useState(0);
 
   // Get dynamic hotel information
   const hotelInfo = useHotelInfo();
   const contactInfo = useContactInfo();
   const socialMedia = useSocialMedia();
+
+  // Force re-render when hotel settings change
+  useEffect(() => {
+    const handleSettingsChange = () => {
+      setForceUpdate(prev => prev + 1);
+    };
+
+    window.addEventListener('hotelSettingsChanged', handleSettingsChange);
+
+    return () => {
+      window.removeEventListener('hotelSettingsChanged', handleSettingsChange);
+    };
+  }, []);
+
+  // Also listen for contactInfo changes
+  useEffect(() => {
+    // Debug logging (remove in production)
+    // console.log('Footer - Contact Info Updated:', contactInfo);
+    // console.log('Footer - Hotel Info Updated:', hotelInfo);
+  }, [contactInfo.phone, contactInfo.email, contactInfo.address, contactInfo.whatsapp, hotelInfo.hotelName]);
 
   const handleSubscribe = (e) => {
     e.preventDefault();
@@ -59,7 +80,7 @@ const Footer = () => {
 
   return (
     <>
-      <style>
+      <style key={`${contactInfo.phone}-${contactInfo.email}-${forceUpdate}`}>
         {`
           @keyframes float {
             0%, 100% { transform: translateY(0px) rotate(0deg); }
@@ -246,6 +267,55 @@ const Footer = () => {
                     {contactInfo.email}
                   </span>
                 </div>
+
+                {/* WhatsApp */}
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                  <div style={{
+                    width: '2rem',
+                    height: '2rem',
+                    background: 'rgba(37, 211, 102, 0.1)',
+                    borderRadius: '0.4rem',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    border: '1px solid rgba(37, 211, 102, 0.2)'
+                  }}>
+                    <FaWhatsapp style={{ color: '#25D366', fontSize: '0.8rem' }} />
+                  </div>
+                  <span style={{ color: 'rgba(255, 255, 255, 0.8)', fontSize: '0.8rem' }}>
+                    {contactInfo.whatsapp}
+                  </span>
+                </div>
+
+                {/* Website */}
+                {contactInfo.website && (
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                    <div style={{
+                      width: '2rem',
+                      height: '2rem',
+                      background: 'rgba(100, 255, 218, 0.1)',
+                      borderRadius: '0.4rem',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      border: '1px solid rgba(100, 255, 218, 0.2)'
+                    }}>
+                      <FiGlobe style={{ color: '#64ffda', fontSize: '0.8rem' }} />
+                    </div>
+                    <a
+                      href={contactInfo.website}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      style={{
+                        color: 'rgba(255, 255, 255, 0.8)',
+                        fontSize: '0.8rem',
+                        textDecoration: 'none'
+                      }}
+                    >
+                      {contactInfo.website.replace(/^https?:\/\//, '')}
+                    </a>
+                  </div>
+                )}
               </div>
             </div>
 

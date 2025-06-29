@@ -42,11 +42,11 @@ export default function Header() {
     // This will trigger a re-render when hotelInfo changes
   }, [hotelInfo.hotelName, hotelInfo.loading]);
 
-  // Debug logging to check if data is loading
-  console.log('Header.jsx - Hotel Info:', hotelInfo);
-  console.log('Header.jsx - Loading state:', hotelInfo.loading);
-  console.log('Header.jsx - Hotel Name:', hotelInfo.hotelName);
-  console.log('Header.jsx - Logos:', logos);
+  // Debug logging to check if data is loading (remove in production)
+  // console.log('Header.jsx - Hotel Info:', hotelInfo);
+  // console.log('Header.jsx - Loading state:', hotelInfo.loading);
+  // console.log('Header.jsx - Hotel Name:', hotelInfo.hotelName);
+  // console.log('Header.jsx - Logos:', logos);
 
   useEffect(() => {
     const handleScroll = () => {

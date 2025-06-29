@@ -117,11 +117,15 @@ const getPublicHotelSettings = async (req, res) => {
         address: settings.contact.address,
         phone: {
           primary: settings.contact.phone.primary,
+          secondary: settings.contact.phone.secondary,
           whatsapp: settings.contact.phone.whatsapp
         },
         email: {
-          primary: settings.contact.email.primary
-        }
+          primary: settings.contact.email.primary,
+          support: settings.contact.email.support,
+          reservations: settings.contact.email.reservations
+        },
+        website: settings.contact.website
       },
       socialMedia: settings.socialMedia,
       business: {
