@@ -88,72 +88,39 @@ const Services = () => {
     <>
       <style>
         {`
-          @keyframes float {
-            0%, 100% { transform: translateY(0px) rotate(0deg); }
-            50% { transform: translateY(-20px) rotate(180deg); }
-          }
-          @keyframes pulse {
-            0%, 100% { opacity: 1; transform: scale(1); }
-            50% { opacity: 0.8; transform: scale(1.05); }
-          }
-          @keyframes shimmer {
-            0% { transform: translateX(-100%); }
-            100% { transform: translateX(100%); }
-          }
-          @keyframes glow {
-            0%, 100% { box-shadow: 0 0 20px rgba(100, 255, 218, 0.3); }
-            50% { box-shadow: 0 0 40px rgba(100, 255, 218, 0.6); }
-          }
-
           /* Responsive Styles */
           @media (max-width: 768px) {
             .services-grid {
-              grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)) !important;
-              gap: 1rem !important;
-              padding: 0 !important;
+              grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)) !important;
+              gap: 1.5rem !important;
+              padding: 0 0.5rem !important;
             }
             .service-card {
-              padding: 1rem !important;
+              padding: 1.5rem !important;
             }
             .service-title {
-              font-size: 1rem !important;
+              font-size: 1.125rem !important;
             }
             .service-description {
-              font-size: 0.8rem !important;
-              -webkit-line-clamp: 3 !important;
-            }
-            .service-icon {
-              width: 2.5rem !important;
-              height: 2.5rem !important;
-              font-size: 1rem !important;
-            }
-            .feature-tags {
-              gap: 0.3rem !important;
-            }
-            .feature-tag {
-              font-size: 0.65rem !important;
-              padding: 0.15rem 0.4rem !important;
+              font-size: 0.875rem !important;
             }
           }
 
           @media (max-width: 480px) {
             .services-grid {
               grid-template-columns: 1fr !important;
-              gap: 0.75rem !important;
+              gap: 1rem !important;
+              padding: 0 0.5rem !important;
             }
             .service-card {
-              padding: 0.875rem !important;
-              margin: 0 0.5rem !important;
+              padding: 1.25rem !important;
+              margin: 0 !important;
             }
             .service-title {
-              font-size: 0.95rem !important;
+              font-size: 1rem !important;
             }
             .service-description {
-              font-size: 0.75rem !important;
-            }
-            .learn-more-btn {
-              padding: 0.4rem 0.8rem !important;
-              font-size: 0.7rem !important;
+              font-size: 0.8rem !important;
             }
           }
         `}
@@ -161,69 +128,10 @@ const Services = () => {
       <section style={{
         width: '100%',
         margin: 0,
-        marginTop: '80px', // Top margin for header spacing
-        padding: '3rem 0',
-        background: 'linear-gradient(180deg, #0A192F 0%, #112240 50%, #0A192F 100%)',
-        backdropFilter: 'blur(10px)',
-        position: 'relative',
-        overflow: 'hidden'
+        padding: '4rem 0',
+        background: '#ffffff',
+        position: 'relative'
       }}>
-        {/* Animated Background Elements */}
-        <div style={{
-          position: 'absolute',
-          top: '10%',
-          left: '5%',
-          width: '400px',
-          height: '400px',
-          background: 'radial-gradient(circle, rgba(100, 255, 218, 0.08) 0%, transparent 70%)',
-          borderRadius: '50%',
-          filter: 'blur(60px)',
-          animation: 'float 8s ease-in-out infinite',
-          zIndex: 0
-        }} />
-        <div style={{
-          position: 'absolute',
-          top: '60%',
-          right: '10%',
-          width: '300px',
-          height: '300px',
-          background: 'radial-gradient(circle, rgba(187, 134, 252, 0.06) 0%, transparent 70%)',
-          borderRadius: '50%',
-          filter: 'blur(50px)',
-          animation: 'float 10s ease-in-out infinite reverse',
-          zIndex: 0
-        }} />
-        <div style={{
-          position: 'absolute',
-          bottom: '20%',
-          left: '20%',
-          width: '250px',
-          height: '250px',
-          background: 'radial-gradient(circle, rgba(255, 107, 157, 0.05) 0%, transparent 70%)',
-          borderRadius: '50%',
-          filter: 'blur(40px)',
-          animation: 'float 12s ease-in-out infinite',
-          zIndex: 0
-        }} />
-
-        {/* Floating Particles */}
-        {[...Array(20)].map((_, i) => (
-          <div
-            key={i}
-            style={{
-              position: 'absolute',
-              width: '4px',
-              height: '4px',
-              background: `rgba(${100 + i * 10}, ${255 - i * 5}, ${218 - i * 3}, 0.6)`,
-              borderRadius: '50%',
-              top: `${Math.random() * 100}%`,
-              left: `${Math.random() * 100}%`,
-              animation: `float ${5 + Math.random() * 10}s ease-in-out infinite`,
-              animationDelay: `${Math.random() * 5}s`,
-              zIndex: 1
-            }}
-          />
-        ))}
 
         <div style={{
           width: '100%',
@@ -234,24 +142,21 @@ const Services = () => {
           zIndex: 2
         }}>
           {/* Header Section */}
-          <div style={{ textAlign: 'center', marginBottom: '2rem' }}>
+          <div style={{ textAlign: 'center', marginBottom: '3rem' }}>
             <h2 style={{
-              fontSize: '2.2rem',
-              fontWeight: '800',
-              background: 'linear-gradient(135deg, #ffffff 0%, #64ffda 50%, #bb86fc 100%)',
-              WebkitBackgroundClip: 'text',
-              WebkitTextFillColor: 'transparent',
-              backgroundClip: 'text',
-              marginBottom: '0.75rem',
-              lineHeight: '1.1'
+              fontSize: '2rem',
+              fontWeight: '600',
+              color: '#000000',
+              marginBottom: '1rem',
+              fontFamily: 'Inter, sans-serif'
             }}>
               Premium Services
             </h2>
 
             <p style={{
               fontSize: '1rem',
-              color: 'rgba(255, 255, 255, 0.8)',
-              maxWidth: '500px',
+              color: '#6b7280',
+              maxWidth: '600px',
               margin: '0 auto',
               lineHeight: '1.5'
             }}>
@@ -262,73 +167,49 @@ const Services = () => {
           {/* Services Grid */}
           <div className="services-grid" style={{
             display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
-            gap: '1.25rem',
-            padding: '0.5rem 0'
+            gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
+            gap: '2rem',
+            padding: '0 1rem'
           }}>
             {services.map((service, index) => (
               <div
                 key={index}
                 className="service-card"
                 style={{
-                  background: hoveredCard === index
-                    ? service.gradient
-                    : 'linear-gradient(145deg, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0.02) 100%)',
-                  backdropFilter: 'blur(20px)',
-                  border: hoveredCard === index
-                    ? `1px solid ${service.color}`
-                    : '1px solid rgba(255, 255, 255, 0.15)',
-                  borderRadius: '1.25rem',
-                  padding: '1.25rem',
+                  background: '#ffffff',
+                  border: '1px solid #e5e7eb',
+                  borderRadius: '0.75rem',
+                  padding: '2rem',
                   position: 'relative',
                   cursor: 'pointer',
-                  transition: 'all 0.3s ease',
-                  transform: hoveredCard === index ? 'translateY(-5px)' : 'translateY(0)',
+                  transition: 'all 0.2s ease',
+                  transform: hoveredCard === index ? 'translateY(-4px)' : 'translateY(0)',
                   boxShadow: hoveredCard === index
-                    ? `0 15px 30px rgba(0, 0, 0, 0.2), 0 0 0 1px ${service.color}`
-                    : '0 4px 15px rgba(0, 0, 0, 0.1)',
+                    ? '0 8px 25px rgba(0, 0, 0, 0.1)'
+                    : '0 2px 4px rgba(0, 0, 0, 0.05)',
                   overflow: 'hidden'
                 }}
                 onMouseEnter={() => setHoveredCard(index)}
                 onMouseLeave={() => setHoveredCard(null)}
               >
-                {/* Shimmer Effect */}
-                {hoveredCard === index && (
-                  <div style={{
-                    position: 'absolute',
-                    top: 0,
-                    left: '-100%',
-                    width: '100%',
-                    height: '100%',
-                    background: 'linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent)',
-                    animation: 'shimmer 1.5s ease-in-out',
-                    zIndex: 1
-                  }} />
-                )}
-
                 {/* Icon Section */}
                 <div style={{
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'space-between',
-                  marginBottom: '1rem',
-                  position: 'relative',
-                  zIndex: 2
+                  marginBottom: '1.5rem'
                 }}>
                   <div style={{
                     width: '3rem',
                     height: '3rem',
-                    background: hoveredCard === index
-                      ? service.color
-                      : 'rgba(255, 255, 255, 0.1)',
+                    background: '#f3f4f6',
                     borderRadius: '0.75rem',
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
                     fontSize: '1.2rem',
-                    color: hoveredCard === index ? '#000' : '#fff',
-                    transition: 'all 0.3s ease',
-                    transform: hoveredCard === index ? 'scale(1.05)' : 'scale(1)'
+                    color: '#374151',
+                    transition: 'all 0.2s ease'
                   }}>
                     {service.icon}
                   </div>
@@ -338,45 +219,35 @@ const Services = () => {
                     display: 'flex',
                     alignItems: 'center',
                     gap: '0.25rem',
-                    padding: '0.2rem 0.5rem',
-                    background: 'rgba(255, 193, 7, 0.2)',
-                    borderRadius: '0.75rem',
-                    border: '1px solid rgba(255, 193, 7, 0.3)'
+                    padding: '0.25rem 0.5rem',
+                    background: '#ffffff',
+                    borderRadius: '0.5rem',
+                    border: '1px solid #e5e7eb'
                   }}>
-                    <FiStar style={{ color: '#ffc107', fill: '#ffc107' }} size={10} />
-                    <span style={{ color: '#ffc107', fontSize: '0.7rem', fontWeight: '600' }}>
+                    <FiStar style={{ color: '#fbbf24' }} size={12} />
+                    <span style={{ color: '#000000', fontSize: '0.75rem', fontWeight: '500' }}>
                       {service.stats.rating}
                     </span>
                   </div>
                 </div>
 
                 {/* Content */}
-                <div style={{ position: 'relative', zIndex: 2 }}>
+                <div>
                   <h3 className="service-title" style={{
-                    fontSize: '1.1rem',
-                    fontWeight: '700',
-                    color: '#fff',
-                    marginBottom: '0.5rem',
-                    background: hoveredCard === index
-                      ? 'linear-gradient(135deg, #ffffff 0%, #bb86fc 100%)'
-                      : 'none',
-                    WebkitBackgroundClip: hoveredCard === index ? 'text' : 'initial',
-                    WebkitTextFillColor: hoveredCard === index ? 'transparent' : '#fff',
-                    backgroundClip: hoveredCard === index ? 'text' : 'initial',
-                    transition: 'all 0.3s ease'
+                    fontSize: '1.25rem',
+                    fontWeight: '600',
+                    color: '#000000',
+                    marginBottom: '0.75rem',
+                    fontFamily: 'Inter, sans-serif'
                   }}>
                     {service.title}
                   </h3>
 
                   <p className="service-description" style={{
-                    color: 'rgba(255, 255, 255, 0.7)',
-                    fontSize: '0.85rem',
-                    lineHeight: '1.4',
-                    marginBottom: '1rem',
-                    display: '-webkit-box',
-                    WebkitLineClamp: 2,
-                    WebkitBoxOrient: 'vertical',
-                    overflow: 'hidden'
+                    color: '#6b7280',
+                    fontSize: '0.875rem',
+                    lineHeight: '1.5',
+                    marginBottom: '1.5rem'
                   }}>
                     {service.description}
                   </p>
@@ -385,19 +256,18 @@ const Services = () => {
                   <div style={{
                     display: 'flex',
                     flexWrap: 'wrap',
-                    gap: '0.4rem',
-                    marginBottom: '1rem'
+                    gap: '0.5rem',
+                    marginBottom: '1.5rem'
                   }}>
-                    {service.features.slice(0, 2).map((feature, featureIndex) => (
+                    {service.features.slice(0, 3).map((feature, featureIndex) => (
                       <span
                         key={featureIndex}
                         style={{
-                          padding: '0.2rem 0.5rem',
-                          background: 'rgba(100, 255, 218, 0.1)',
-                          border: '1px solid rgba(100, 255, 218, 0.2)',
-                          borderRadius: '0.75rem',
-                          fontSize: '0.7rem',
-                          color: 'rgba(100, 255, 218, 0.9)',
+                          padding: '0.25rem 0.5rem',
+                          background: '#f3f4f6',
+                          borderRadius: '0.25rem',
+                          fontSize: '0.75rem',
+                          color: '#374151',
                           fontWeight: '500'
                         }}
                       >
@@ -413,35 +283,37 @@ const Services = () => {
                     justifyContent: 'space-between'
                   }}>
                     <button style={{
-                      padding: '0.5rem 1rem',
-                      background: hoveredCard === index
-                        ? service.color
-                        : 'rgba(255, 255, 255, 0.1)',
+                      padding: '0.75rem 1.5rem',
+                      background: '#000000',
                       border: 'none',
                       borderRadius: '0.5rem',
-                      color: hoveredCard === index ? '#000' : '#fff',
-                      fontSize: '0.8rem',
-                      fontWeight: '600',
+                      color: '#ffffff',
+                      fontSize: '0.875rem',
+                      fontWeight: '500',
                       cursor: 'pointer',
-                      transition: 'all 0.3s ease'
+                      transition: 'all 0.2s ease'
+                    }}
+                    onMouseEnter={(e) => {
+                      e.target.style.background = '#333333';
+                    }}
+                    onMouseLeave={(e) => {
+                      e.target.style.background = '#000000';
                     }}>
                       Learn More
                     </button>
 
                     <div style={{
-                      width: '2rem',
-                      height: '2rem',
-                      background: hoveredCard === index
-                        ? 'rgba(255, 255, 255, 0.2)'
-                        : 'rgba(255, 255, 255, 0.1)',
+                      width: '2.5rem',
+                      height: '2.5rem',
+                      background: '#f3f4f6',
                       borderRadius: '50%',
                       display: 'flex',
                       alignItems: 'center',
                       justifyContent: 'center',
-                      transition: 'all 0.3s ease',
-                      transform: hoveredCard === index ? 'rotate(45deg)' : 'rotate(0deg)'
+                      transition: 'all 0.2s ease',
+                      cursor: 'pointer'
                     }}>
-                      <BsArrowUpRight style={{ color: '#fff' }} size={12} />
+                      <BsArrowUpRight style={{ color: '#374151' }} size={14} />
                     </div>
                   </div>
                 </div>

@@ -1,3 +1,70 @@
+/* ========== BLACK & WHITE THEME OVERRIDES FOR ORDER TRACKING ========== */
+
+/* Force white background and black text for all tracking elements */
+.tracking-container,
+.tracking-card,
+.tracking-header,
+.status-icon,
+.delivery-info,
+.order-summary,
+.order-items,
+.order-item,
+.action-buttons,
+.delivered-card {
+  background: #ffffff !important;
+  background-color: #ffffff !important;
+  background-image: none !important;
+  color: #000000 !important;
+  border-color: #e5e7eb !important;
+}
+
+/* Override all text elements */
+.tracking-container h1,
+.tracking-container h2,
+.tracking-container h3,
+.tracking-container h4,
+.tracking-container p,
+.tracking-container span,
+.tracking-container div,
+.tracking-header h2,
+.estimated-delivery,
+.order-summary h3,
+.order-item,
+.order-total {
+  color: #000000 !important;
+  -webkit-text-fill-color: #000000 !important;
+}
+
+/* Status icon styling */
+.status-icon {
+  background: #f3f4f6 !important;
+  color: #000000 !important;
+  border: 1px solid #d1d5db !important;
+}
+
+/* Button styling */
+.invoice-button,
+.action-buttons button {
+  background: #000000 !important;
+  color: #ffffff !important;
+  border: 1px solid #000000 !important;
+}
+
+.invoice-button:hover,
+.action-buttons button:hover {
+  background: #374151 !important;
+}
+
+/* Remove any CSS variables that might cause dark themes */
+.tracking-card {
+  --bg-primary: #ffffff !important;
+  --text-primary: #000000 !important;
+  --text-secondary: #6b7280 !important;
+  --accent-primary: #000000 !important;
+  --accent-primary-transparent: rgba(0, 0, 0, 0.1) !important;
+  --gradient-primary: linear-gradient(90deg, #000000, #374151) !important;
+}
+
 .tracking-container {
   max-width: 90%;
   margin: 1rem auto;
@@ -5,8 +72,8 @@
 }
 
 .tracking-card {
-  background: var(--bg-primary);
-  border-radius: var(--radius-lg);
+  background: #ffffff !important;
+  border-radius: 12px;
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
   padding: 2rem;
   display: grid;
@@ -14,6 +81,7 @@
   gap: 3rem;
   position: relative;
   overflow: hidden;
+  border: 1px solid #e5e7eb !important;
 }
 
 .tracking-card::before {
@@ -23,7 +91,7 @@
   left: 0;
   width: 100%;
   height: 4px;
-  background: var(--gradient-primary);
+  background: #000000 !important;
 }
 
 .tracking-header {
@@ -36,16 +104,17 @@
 .status-icon {
   width: 60px;
   height: 60px;
-  background: var(--accent-primary-transparent);
+  background: #f3f4f6 !important;
   border-radius: 15px;
   display: flex;
   align-items: center;
   justify-content: center;
   margin-bottom: 1rem;
-  color: var(--accent-primary);
+  color: #000000 !important;
   font-size: 1.5rem;
   transform: rotate(-5deg);
   transition: transform 0.3s ease;
+  border: 1px solid #d1d5db !important;
 }
 
 .status-icon:hover {
@@ -53,7 +122,7 @@
 }
 
 .tracking-header h2 {
-  color: var(--accent-primary);
+  color: #000000 !important;
   margin: 0.25rem 0;
   font-size: 2rem;
   font-weight: 700;
@@ -61,7 +130,7 @@
 }
 
 .estimated-delivery {
-  color: var(--text-secondary);
+  color: #6b7280 !important;
   margin: 0.5rem 0 1rem;
   font-size: 1rem;
   line-height: 1.4;
@@ -533,6 +602,51 @@
     border-radius: 0;
     box-shadow: none;
   }
+}
+
+/* ========== COMPREHENSIVE OVERRIDE FOR ALL TRACKING ELEMENTS ========== */
+/* Ensure no dark theme elements remain */
+
+#order-tracking-component,
+#order-tracking-component *,
+.tracking-container *,
+.tracking-card *,
+.delivery-info *,
+.order-summary *,
+.delivered-card * {
+  background: #ffffff !important;
+  background-color: #ffffff !important;
+  background-image: none !important;
+  color: #000000 !important;
+  border-color: #e5e7eb !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+
+/* Preserve button styling */
+.invoice-button,
+.action-buttons button,
+.tracking-container button {
+  background: #000000 !important;
+  background-color: #000000 !important;
+  color: #ffffff !important;
+  border: 1px solid #000000 !important;
+}
+
+.invoice-button:hover,
+.action-buttons button:hover,
+.tracking-container button:hover {
+  background: #374151 !important;
+  background-color: #374151 !important;
+}
+
+/* Override any remaining CSS variables */
+.tracking-container {
+  --primary-color: #000000 !important;
+  --secondary-color: #6b7280 !important;
+  --background-color: #ffffff !important;
+  --text-color: #000000 !important;
+  --border-color: #e5e7eb !important;
 }
 
 /* Socket Debug Panel Styles */

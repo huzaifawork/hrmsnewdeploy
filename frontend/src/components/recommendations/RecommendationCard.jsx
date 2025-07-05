@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { Card, Badge, Button, OverlayTrigger, Tooltip, Toast } from 'react-bootstrap';
+import { OverlayTrigger, Tooltip, Toast } from 'react-bootstrap';
 import { FiStar, FiShoppingCart, FiHeart, FiInfo, FiClock, FiAward } from 'react-icons/fi';
 import { recommendationHelpers, recommendationAPI } from '../../api/recommendations';
 import './RecommendationCard.css';
@@ -24,6 +24,13 @@ const RecommendationCard = ({
   const {  score, reason, confidence } = recommendation;
   // Now all recommendations have a clean, consistent structure
   const menuItem = recommendation;
+
+  // Debug: Log the menu item data to check price
+  console.log('RecommendationCard - menuItem:', {
+    name: menuItem.name,
+    price: menuItem.price,
+    _id: menuItem._id
+  });
 
   // Define all hooks first (before any conditional returns)
   const recordInteraction = useCallback(async (type, rating = null) => {
@@ -96,7 +103,7 @@ const RecommendationCard = ({
   };
 
   return (
-    <Card 
+    <div
       className={`recommendation-card ${className} ${isHovered ? 'hovered' : ''}`}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
@@ -121,12 +128,11 @@ const RecommendationCard = ({
               placement="top"
               overlay={<Tooltip>{confidenceInfo.text}</Tooltip>}
             >
-              <Badge 
+              <span
                 className="confidence-badge"
-                style={{ backgroundColor: confidenceInfo.color }}
               >
                 {confidenceInfo.icon}
-              </Badge>
+              </span>
             </OverlayTrigger>
           )}
 
@@ -138,7 +144,7 @@ const RecommendationCard = ({
 
           {/* Price Badge */}
           <div className="price-badge">
-            Rs. {menuItem.price?.toFixed(0)}
+            Rs. {menuItem.price ? menuItem.price.toFixed(0) : 'N/A'}
           </div>
         </div>
 
@@ -151,7 +157,7 @@ const RecommendationCard = ({
       </div>
 
       {/* Card Body */}
-      <Card.Body className="recommendation-body">
+      <div className="recommendation-body">
         {/* Header */}
         <div className="recommendation-header">
           <h5 className="recommendation-title">{menuItem.name}</h5>
@@ -170,27 +176,28 @@ const RecommendationCard = ({
           {menuItem.description || "Delicious Pakistani cuisine prepared with authentic spices and fresh ingredients."}
         </p>
 
+        {/* Price Display */}
+        <div className="price-display">
+          <span className="price-text">Rs. {menuItem.price ? menuItem.price.toFixed(0) : 'Price not available'}</span>
+        </div>
+
         {/* Tags Row */}
         <div className="tags-row">
           {/* Cuisine Badge */}
-          <Badge variant="outline-primary" className="cuisine-badge">
+          <span className="cuisine-badge">
             🍛 {menuItem.cuisine || 'Pakistani'}
-          </Badge>
+          </span>
 
           {/* Spice Level */}
-          <Badge 
-            variant="outline-warning" 
-            className="spice-badge"
-            style={{ color: spiceInfo.color, borderColor: spiceInfo.color }}
-          >
+          <span className="spice-badge">
             {spiceInfo.emoji} {spiceInfo.text}
-          </Badge>
+          </span>
 
           {/* Preparation Time */}
           {menuItem.preparationTime && (
-            <Badge variant="outline-info" className="time-badge">
+            <span className="time-badge">
               <FiClock size={12} /> {menuItem.preparationTime}min
-            </Badge>
+            </span>
           )}
         </div>
 
@@ -198,14 +205,12 @@ const RecommendationCard = ({
         {dietaryTags.length > 0 && (
           <div className="dietary-tags">
             {dietaryTags.map((tag, index) => (
-              <Badge 
+              <span
                 key={index}
-                variant="outline-success" 
                 className="dietary-badge"
-                style={{ color: tag.color, borderColor: tag.color }}
               >
                 {tag.emoji} {tag.text}
-              </Badge>
+              </span>
             ))}
           </div>
         )}
@@ -242,33 +247,29 @@ const RecommendationCard = ({
 
         {/* Actions */}
         <div className="recommendation-actions">
-          <Button
-            variant="primary"
+          <button
             className="add-to-cart-btn"
             onClick={handleAddToCart}
             disabled={!menuItem.availability}
           >
             <FiShoppingCart className="btn-icon" />
             Add Cart
-          </Button>
+          </button>
 
-          <Button
-            variant="outline-secondary"
+          <button
             className="rate-btn"
             onClick={() => setIsRating(!isRating)}
           >
             <FiStar className="btn-icon" />
             Rate
-          </Button>
+          </button>
 
-          <Button
-            variant={isFavorited ? "danger" : "outline-danger"}
-            className="favorite-btn"
-            size="sm"
+          <button
+            className={`favorite-btn ${isFavorited ? "favorited" : ""}`}
             onClick={handleFavorite}
           >
             <FiHeart className={isFavorited ? "favorited" : ""} />
-          </Button>
+          </button>
         </div>
 
         {/* Recommendation Reason */}
@@ -282,7 +283,7 @@ const RecommendationCard = ({
         )}
 
 
-      </Card.Body>
+      </div>
 
       {/* Toast Notification */}
       <Toast
@@ -301,7 +302,7 @@ const RecommendationCard = ({
           {toastMessage}
         </Toast.Body>
       </Toast>
-    </Card>
+    </div>
   );
 };
 

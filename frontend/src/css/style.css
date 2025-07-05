@@ -1,8 +1,8 @@
-/********** Template CSS **********/
+/********** Clean Minimal CSS **********/
 :root {
-    --primary: #FEA116;
-    --light: #F1F8FF;
-    --dark: #0F172B;
+    --primary: #000000;
+    --light: #f8fafc;
+    --dark: #111827;
 }
 
 .fw-medium {
@@ -22,15 +22,19 @@
 }
 /* Buttons */
 .btn-primary {
-    background-color: #fdd835 !important; /* Yellow */
-    border-color: #fdd835 !important; /* Yellow */
+    background-color: #000000 !important; /* Black */
+    border-color: #000000 !important; /* Black */
     color: #ffffff !important; /* White text */
+    border-radius: 6px !important;
+    font-weight: 500 !important;
 }
 
 .btn-light {
     background-color: #ffffff !important; /* White */
-    border-color: #fdd835 !important; /* Yellow border */
-    color: #fdd835 !important; /* Yellow text */
+    border-color: #d1d5db !important; /* Gray border */
+    color: #374151 !important; /* Gray text */
+    border-radius: 6px !important;
+    font-weight: 500 !important;
 }
 
 /* Carousel Controls */

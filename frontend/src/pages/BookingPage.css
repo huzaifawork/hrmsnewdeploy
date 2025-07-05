@@ -350,40 +350,249 @@
   }
 }
 
-body {
-  background: var(--primary-bg) !important;
-  margin: 0;
-  padding: 0;
-  overflow-x: hidden;
+/* ========== BOOKING PAGE CLEAN WHITE DESIGN OVERRIDES ========== */
+
+/* Force white background everywhere */
+body,
+#root,
+.container,
+.main-content,
+.booking-page,
+[style*="background"],
+[style*="Background"] {
+  background: #ffffff !important;
+  background-color: #ffffff !important;
+  background-image: none !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  overflow-x: hidden !important;
 }
 
-#root {
-  background: var(--primary-bg);
-  margin: 0;
-  padding: 0;
-  overflow-x: hidden;
-}
-
-/* Override any bootstrap or other framework styles */
-.container {
-  background: #0A192F !important;
-}
-
-.main-content {
-  background: #0A192F !important;
-}
-
-/* Remove any glass effects */
+/* Remove all glass effects and gradients */
 .glass,
-[class*="glass"] {
-  background: #0A192F !important;
+[class*="glass"],
+[style*="backdrop-filter"],
+[style*="backdropFilter"],
+[style*="linear-gradient"],
+[style*="radial-gradient"] {
+  background: #ffffff !important;
+  background-color: #ffffff !important;
+  background-image: none !important;
   backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+
+/* Force all containers to be white */
+div[style*="background"],
+div[style*="Background"] {
+  background: #ffffff !important;
+  background-color: #ffffff !important;
+  background-image: none !important;
+}
+
+/* ========== BOOKING FORM CLEAN WHITE OVERRIDES ========== */
+
+/* Header section overrides */
+div[style*="paddingTop: '80px'"] {
+  background: #ffffff !important;
+  padding-top: 80px !important;
+}
+
+/* Header content overrides */
+div[style*="position: 'sticky'"],
+div[style*="position: sticky"] {
+  background: #ffffff !important;
+  border-bottom: 1px solid #e5e7eb !important;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05) !important;
+}
+
+/* Main content container overrides */
+div[style*="maxWidth: '1600px'"] {
+  background: #ffffff !important;
+  padding: 2rem !important;
+}
+
+/* Left side booking form overrides */
+div[style*="linear-gradient"],
+div[style*="backdrop-filter"],
+div[style*="backdropFilter"] {
+  background: #ffffff !important;
+  background-color: #ffffff !important;
+  background-image: none !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  border: 1px solid #e5e7eb !important;
+  border-radius: 1rem !important;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05) !important;
+}
+
+/* Room header section overrides */
+div[style*="background: 'rgba(10, 25, 47, 0.5)'"],
+div[style*="background: rgba(10, 25, 47, 0.5)"] {
+  background: #f8fafc !important;
+  background-color: #f8fafc !important;
+  border: 1px solid #e5e7eb !important;
+  border-radius: 0.75rem !important;
+}
+
+/* Text color overrides - Force black text */
+h1, h2, h3, h4, h5, h6,
+p, span, label, div,
+[style*="color: '#fff'"],
+[style*="color: #fff"],
+[style*="color: 'rgba(255, 255, 255"],
+[style*="color: rgba(255, 255, 255"] {
+  color: #000000 !important;
+  -webkit-text-fill-color: #000000 !important;
+}
+
+/* Specific header text overrides */
+h1[style*="color: '#fff'"],
+h2[style*="color: '#fff'"] {
+  color: #000000 !important;
+  -webkit-text-fill-color: #000000 !important;
+  font-weight: 700 !important;
+}
+
+/* Label overrides */
+label[style*="color: 'rgba(255, 255, 255"],
+label[style*="color: rgba(255, 255, 255"] {
+  color: #374151 !important;
+  -webkit-text-fill-color: #374151 !important;
+  font-weight: 500 !important;
 }
 
 /* Spinner animation */
 @keyframes spin {
   0% { transform: rotate(0deg); }
   100% { transform: rotate(360deg); }
+}
+
+/* ========== FORM INPUTS AND BUTTONS OVERRIDES ========== */
+
+/* Input field overrides */
+input[type="date"],
+input[type="number"],
+input[type="text"],
+input[type="email"],
+input[type="tel"],
+textarea,
+select,
+input[style*="background"],
+textarea[style*="background"] {
+  background: #ffffff !important;
+  background-color: #ffffff !important;
+  border: 1px solid #d1d5db !important;
+  border-radius: 0.5rem !important;
+  color: #000000 !important;
+  padding: 0.75rem !important;
+  font-size: 0.9rem !important;
+  transition: border-color 0.2s ease !important;
+}
+
+input:focus,
+textarea:focus,
+select:focus {
+  outline: none !important;
+  border-color: #000000 !important;
+  box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.1) !important;
+}
+
+/* Button overrides */
+button[style*="background"],
+button[style*="Background"],
+.btn,
+[role="button"] {
+  background: #000000 !important;
+  background-color: #000000 !important;
+  background-image: none !important;
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+  border: 1px solid #000000 !important;
+  border-radius: 0.5rem !important;
+  padding: 0.75rem 1.5rem !important;
+  font-weight: 600 !important;
+  cursor: pointer !important;
+  transition: all 0.2s ease !important;
+}
+
+button:hover,
+.btn:hover {
+  background: #374151 !important;
+  background-color: #374151 !important;
+  border-color: #374151 !important;
+  transform: translateY(-1px) !important;
+}
+
+/* Price and accent color overrides */
+[style*="color: '#64ffda'"],
+[style*="color: #64ffda"],
+.price,
+.accent-text {
+  color: #000000 !important;
+  -webkit-text-fill-color: #000000 !important;
+  font-weight: 700 !important;
+}
+
+/* Icon overrides */
+svg[style*="color: '#64ffda'"],
+svg[style*="color: #64ffda"] {
+  color: #6b7280 !important;
+}
+
+/* ========== BOOKING SUMMARY SECTION OVERRIDES ========== */
+
+/* Force booking summary to be visible with black background */
+div[style*="Right Side - Booking Summary"],
+div[style*="Booking Summary"] {
+  background: #000000 !important;
+  background-color: #000000 !important;
+  color: #ffffff !important;
+  border: 1px solid #374151 !important;
+}
+
+/* Force all text in booking summary to be white */
+div[style*="Booking Summary"] h3,
+div[style*="Booking Summary"] h4,
+div[style*="Booking Summary"] span,
+div[style*="Booking Summary"] div {
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+}
+
+/* Force price breakdown items to be visible */
+div[style*="justifyContent: 'space-between'"] {
+  color: #d1d5db !important;
+}
+
+div[style*="justifyContent: 'space-between'"] span {
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+}
+
+/* Force total amount to be prominent */
+div[style*="Total Amount"] {
+  color: #ffffff !important;
+  font-weight: 700 !important;
+}
+
+/* Force amenities to be visible */
+div[style*="Included Amenities"] {
+  color: #ffffff !important;
+}
+
+/* Force booking button text to be visible */
+button[style*="Proceed to Payment"] {
+  color: #000000 !important;
+  -webkit-text-fill-color: #000000 !important;
+  background: #ffffff !important;
+  border: 1px solid #ffffff !important;
+}
+
+button[style*="Select Dates"] {
+  color: #9ca3af !important;
+  -webkit-text-fill-color: #9ca3af !important;
+  background: #374151 !important;
 }
 
 /* Responsive design for new layout */

@@ -1,19 +1,114 @@
 /* Modern MyOrders CSS */
 
+/* ========== BLACK & WHITE THEME OVERRIDES ========== */
+/* Simple targeted overrides for consistent theme */
+
+/* Remove any dark backgrounds that might exist */
+.modern-orders-page,
+.orders-hero,
+.orders-content,
+.orders-stats,
+.stats-grid,
+.stat-card,
+.orders-controls,
+.orders-list,
+.order-card,
+.order-header,
+.order-content,
+.order-items,
+.order-item,
+.order-actions {
+  background: #ffffff !important;
+  background-color: #ffffff !important;
+  background-image: none !important;
+}
+
+/* Ensure all text is black */
+.modern-orders-page h1,
+.modern-orders-page h2,
+.modern-orders-page h3,
+.modern-orders-page h4,
+.modern-orders-page h5,
+.modern-orders-page h6,
+.modern-orders-page p,
+.modern-orders-page span,
+.modern-orders-page div,
+.modern-orders-page label,
+.hero-title,
+.hero-subtitle,
+.stat-content h3,
+.stat-content p,
+.order-title,
+.order-status,
+.order-date,
+.order-total {
+  color: #000000 !important;
+}
+
+/* Icons should be black */
+.modern-orders-page svg,
+.modern-orders-page i,
+.hero-icon,
+.stat-icon,
+.order-icon,
+.status-icon {
+  color: #000000 !important;
+  fill: #000000 !important;
+}
+
+/* Form elements */
+.search-input,
+.filter-select,
+input,
+select {
+  background: #ffffff !important;
+  color: #000000 !important;
+  border: 1px solid #d1d5db !important;
+}
+
+/* Buttons */
+.view-btn,
+.filter-btn,
+.refresh-btn {
+  background: #000000 !important;
+  color: #ffffff !important;
+  border: 1px solid #000000 !important;
+}
+
+.view-btn svg,
+.view-btn i,
+.filter-btn svg,
+.filter-btn i,
+.refresh-btn svg,
+.refresh-btn i {
+  color: #ffffff !important;
+  fill: #ffffff !important;
+}
+
+/* Remove any pseudo-element backgrounds */
+.modern-orders-page::before,
+.modern-orders-page::after,
+.order-card::before,
+.order-card::after,
+.stat-card::before,
+.stat-card::after {
+  display: none !important;
+}
+
 /* Modern Orders Page */
 .modern-orders-page {
   width: 100%;
   min-height: 100vh;
-  background: #0a192f;
-  color: #ffffff;
+  background: #ffffff;
+  color: #000000;
   margin-top: 80px;
 }
 
 /* Hero Section - Ultra Compact */
 .orders-hero {
-  padding: 1rem 0;
+  padding: 2rem 0;
   text-align: center;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  border-bottom: 1px solid #e5e7eb;
 }
 
 .hero-content {
@@ -25,26 +120,27 @@
 .hero-icon {
   width: 40px;
   height: 40px;
-  background: rgba(100, 255, 218, 0.1);
-  border: 2px solid #64ffda;
+  background: #f3f4f6;
+  border: 2px solid #d1d5db;
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
   margin: 0 auto 0.75rem;
-  color: #64ffda;
+  color: #374151;
 }
 
 .hero-title {
-  font-size: 1.5rem;
-  font-weight: 600;
-  color: #ffffff;
-  margin-bottom: 0.2rem;
+  font-size: 2rem;
+  font-weight: 700;
+  color: #000000;
+  margin-bottom: 0.5rem;
+  font-family: 'Inter', sans-serif;
 }
 
 .hero-subtitle {
-  font-size: 0.85rem;
-  color: #b0b0b0;
+  font-size: 1rem;
+  color: #6b7280;
   margin: 0;
 }
 
@@ -319,18 +415,19 @@
   align-items: center;
   gap: 0.5rem;
   padding: 0.75rem 1.5rem;
-  background: rgba(100, 255, 218, 0.1);
-  border: 1px solid rgba(100, 255, 218, 0.2);
+  background: #000000;
+  border: 1px solid #000000;
   border-radius: 0.5rem;
-  color: #64ffda;
+  color: #ffffff;
   font-weight: 500;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: all 0.2s ease;
   margin: 0 auto;
+  font-family: 'Inter', sans-serif;
 }
 
 .order-btn:hover {
-  background: rgba(100, 255, 218, 0.2);
+  background: #333333;
   transform: translateY(-1px);
 }
 
@@ -342,17 +439,17 @@
 .orders-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-  gap: 1rem;
+  gap: 1.5rem;
 }
 
 /* Modern Order Card */
 .modern-order-card {
-  background: rgba(255, 255, 255, 0.05);
-  backdrop-filter: blur(20px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 0.6rem;
-  padding: 1rem;
-  transition: all 0.3s ease;
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 1rem;
+  padding: 1.5rem;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
 }
 
 .modern-order-card:hover {

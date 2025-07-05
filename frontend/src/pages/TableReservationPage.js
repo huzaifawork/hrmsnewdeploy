@@ -52,39 +52,88 @@ const PaymentForm = ({ onPaymentSuccess, totalPrice }) => {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="payment-form">
-      <div className="form-group">
-        <label className="form-label">
-          <FiCreditCard className="me-2" />
-          Card Details
-        </label>
-        <CardElement
-          options={{
-            style: {
-              base: {
-                fontSize: '16px',
-                color: '#424770',
-                '::placeholder': {
-                  color: '#aab7c4',
+    <div style={{
+      background: '#ffffff',
+      borderRadius: '1rem',
+      padding: '1.5rem',
+      border: '1px solid #e5e7eb',
+      boxShadow: '0 4px 6px rgba(0, 0, 0, 0.05)'
+    }}>
+      <form onSubmit={handleSubmit} className="payment-form">
+        <div className="form-group">
+          <label className="form-label" style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: '0.5rem',
+            marginBottom: '0.75rem',
+            color: '#000000',
+            fontWeight: '600',
+            fontSize: '1rem'
+          }}>
+            <FiCreditCard />
+            Card Details
+          </label>
+          <div style={{
+            padding: '1rem',
+            border: '1px solid #d1d5db',
+            borderRadius: '0.5rem',
+            background: '#ffffff',
+            transition: 'all 0.3s ease'
+          }}>
+            <CardElement
+              options={{
+                style: {
+                  base: {
+                    fontSize: '16px',
+                    color: '#000000',
+                    fontFamily: 'Inter, sans-serif',
+                    '::placeholder': {
+                      color: '#9ca3af',
+                    },
+                  },
+                  invalid: {
+                    color: '#ef4444',
+                  },
                 },
-              },
-              invalid: {
-                color: '#9e2146',
-              },
-            },
-            hidePostalCode: true
+                hidePostalCode: true
+              }}
+            />
+          </div>
+        </div>
+        {error && (
+          <div style={{
+            color: '#ef4444',
+            fontSize: '0.9rem',
+            marginTop: '0.5rem',
+            background: '#fef2f2',
+            border: '1px solid #fecaca',
+            borderRadius: '0.5rem',
+            padding: '0.75rem'
+          }}>
+            {error}
+          </div>
+        )}
+        <button
+          type="submit"
+          disabled={!stripe || processing}
+          style={{
+            background: processing ? '#9ca3af' : '#000000',
+            color: '#ffffff',
+            border: 'none',
+            padding: '0.75rem 1.5rem',
+            borderRadius: '0.5rem',
+            fontWeight: '600',
+            cursor: processing ? 'not-allowed' : 'pointer',
+            transition: 'all 0.3s ease',
+            width: '100%',
+            fontSize: '1rem',
+            marginTop: '1rem'
           }}
-        />
-      </div>
-      {error && <div className="error-message">{error}</div>}
-      <button
-        type="submit"
-        className="btn btn-accent w-100 mt-3"
-        disabled={!stripe || processing}
-      >
-        {processing ? 'Processing...' : `Pay Rs. ${totalPrice}`}
-      </button>
-    </form>
+        >
+          {processing ? 'Processing...' : `Pay Rs. ${totalPrice.toLocaleString('en-PK')}`}
+        </button>
+      </form>
+    </div>
   );
 };
 

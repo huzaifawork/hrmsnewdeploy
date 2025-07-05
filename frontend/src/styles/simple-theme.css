@@ -1,35 +1,51 @@
-/* ========== 🎨 Simple Clean Theme ========== */
+/* ========== 🎨 Clean Minimal Theme ========== */
 
 /* Essential Color Variables */
 :root {
   /* Background Colors */
-  --primary-bg: #0A192F;
-  --secondary-bg: #112240;
-  --card-bg: #1A2332;
-  
+  --primary-bg: #ffffff;
+  --secondary-bg: #f8fafc;
+  --card-bg: #ffffff;
+
   /* Accent Colors */
-  --accent-primary: #64ffda;
-  --accent-secondary: #FFD700;
-  
+  --accent-primary: #000000;
+  --accent-secondary: #6b7280;
+
   /* Text Colors */
-  --text-primary: #F0F4FC;
-  --text-secondary: #CBD5E1;
-  --text-muted: #94A3B8;
-  
+  --text-primary: #111827;
+  --text-secondary: #374151;
+  --text-muted: #6b7280;
+
   /* Gradients */
-  --gradient-primary: linear-gradient(135deg, #64ffda 0%, #4fd1c7 100%);
-  --gradient-bg: linear-gradient(135deg, #0A192F 0%, #112240 50%, #0A192F 100%);
+  --gradient-primary: linear-gradient(135deg, #000000 0%, #374151 100%);
+  --gradient-bg: #ffffff;
 }
 
 /* Global Background Theme */
 body {
-  background: var(--primary-bg) !important;
-  color: var(--text-primary) !important;
-  font-family: 'Inter', 'Segoe UI', system-ui, sans-serif !important;
+  background: #ffffff !important;
+  color: #111827 !important;
+  font-family: "Inter", "Segoe UI", system-ui, sans-serif !important;
 }
 
 #root {
-  background: var(--primary-bg) !important;
+  background: #ffffff !important;
+}
+
+/* Force main containers to have white background */
+.container,
+.container-fluid,
+.main-content,
+.page-container {
+  background: #ffffff !important;
+}
+
+/* Specific overrides for common blue background classes */
+.bg-primary,
+.bg-blue,
+[class*="bg-blue"],
+[class*="primary-bg"] {
+  background: #ffffff !important;
 }
 
 /* Remove any conflicting styles */
@@ -39,37 +55,43 @@ body {
 
 /* Simple button styles */
 .btn-primary {
-  background: var(--gradient-primary) !important;
-  border: none !important;
-  color: #0A192F !important;
-  font-weight: 600 !important;
+  background: var(--accent-primary) !important;
+  border: 1px solid var(--accent-primary) !important;
+  color: #ffffff !important;
+  font-weight: 500 !important;
+  border-radius: 6px !important;
 }
 
 .btn-primary:hover {
-  background: var(--gradient-primary) !important;
-  transform: translateY(-2px);
-  box-shadow: 0 8px 25px rgba(100, 255, 218, 0.3) !important;
+  background: #374151 !important;
+  border-color: #374151 !important;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
 }
 
 /* Card styles */
 .card {
   background: var(--card-bg) !important;
-  border: 1px solid rgba(100, 255, 218, 0.1) !important;
+  border: 1px solid #e5e7eb !important;
   color: var(--text-primary) !important;
+  border-radius: 8px !important;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1) !important;
 }
 
 /* Form controls */
 .form-control {
-  background: var(--secondary-bg) !important;
-  border: 1px solid rgba(100, 255, 218, 0.2) !important;
+  background: var(--card-bg) !important;
+  border: 1px solid #d1d5db !important;
   color: var(--text-primary) !important;
+  border-radius: 6px !important;
 }
 
 .form-control:focus {
-  background: var(--secondary-bg) !important;
+  background: var(--card-bg) !important;
   border-color: var(--accent-primary) !important;
-  box-shadow: 0 0 0 0.2rem rgba(100, 255, 218, 0.25) !important;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1) !important;
   color: var(--text-primary) !important;
+  outline: none !important;
 }
 
 /* Text colors */
@@ -129,7 +151,8 @@ body {
 }
 
 /* Ensure body and html don't constrain width */
-html, body {
+html,
+body {
   width: 100% !important;
   max-width: none !important;
   overflow-x: hidden;

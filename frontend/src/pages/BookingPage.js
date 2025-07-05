@@ -45,41 +45,96 @@ const PaymentForm = ({ onPaymentSuccess, totalPrice, onCancel }) => {
   };
 
   return (
-    <div className="payment-container">
-      <h3>Payment Details</h3>
-      <form onSubmit={handleSubmit} className="payment-form">
-        <div className="form-group">
+    <div style={{
+      background: '#ffffff',
+      borderRadius: '1rem',
+      padding: '2rem',
+      boxShadow: '0 4px 6px rgba(0, 0, 0, 0.05)',
+      border: '1px solid #e5e7eb'
+    }}>
+      <h3 style={{
+        fontSize: '1.5rem',
+        fontWeight: '600',
+        color: '#000000',
+        marginBottom: '1.5rem',
+        textAlign: 'center'
+      }}>
+        Payment Details
+      </h3>
+      <form onSubmit={handleSubmit} style={{ display: 'grid', gap: '1.5rem' }}>
+        <div style={{
+          padding: '1rem',
+          border: '1px solid #d1d5db',
+          borderRadius: '0.5rem',
+          background: '#ffffff'
+        }}>
           <CardElement
             options={{
               style: {
                 base: {
                   fontSize: '16px',
-                  color: '#424770',
+                  color: '#000000',
+                  fontFamily: 'Inter, sans-serif',
                   '::placeholder': {
-                    color: '#aab7c4',
+                    color: '#9ca3af',
                   },
                 },
                 invalid: {
-                  color: '#9e2146',
+                  color: '#ef4444',
                 },
               },
               hidePostalCode: true
             }}
           />
         </div>
-        {error && <div className="error-message">{error}</div>}
-        <div className="payment-buttons">
+        {error && (
+          <div style={{
+            color: '#ef4444',
+            background: '#fef2f2',
+            border: '1px solid #fecaca',
+            borderRadius: '0.5rem',
+            padding: '0.75rem',
+            fontSize: '0.9rem'
+          }}>
+            {error}
+          </div>
+        )}
+        <div style={{
+          display: 'grid',
+          gridTemplateColumns: '1fr 1fr',
+          gap: '1rem'
+        }}>
           <button
             type="button"
             onClick={onCancel}
-            className="btn btn-secondary"
+            style={{
+              background: '#ffffff',
+              border: '1px solid #d1d5db',
+              borderRadius: '0.5rem',
+              padding: '0.75rem 1.5rem',
+              color: '#374151',
+              fontSize: '1rem',
+              fontWeight: '500',
+              cursor: 'pointer',
+              transition: 'all 0.2s ease'
+            }}
           >
             Back
           </button>
           <button
             type="submit"
-            className="btn btn-primary"
             disabled={!stripe || processing}
+            style={{
+              background: processing ? '#9ca3af' : '#000000',
+              border: 'none',
+              borderRadius: '0.5rem',
+              padding: '0.75rem 1.5rem',
+              color: '#ffffff',
+              fontSize: '1rem',
+              fontWeight: '600',
+              cursor: processing ? 'not-allowed' : 'pointer',
+              transition: 'all 0.2s ease'
+            }}
           >
             {processing ? 'Processing...' : `Pay Rs. ${totalPrice}`}
           </button>
@@ -607,7 +662,7 @@ const BookingPage = () => {
   if (showPayment) {
     return (
       <div style={{
-        background: '#0A192F',
+        background: 'rgba(0, 0, 0, 0.5)',
         minHeight: '100vh',
         display: 'flex',
         alignItems: 'flex-start',
@@ -623,15 +678,16 @@ const BookingPage = () => {
         overflowY: 'auto'
       }}>
         <div style={{
-          background: 'linear-gradient(145deg, rgba(17, 34, 64, 0.6) 0%, rgba(26, 35, 50, 0.4) 100%)',
-          backdropFilter: 'blur(20px)',
-          border: '1px solid rgba(100, 255, 218, 0.1)',
+          background: '#ffffff',
+          backdropFilter: 'none',
+          border: '1px solid #e5e7eb',
           borderRadius: '1rem',
           padding: '2rem',
           maxWidth: '500px',
           width: '100%',
           margin: '2rem 1rem',
-          position: 'relative'
+          position: 'relative',
+          boxShadow: '0 10px 25px rgba(0, 0, 0, 0.15)'
         }}>
           <Elements stripe={stripePromise}>
             <PaymentForm
@@ -651,7 +707,7 @@ const BookingPage = () => {
 
   return (
     <div style={{
-      background: '#0A192F',
+      background: '#ffffff',
       minHeight: '100vh',
       width: '100%',
       margin: 0,
@@ -663,10 +719,11 @@ const BookingPage = () => {
         position: 'sticky',
         top: '80px',
         zIndex: 10,
-        background: 'rgba(10, 25, 47, 0.95)',
-        backdropFilter: 'blur(20px)',
-        borderBottom: '1px solid rgba(100, 255, 218, 0.1)',
-        padding: isMobile() ? '0.75rem 1rem' : '1rem 2rem'
+        background: '#ffffff',
+        backdropFilter: 'none',
+        borderBottom: '1px solid #e5e7eb',
+        padding: isMobile() ? '0.75rem 1rem' : '1rem 2rem',
+        boxShadow: '0 2px 4px rgba(0, 0, 0, 0.05)'
       }}>
         <div style={{
           display: 'flex',
@@ -678,11 +735,11 @@ const BookingPage = () => {
           <button
             onClick={() => navigate('/rooms')}
             style={{
-              background: 'rgba(100, 255, 218, 0.1)',
-              border: '1px solid rgba(100, 255, 218, 0.3)',
+              background: '#ffffff',
+              border: '1px solid #d1d5db',
               borderRadius: '0.5rem',
               padding: isMobile() ? '0.4rem 0.6rem' : '0.5rem',
-              color: '#64ffda',
+              color: '#374151',
               cursor: 'pointer',
               display: 'flex',
               alignItems: 'center',
@@ -697,7 +754,7 @@ const BookingPage = () => {
           <h1 style={{
             fontSize: isMobile() ? '1.2rem' : '1.5rem',
             fontWeight: '600',
-            color: '#fff',
+            color: '#000000',
             margin: 0
           }}>
             {isMobile() ? 'Book Room' : 'Complete Your Booking'}
@@ -717,11 +774,12 @@ const BookingPage = () => {
       }}>
         {/* Left Side - Booking Form */}
         <div style={{
-          background: 'linear-gradient(145deg, rgba(17, 34, 64, 0.6) 0%, rgba(26, 35, 50, 0.4) 100%)',
-          backdropFilter: 'blur(20px)',
-          border: '1px solid rgba(100, 255, 218, 0.1)',
+          background: '#ffffff',
+          backdropFilter: 'none',
+          border: '1px solid #e5e7eb',
           borderRadius: '1rem',
-          padding: isMobile() ? '1.25rem' : '2rem'
+          padding: isMobile() ? '1.25rem' : '2rem',
+          boxShadow: '0 4px 6px rgba(0, 0, 0, 0.05)'
         }}>
           {/* Room Header */}
           <div style={{
@@ -731,9 +789,9 @@ const BookingPage = () => {
             gap: isMobile() ? '0.75rem' : '1rem',
             marginBottom: '1.5rem',
             padding: isMobile() ? '1rem' : '0.75rem',
-            background: 'rgba(10, 25, 47, 0.5)',
+            background: '#f8fafc',
             borderRadius: '0.75rem',
-            border: '1px solid rgba(100, 255, 218, 0.1)'
+            border: '1px solid #e5e7eb'
           }}>
             <div style={{
               position: 'relative',
@@ -760,7 +818,7 @@ const BookingPage = () => {
               <h2 style={{
                 fontSize: isMobile() ? '1.4rem' : '1.25rem',
                 fontWeight: '600',
-                color: '#fff',
+                color: '#000000',
                 marginBottom: '0.5rem'
               }}>
                 {room?.roomType}
@@ -773,15 +831,15 @@ const BookingPage = () => {
                 marginBottom: '0.5rem'
               }}>
                 {[...Array(5)].map((_, i) => (
-                  <FiStar key={i} style={{ color: '#64ffda', fontSize: isMobile() ? '1rem' : '0.8rem' }} />
+                  <FiStar key={i} style={{ color: '#fbbf24', fontSize: isMobile() ? '1rem' : '0.8rem' }} />
                 ))}
               </div>
               <div style={{
                 fontSize: isMobile() ? '1.3rem' : '1.1rem',
                 fontWeight: '600',
-                color: '#64ffda'
+                color: '#000000'
               }}>
-                {formatPrice(room?.price)}<span style={{ fontSize: isMobile() ? '0.9rem' : '0.7rem', opacity: 0.8 }}>/night</span>
+                {formatPrice(room?.price)}<span style={{ fontSize: isMobile() ? '0.9rem' : '0.7rem', opacity: 0.8, color: '#6b7280' }}>/night</span>
               </div>
             </div>
           </div>
@@ -798,14 +856,13 @@ const BookingPage = () => {
                 <label style={{
                   display: 'block',
                   marginBottom: '0.5rem',
-                  color: 'rgba(255, 255, 255, 0.9)',
+                  color: '#374151',
                   fontSize: '0.9rem',
                   fontWeight: '500',
-                  display: 'flex',
                   alignItems: 'center',
                   gap: '0.5rem'
                 }}>
-                  <FiCalendar style={{ color: '#64ffda' }} />
+                  <FiCalendar style={{ color: '#6b7280', marginRight: '0.5rem' }} />
                   Check-in Date *
                 </label>
                 <input
@@ -818,10 +875,10 @@ const BookingPage = () => {
                   style={{
                     width: '100%',
                     padding: isMobile() ? '1rem' : '0.75rem',
-                    background: 'rgba(255, 255, 255, 0.05)',
-                    border: '1px solid rgba(255, 255, 255, 0.1)',
+                    background: '#ffffff',
+                    border: '1px solid #d1d5db',
                     borderRadius: '0.5rem',
-                    color: '#fff',
+                    color: '#000000',
                     fontSize: isMobile() ? '1rem' : '0.9rem',
                     minHeight: isMobile() ? '48px' : 'auto'
                   }}
@@ -830,16 +887,15 @@ const BookingPage = () => {
 
               <div>
                 <label style={{
-                  display: 'block',
+                  display: 'flex',
                   marginBottom: '0.5rem',
-                  color: 'rgba(255, 255, 255, 0.9)',
+                  color: '#374151',
                   fontSize: '0.9rem',
                   fontWeight: '500',
-                  display: 'flex',
                   alignItems: 'center',
                   gap: '0.5rem'
                 }}>
-                  <FiCalendar style={{ color: '#64ffda' }} />
+                  <FiCalendar style={{ color: '#6b7280' }} />
                   Check-out Date *
                 </label>
                 <input
@@ -852,10 +908,10 @@ const BookingPage = () => {
                   style={{
                     width: '100%',
                     padding: isMobile() ? '1rem' : '0.75rem',
-                    background: 'rgba(255, 255, 255, 0.05)',
-                    border: '1px solid rgba(255, 255, 255, 0.1)',
+                    background: '#ffffff',
+                    border: '1px solid #d1d5db',
                     borderRadius: '0.5rem',
-                    color: '#fff',
+                    color: '#000000',
                     fontSize: isMobile() ? '1rem' : '0.9rem',
                     minHeight: isMobile() ? '48px' : 'auto'
                   }}
@@ -864,16 +920,15 @@ const BookingPage = () => {
 
               <div>
                 <label style={{
-                  display: 'block',
+                  display: 'flex',
                   marginBottom: '0.5rem',
-                  color: 'rgba(255, 255, 255, 0.9)',
+                  color: '#374151',
                   fontSize: '0.9rem',
                   fontWeight: '500',
-                  display: 'flex',
                   alignItems: 'center',
                   gap: '0.5rem'
                 }}>
-                  <FiUser style={{ color: '#64ffda' }} />
+                  <FiUser style={{ color: '#6b7280' }} />
                   Guests *
                 </label>
                 <input
@@ -887,10 +942,10 @@ const BookingPage = () => {
                   style={{
                     width: '100%',
                     padding: isMobile() ? '1rem' : '0.75rem',
-                    background: 'rgba(255, 255, 255, 0.05)',
-                    border: '1px solid rgba(255, 255, 255, 0.1)',
+                    background: '#ffffff',
+                    border: '1px solid #d1d5db',
                     borderRadius: '0.5rem',
-                    color: '#fff',
+                    color: '#000000',
                     fontSize: isMobile() ? '1rem' : '0.9rem',
                     minHeight: isMobile() ? '48px' : 'auto'
                   }}
@@ -906,16 +961,15 @@ const BookingPage = () => {
             }}>
               <div>
                 <label style={{
-                  display: 'block',
+                  display: 'flex',
                   marginBottom: '0.5rem',
-                  color: 'rgba(255, 255, 255, 0.9)',
+                  color: '#374151',
                   fontSize: '0.9rem',
                   fontWeight: '500',
-                  display: 'flex',
                   alignItems: 'center',
                   gap: '0.5rem'
                 }}>
-                  <FiUser style={{ color: '#64ffda' }} />
+                  <FiUser style={{ color: '#6b7280' }} />
                   Full Name *
                 </label>
                 <input
@@ -928,10 +982,10 @@ const BookingPage = () => {
                   style={{
                     width: '100%',
                     padding: isMobile() ? '1rem' : '0.75rem',
-                    background: 'rgba(255, 255, 255, 0.05)',
-                    border: '1px solid rgba(255, 255, 255, 0.1)',
+                    background: '#ffffff',
+                    border: '1px solid #d1d5db',
                     borderRadius: '0.5rem',
-                    color: '#fff',
+                    color: '#000000',
                     fontSize: isMobile() ? '1rem' : '0.9rem',
                     minHeight: isMobile() ? '48px' : 'auto'
                   }}
@@ -940,16 +994,15 @@ const BookingPage = () => {
 
               <div>
                 <label style={{
-                  display: 'block',
+                  display: 'flex',
                   marginBottom: '0.5rem',
-                  color: 'rgba(255, 255, 255, 0.9)',
+                  color: '#374151',
                   fontSize: '0.9rem',
                   fontWeight: '500',
-                  display: 'flex',
                   alignItems: 'center',
                   gap: '0.5rem'
                 }}>
-                  <FiMail style={{ color: '#64ffda' }} />
+                  <FiMail style={{ color: '#6b7280' }} />
                   Email *
                 </label>
                 <input
@@ -962,10 +1015,10 @@ const BookingPage = () => {
                   style={{
                     width: '100%',
                     padding: isMobile() ? '1rem' : '0.75rem',
-                    background: 'rgba(255, 255, 255, 0.05)',
-                    border: '1px solid rgba(255, 255, 255, 0.1)',
+                    background: '#ffffff',
+                    border: '1px solid #d1d5db',
                     borderRadius: '0.5rem',
-                    color: '#fff',
+                    color: '#000000',
                     fontSize: isMobile() ? '1rem' : '0.9rem',
                     minHeight: isMobile() ? '48px' : 'auto'
                   }}
@@ -974,16 +1027,15 @@ const BookingPage = () => {
 
               <div>
                 <label style={{
-                  display: 'block',
+                  display: 'flex',
                   marginBottom: '0.5rem',
-                  color: 'rgba(255, 255, 255, 0.9)',
+                  color: '#374151',
                   fontSize: '0.9rem',
                   fontWeight: '500',
-                  display: 'flex',
                   alignItems: 'center',
                   gap: '0.5rem'
                 }}>
-                  <FiPhone style={{ color: '#64ffda' }} />
+                  <FiPhone style={{ color: '#6b7280' }} />
                   Phone Number *
                 </label>
                 <input
@@ -996,10 +1048,10 @@ const BookingPage = () => {
                   style={{
                     width: '100%',
                     padding: isMobile() ? '1rem' : '0.75rem',
-                    background: 'rgba(255, 255, 255, 0.05)',
-                    border: '1px solid rgba(255, 255, 255, 0.1)',
+                    background: '#ffffff',
+                    border: '1px solid #d1d5db',
                     borderRadius: '0.5rem',
-                    color: '#fff',
+                    color: '#000000',
                     fontSize: isMobile() ? '1rem' : '0.9rem',
                     minHeight: isMobile() ? '48px' : 'auto'
                   }}
@@ -1010,7 +1062,7 @@ const BookingPage = () => {
                 <label style={{
                   display: 'block',
                   marginBottom: '0.5rem',
-                  color: 'rgba(255, 255, 255, 0.9)',
+                  color: '#374151',
                   fontSize: '0.9rem',
                   fontWeight: '500'
                 }}>
@@ -1024,10 +1076,10 @@ const BookingPage = () => {
                   style={{
                     width: '100%',
                     padding: isMobile() ? '1rem' : '0.75rem',
-                    background: 'rgba(255, 255, 255, 0.05)',
-                    border: '1px solid rgba(255, 255, 255, 0.1)',
+                    background: '#ffffff',
+                    border: '1px solid #d1d5db',
                     borderRadius: '0.5rem',
-                    color: '#fff',
+                    color: '#000000',
                     fontSize: isMobile() ? '1rem' : '0.9rem',
                     minHeight: isMobile() ? '48px' : 'auto'
                   }}
@@ -1043,7 +1095,7 @@ const BookingPage = () => {
               <label style={{
                 display: 'block',
                 marginBottom: '0.5rem',
-                color: 'rgba(255, 255, 255, 0.9)',
+                color: '#374151',
                 fontSize: '0.9rem',
                 fontWeight: '500'
               }}>
@@ -1058,10 +1110,10 @@ const BookingPage = () => {
                 style={{
                   width: '100%',
                   padding: isMobile() ? '1rem' : '0.75rem',
-                  background: 'rgba(255, 255, 255, 0.05)',
-                  border: '1px solid rgba(255, 255, 255, 0.1)',
+                  background: '#ffffff',
+                  border: '1px solid #d1d5db',
                   borderRadius: '0.5rem',
-                  color: '#fff',
+                  color: '#000000',
                   fontSize: isMobile() ? '1rem' : '0.9rem',
                   resize: 'vertical',
                   minHeight: isMobile() ? '100px' : 'auto'
@@ -1073,12 +1125,13 @@ const BookingPage = () => {
 
         {/* Right Side - Booking Summary */}
         <div style={{
-          background: 'linear-gradient(145deg, rgba(17, 34, 64, 0.6) 0%, rgba(26, 35, 50, 0.4) 100%)',
-          backdropFilter: 'blur(20px)',
-          border: '1px solid rgba(100, 255, 218, 0.1)',
+          background: '#000000',
+          backdropFilter: 'none',
+          border: '1px solid #374151',
           borderRadius: '1rem',
           padding: isMobile() ? '1.25rem' : '1.5rem',
           height: 'fit-content',
+          boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
           position: isMobile() ? 'static' : 'sticky',
           top: isMobile() ? 'auto' : '180px',
           order: isMobile() ? -1 : 0
@@ -1086,7 +1139,7 @@ const BookingPage = () => {
           <h3 style={{
             fontSize: '1.25rem',
             fontWeight: '600',
-            color: '#fff',
+            color: '#ffffff',
             marginBottom: '1.5rem',
             textAlign: 'center'
           }}>
@@ -1096,8 +1149,8 @@ const BookingPage = () => {
           {/* Stay Duration */}
           {bookingSummary.nights > 0 && (
             <div style={{
-              background: 'rgba(100, 255, 218, 0.1)',
-              border: '1px solid rgba(100, 255, 218, 0.3)',
+              background: '#374151',
+              border: '1px solid #6b7280',
               borderRadius: '0.75rem',
               padding: '1rem',
               marginBottom: '1.5rem',
@@ -1106,14 +1159,14 @@ const BookingPage = () => {
               <div style={{
                 fontSize: '2rem',
                 fontWeight: '700',
-                color: '#64ffda',
+                color: '#ffffff',
                 marginBottom: '0.25rem'
               }}>
                 {bookingSummary.nights}
               </div>
               <div style={{
                 fontSize: '0.9rem',
-                color: 'rgba(255, 255, 255, 0.8)'
+                color: '#d1d5db'
               }}>
                 {bookingSummary.nights === 1 ? 'Night' : 'Nights'}
               </div>
@@ -1127,12 +1180,12 @@ const BookingPage = () => {
               justifyContent: 'space-between',
               alignItems: 'center',
               padding: '0.75rem 0',
-              borderBottom: '1px solid rgba(255, 255, 255, 0.1)',
-              color: 'rgba(255, 255, 255, 0.8)',
+              borderBottom: '1px solid #374151',
+              color: '#d1d5db',
               fontSize: '0.9rem'
             }}>
               <span>Room Type:</span>
-              <span style={{ color: '#fff', fontWeight: '500' }}>{room?.roomType}</span>
+              <span style={{ color: '#ffffff', fontWeight: '500' }}>{room?.roomType}</span>
             </div>
 
             <div style={{
@@ -1140,12 +1193,12 @@ const BookingPage = () => {
               justifyContent: 'space-between',
               alignItems: 'center',
               padding: '0.75rem 0',
-              borderBottom: '1px solid rgba(255, 255, 255, 0.1)',
-              color: 'rgba(255, 255, 255, 0.8)',
+              borderBottom: '1px solid #374151',
+              color: '#d1d5db',
               fontSize: '0.9rem'
             }}>
               <span>Price per Night:</span>
-              <span style={{ color: '#fff', fontWeight: '500' }}>{formatPrice(room?.price || 0)}</span>
+              <span style={{ color: '#ffffff', fontWeight: '500' }}>{formatPrice(room?.price || 0)}</span>
             </div>
 
             {bookingSummary.nights > 0 && (
@@ -1155,12 +1208,12 @@ const BookingPage = () => {
                   justifyContent: 'space-between',
                   alignItems: 'center',
                   padding: '0.75rem 0',
-                  borderBottom: '1px solid rgba(255, 255, 255, 0.1)',
-                  color: 'rgba(255, 255, 255, 0.8)',
+                  borderBottom: '1px solid #374151',
+                  color: '#d1d5db',
                   fontSize: '0.9rem'
                 }}>
                   <span>Number of Nights:</span>
-                  <span style={{ color: '#fff', fontWeight: '500' }}>{bookingSummary.nights}</span>
+                  <span style={{ color: '#ffffff', fontWeight: '500' }}>{bookingSummary.nights}</span>
                 </div>
 
                 <div style={{
@@ -1168,12 +1221,12 @@ const BookingPage = () => {
                   justifyContent: 'space-between',
                   alignItems: 'center',
                   padding: '0.75rem 0',
-                  borderBottom: '1px solid rgba(255, 255, 255, 0.1)',
-                  color: 'rgba(255, 255, 255, 0.8)',
+                  borderBottom: '1px solid #374151',
+                  color: '#d1d5db',
                   fontSize: '0.9rem'
                 }}>
                   <span>Subtotal:</span>
-                  <span style={{ color: '#fff', fontWeight: '500' }}>{formatPrice(bookingSummary.basePrice)}</span>
+                  <span style={{ color: '#ffffff', fontWeight: '500' }}>{formatPrice(bookingSummary.basePrice)}</span>
                 </div>
 
                 <div style={{
@@ -1181,12 +1234,12 @@ const BookingPage = () => {
                   justifyContent: 'space-between',
                   alignItems: 'center',
                   padding: '0.75rem 0',
-                  borderBottom: '2px solid rgba(100, 255, 218, 0.2)',
-                  color: 'rgba(255, 255, 255, 0.8)',
+                  borderBottom: '2px solid #374151',
+                  color: '#d1d5db',
                   fontSize: '0.9rem'
                 }}>
                   <span>Tax (10%):</span>
-                  <span style={{ color: '#fff', fontWeight: '500' }}>{formatPrice(bookingSummary.taxAmount)}</span>
+                  <span style={{ color: '#ffffff', fontWeight: '500' }}>{formatPrice(bookingSummary.taxAmount)}</span>
                 </div>
 
                 <div style={{
@@ -1196,7 +1249,7 @@ const BookingPage = () => {
                   padding: '1rem 0 0.5rem',
                   fontSize: '1.1rem',
                   fontWeight: '600',
-                  color: '#64ffda'
+                  color: '#ffffff'
                 }}>
                   <span>Total Amount:</span>
                   <span>{formatPrice(bookingSummary.totalPrice)}</span>
@@ -1211,7 +1264,7 @@ const BookingPage = () => {
               <h4 style={{
                 fontSize: '1rem',
                 fontWeight: '600',
-                color: '#fff',
+                color: '#ffffff',
                 marginBottom: '0.75rem'
               }}>
                 Included Amenities
@@ -1226,10 +1279,10 @@ const BookingPage = () => {
                     display: 'flex',
                     alignItems: 'center',
                     gap: '0.5rem',
-                    color: 'rgba(255, 255, 255, 0.8)',
+                    color: '#d1d5db',
                     fontSize: '0.8rem'
                   }}>
-                    <FiCheck style={{ color: '#64ffda', fontSize: '0.7rem' }} />
+                    <FiCheck style={{ color: '#ffffff', fontSize: '0.7rem' }} />
                     {amenity}
                   </div>
                 ))}
@@ -1253,11 +1306,11 @@ const BookingPage = () => {
               width: '100%',
               padding: isMobile() ? '1.25rem' : '1rem',
               background: bookingSummary.nights === 0
-                ? 'rgba(255, 255, 255, 0.1)'
-                : 'linear-gradient(135deg, #64ffda 0%, #bb86fc 100%)',
-              border: 'none',
+                ? '#374151'
+                : '#ffffff',
+              border: '1px solid #ffffff',
               borderRadius: '0.75rem',
-              color: bookingSummary.nights === 0 ? 'rgba(255, 255, 255, 0.5)' : '#0a0a0a',
+              color: bookingSummary.nights === 0 ? '#9ca3af' : '#000000',
               fontSize: isMobile() ? '1.1rem' : '1rem',
               fontWeight: '600',
               cursor: bookingSummary.nights === 0 ? 'not-allowed' : 'pointer',

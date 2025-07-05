@@ -1,15 +1,16 @@
 .reservation-page {
   min-height: calc(100vh - var(--header-height));
   padding: 1.5rem 0;
+  background: #ffffff !important;
 }
 
 .reservation-form {
-  background: var(--gradient-glass);
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: var(--border-radius-lg);
-  box-shadow: var(--shadow-lg);
-  padding: 1.5rem;
+  background: #ffffff !important;
+  backdrop-filter: none !important;
+  border: 1px solid #e5e7eb !important;
+  border-radius: 1rem !important;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05) !important;
+  padding: 1.5rem !important;
 }
 
 .table-image-container {
@@ -57,64 +58,80 @@
 }
 
 .theme-input {
-  background: rgba(255, 255, 255, 0.1);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  color: var(--text-primary);
-  transition: all 0.3s ease;
-  padding: 0.5rem 0.75rem;
-  font-size: var(--font-size-sm);
+  background: #ffffff !important;
+  border: 1px solid #d1d5db !important;
+  color: #000000 !important;
+  transition: all 0.3s ease !important;
+  padding: 0.75rem !important;
+  font-size: 1rem !important;
+  border-radius: 0.5rem !important;
+  width: 100% !important;
 }
 
 .theme-input:focus {
-  background: rgba(255, 255, 255, 0.15);
-  border-color: var(--accent-primary);
-  box-shadow: 0 0 0 2px rgba(100, 255, 218, 0.2);
+  background: #ffffff !important;
+  border-color: #000000 !important;
+  box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.1) !important;
 }
 
 .theme-input[readonly] {
-  background: rgba(255, 255, 255, 0.05);
-  cursor: not-allowed;
+  background: #f9fafb !important;
+  cursor: not-allowed !important;
+  color: #6b7280 !important;
 }
 
 .theme-input::placeholder {
-  color: rgba(255, 255, 255, 0.6);
+  color: #9ca3af !important;
 }
 
 .reservation-summary {
-  background: rgba(255, 255, 255, 0.05);
-  border-radius: var(--border-radius-md);
-  padding: 1rem;
-  margin: 1rem 0;
+  background: #f8fafc !important;
+  border-radius: 0.75rem !important;
+  padding: 1.5rem !important;
+  margin: 1rem 0 !important;
+  border: 1px solid #e5e7eb !important;
 }
 
 .summary-item {
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: 0.5rem;
-  font-size: var(--font-size-sm);
+  display: flex !important;
+  justify-content: space-between !important;
+  margin-bottom: 0.75rem !important;
+  font-size: 1rem !important;
+  color: #374151 !important;
+}
+
+.summary-item span:first-child {
+  color: #6b7280 !important;
+  font-weight: 500 !important;
+}
+
+.summary-item span:last-child {
+  color: #000000 !important;
+  font-weight: 600 !important;
 }
 
 .btn {
-  padding: 0.5rem 1rem;
-  font-size: var(--font-size-sm);
+  padding: 0.75rem 1.5rem !important;
+  font-size: 1rem !important;
+  border-radius: 0.5rem !important;
 }
 
 .theme-button {
-  background: var(--accent-color);
-  color: #fff;
-  border: none;
-  padding: 12px 24px;
-  border-radius: 8px;
-  font-weight: 600;
-  transition: all 0.3s ease;
-  width: 100%;
-  margin-top: 1rem;
+  background: #000000 !important;
+  color: #ffffff !important;
+  border: none !important;
+  padding: 12px 24px !important;
+  border-radius: 0.5rem !important;
+  font-weight: 600 !important;
+  transition: all 0.3s ease !important;
+  width: 100% !important;
+  margin-top: 1rem !important;
 }
 
 .theme-button:hover {
-  background: var(--accent-hover);
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(var(--accent-rgb), 0.3);
+  background: #374151 !important;
+  transform: translateY(-2px) !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
 }
 
 @media (min-width: 992px) {
@@ -155,7 +172,7 @@
     width: 100vw !important;
     overflow-x: hidden !important;
     min-height: calc(100vh - 60px) !important;
-    background: #0A192F !important;
+    background: #ffffff !important;
   }
 
   .container {
@@ -177,12 +194,13 @@
 
   /* Enhanced Table Details Section */
   .reservation-form {
-    background: rgba(255, 255, 255, 0.05) !important;
-    backdrop-filter: blur(20px) !important;
-    border: 1px solid rgba(100, 255, 218, 0.2) !important;
+    background: #ffffff !important;
+    backdrop-filter: none !important;
+    border: 1px solid #e5e7eb !important;
     border-radius: 1rem !important;
     padding: 1.5rem !important;
     margin-bottom: 1.5rem !important;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05) !important;
   }
 
   .table-image-container {
@@ -207,7 +225,7 @@
 
   .table-details h3 {
     font-size: 1.5rem !important;
-    color: #64ffda !important;
+    color: #000000 !important;
     font-weight: 700 !important;
     margin-bottom: 1rem !important;
   }
@@ -218,7 +236,7 @@
   }
 
   .table-details p {
-    color: #ffffff !important;
+    color: #374151 !important;
     font-size: 1rem !important;
     line-height: 1.6 !important;
     margin-bottom: 1rem !important;
@@ -227,7 +245,7 @@
   /* Enhanced Reservation Form */
   .reservation-form h2 {
     font-size: 1.5rem !important;
-    color: #64ffda !important;
+    color: #000000 !important;
     font-weight: 700 !important;
     text-align: center !important;
     margin-bottom: 1.5rem !important;
@@ -247,7 +265,7 @@
   .form-label {
     font-size: 1rem !important;
     font-weight: 600 !important;
-    color: #ffffff !important;
+    color: #000000 !important;
     margin-bottom: 0.75rem !important;
     display: flex !important;
     align-items: center !important;
@@ -312,8 +330,8 @@
 
   /* Enhanced Reservation Summary */
   .reservation-summary {
-    background: rgba(255, 255, 255, 0.08) !important;
-    border: 2px solid rgba(100, 255, 218, 0.2) !important;
+    background: #f8fafc !important;
+    border: 1px solid #e5e7eb !important;
     border-radius: 1rem !important;
     padding: 1.5rem !important;
     margin: 1.5rem 0 !important;
@@ -321,7 +339,7 @@
 
   .reservation-summary h3 {
     font-size: 1.3rem !important;
-    color: #64ffda !important;
+    color: #000000 !important;
     font-weight: 700 !important;
     text-align: center !important;
     margin-bottom: 1rem !important;
@@ -333,18 +351,18 @@
     align-items: center !important;
     padding: 0.75rem 0 !important;
     font-size: 1rem !important;
-    color: #ffffff !important;
-    border-bottom: 1px solid rgba(100, 255, 218, 0.1) !important;
+    color: #374151 !important;
+    border-bottom: 1px solid #e5e7eb !important;
   }
 
   .summary-item:last-child {
     border-bottom: none !important;
     font-weight: 700 !important;
     font-size: 1.1rem !important;
-    color: #64ffda !important;
+    color: #000000 !important;
     margin-top: 0.5rem !important;
     padding-top: 1rem !important;
-    border-top: 2px solid rgba(100, 255, 218, 0.3) !important;
+    border-top: 2px solid #000000 !important;
   }
 
   /* Enhanced Submit Button */
@@ -352,15 +370,15 @@
   .theme-button {
     width: 100% !important;
     padding: 1.5rem 2rem !important;
-    background: linear-gradient(135deg, #64ffda, #4fd1c7) !important;
-    color: #0A192F !important;
-    border: none !important;
+    background: #000000 !important;
+    color: #ffffff !important;
+    border: 1px solid #000000 !important;
     border-radius: 0.75rem !important;
     font-size: 1.2rem !important;
     font-weight: 700 !important;
     cursor: pointer !important;
     transition: all 0.3s ease !important;
-    box-shadow: 0 8px 25px rgba(100, 255, 218, 0.3) !important;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2) !important;
     min-height: 64px !important;
     margin-top: 1.5rem !important;
   }
@@ -368,8 +386,9 @@
   .btn-accent:hover:not(:disabled),
   .theme-button:hover:not(:disabled) {
     transform: translateY(-2px) !important;
-    box-shadow: 0 12px 35px rgba(100, 255, 218, 0.4) !important;
-    background: linear-gradient(135deg, #4fd1c7, #64ffda) !important;
+    box-shadow: 0 12px 35px rgba(0, 0, 0, 0.3) !important;
+    background: #333333 !important;
+    border-color: #333333 !important;
   }
 
   .btn-accent:disabled,
@@ -381,16 +400,17 @@
 
   /* Enhanced Payment Section */
   .payment-section {
-    background: rgba(255, 255, 255, 0.05) !important;
-    border: 1px solid rgba(100, 255, 218, 0.2) !important;
+    background: #ffffff !important;
+    border: 1px solid #e5e7eb !important;
     border-radius: 1rem !important;
     padding: 1.5rem !important;
     margin-top: 1.5rem !important;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05) !important;
   }
 
   .payment-section h3 {
     font-size: 1.3rem !important;
-    color: #64ffda !important;
+    color: #000000 !important;
     font-weight: 700 !important;
     text-align: center !important;
     margin-bottom: 1rem !important;
@@ -411,49 +431,163 @@
 }
 
 .payment-section {
-  background: #f8f9fa;
-  padding: 20px;
-  border-radius: 8px;
-  margin-top: 20px;
+  background: #ffffff !important;
+  padding: 1.5rem !important;
+  border-radius: 1rem !important;
+  margin-top: 1.5rem !important;
+  border: 1px solid #e5e7eb !important;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05) !important;
 }
 
 .payment-form {
-  max-width: 100%;
+  max-width: 100% !important;
 }
 
 .payment-form .form-group {
-  margin-bottom: 20px;
+  margin-bottom: 1.5rem !important;
 }
 
 .payment-form .form-label {
-  display: block;
-  margin-bottom: 8px;
-  color: #333;
-  font-weight: 500;
+  display: flex !important;
+  align-items: center !important;
+  gap: 0.5rem !important;
+  margin-bottom: 0.75rem !important;
+  color: #000000 !important;
+  font-weight: 600 !important;
+  font-size: 1rem !important;
 }
 
 .payment-form .StripeElement {
-  padding: 12px;
-  border: 1px solid #e0e0e0;
-  border-radius: 4px;
-  background: white;
+  padding: 1rem !important;
+  border: 1px solid #d1d5db !important;
+  border-radius: 0.5rem !important;
+  background: #ffffff !important;
+  transition: all 0.3s ease !important;
+}
+
+.payment-form .StripeElement:focus {
+  border-color: #000000 !important;
+  box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.1) !important;
 }
 
 .payment-form .error-message {
-  color: #dc3545;
-  font-size: 14px;
-  margin-top: 8px;
+  color: #ef4444 !important;
+  font-size: 0.9rem !important;
+  margin-top: 0.5rem !important;
+  background: #fef2f2 !important;
+  border: 1px solid #fecaca !important;
+  border-radius: 0.5rem !important;
+  padding: 0.75rem !important;
 }
 
 .payment-form button {
-  background: #007bff;
-  color: white;
-  border: none;
-  padding: 12px;
-  border-radius: 4px;
-  font-weight: 500;
-  cursor: pointer;
-  transition: background-color 0.2s;
+  background: #000000 !important;
+  color: #ffffff !important;
+  border: none !important;
+  padding: 0.75rem 1.5rem !important;
+  border-radius: 0.5rem !important;
+  font-weight: 600 !important;
+  cursor: pointer !important;
+  transition: all 0.3s ease !important;
+  width: 100% !important;
+  font-size: 1rem !important;
+}
+
+.payment-form button:hover {
+  background: #374151 !important;
+  transform: translateY(-2px) !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
+}
+
+.payment-form button:disabled {
+  background: #9ca3af !important;
+  cursor: not-allowed !important;
+  transform: none !important;
+}
+
+/* ========== COMPREHENSIVE WHITE THEME OVERRIDES ========== */
+
+/* Force white background for all main containers */
+.reservation-page,
+.container,
+.row,
+.col-lg-6,
+.col-md-6 {
+  background: #ffffff !important;
+  color: #000000 !important;
+}
+
+/* Force white styling for all cards and forms */
+.card,
+.reservation-form,
+.table-details-card,
+.payment-section {
+  background: #ffffff !important;
+  border: 1px solid #e5e7eb !important;
+  color: #000000 !important;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05) !important;
+}
+
+/* Force black text for all headings */
+h1, h2, h3, h4, h5, h6 {
+  color: #000000 !important;
+}
+
+/* Force proper text colors for all text elements */
+p, span, div, label {
+  color: #374151 !important;
+}
+
+/* Force white background for all inputs */
+input, select, textarea {
+  background: #ffffff !important;
+  border: 1px solid #d1d5db !important;
+  color: #000000 !important;
+}
+
+/* Force proper button styling */
+.btn, .theme-button, .btn-accent {
+  background: #000000 !important;
+  color: #ffffff !important;
+  border: none !important;
+}
+
+.btn:hover, .theme-button:hover, .btn-accent:hover {
+  background: #374151 !important;
+}
+
+/* Force proper availability status colors */
+.availability-status {
+  background: #f8fafc !important;
+  border: 1px solid #e5e7eb !important;
+  color: #374151 !important;
+}
+
+/* Force proper star rating colors */
+.text-warning, .star-rating svg {
+  color: #fbbf24 !important;
+}
+
+/* Force proper accent colors to black */
+.text-accent {
+  color: #000000 !important;
+}
+
+/* Force proper form label styling */
+.form-label {
+  color: #000000 !important;
+  font-weight: 600 !important;
+}
+
+/* Force proper table details styling */
+.table-details h3,
+.table-details p,
+.table-details span {
+  color: #000000 !important;
+}
+
+.table-details .small {
+  color: #6b7280 !important;
 }
 
 .payment-form button:hover {

@@ -1,5 +1,409 @@
 /* Modern Login Page CSS */
 
+/* ========== BLACK & WHITE THEME OVERRIDES ========== */
+/* Main container styling */
+.modern-login-page {
+  background: #ffffff !important;
+  background-color: #ffffff !important;
+  background-image: none !important;
+  display: flex !important;
+  min-height: 100vh !important;
+  width: 100% !important;
+}
+
+/* Left side branding */
+.login-branding {
+  background: #f8fafc !important;
+  background-color: #f8fafc !important;
+  background-image: none !important;
+  flex: 1 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  padding: 2rem !important;
+}
+
+/* Right side form section */
+.login-form-section {
+  background: #ffffff !important;
+  background-color: #ffffff !important;
+  flex: 1 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  padding: 2rem !important;
+}
+
+/* All text elements */
+.modern-login-page h1,
+.modern-login-page h2,
+.modern-login-page h3,
+.modern-login-page h4,
+.modern-login-page h5,
+.modern-login-page h6,
+.modern-login-page p,
+.modern-login-page span,
+.modern-login-page div,
+.modern-login-page label,
+.brand-title,
+.brand-subtitle,
+.logo-text,
+.logo-accent,
+.form-title,
+.form-subtitle,
+.form-label,
+.feature-item {
+  color: #000000 !important;
+  -webkit-text-fill-color: #000000 !important;
+}
+
+/* Form container */
+.form-container {
+  background: #ffffff !important;
+  background-color: #ffffff !important;
+  border: 1px solid #e5e7eb !important;
+  border-radius: 12px !important;
+  padding: 2rem !important;
+  max-width: 400px !important;
+  width: 100% !important;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05) !important;
+}
+
+/* Branding content */
+.branding-content {
+  text-align: center !important;
+  color: #000000 !important;
+}
+
+.professional-logo {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  margin-bottom: 1rem !important;
+}
+
+.brand-title {
+  font-size: 2rem !important;
+  font-weight: 700 !important;
+  color: #000000 !important;
+  margin-bottom: 0.5rem !important;
+}
+
+.brand-subtitle {
+  font-size: 1rem !important;
+  color: #6b7280 !important;
+  margin-bottom: 2rem !important;
+}
+
+/* Form elements */
+.form-header {
+  text-align: center !important;
+  margin-bottom: 1.5rem !important;
+}
+
+.form-title {
+  font-size: 1.5rem !important;
+  font-weight: 600 !important;
+  color: #000000 !important;
+  margin-bottom: 0.5rem !important;
+}
+
+.form-subtitle {
+  font-size: 0.875rem !important;
+  color: #6b7280 !important;
+}
+
+/* Toggle buttons */
+.auth-toggle {
+  display: flex !important;
+  background: #f3f4f6 !important;
+  border-radius: 8px !important;
+  padding: 4px !important;
+  margin-bottom: 1.5rem !important;
+}
+
+.toggle-btn {
+  flex: 1 !important;
+  padding: 0.5rem 1rem !important;
+  background: transparent !important;
+  border: none !important;
+  border-radius: 6px !important;
+  font-size: 0.875rem !important;
+  font-weight: 500 !important;
+  color: #6b7280 !important;
+  cursor: pointer !important;
+  transition: all 0.2s ease !important;
+}
+
+.toggle-btn.active {
+  background: #000000 !important;
+  color: #ffffff !important;
+}
+
+/* Form inputs */
+.form-group {
+  margin-bottom: 1rem !important;
+}
+
+.form-label {
+  display: block !important;
+  font-size: 0.875rem !important;
+  font-weight: 500 !important;
+  color: #000000 !important;
+  margin-bottom: 0.5rem !important;
+}
+
+.form-input,
+input[type="text"],
+input[type="email"],
+input[type="password"] {
+  width: 100% !important;
+  padding: 0.75rem !important;
+  background: #ffffff !important;
+  border: 1px solid #d1d5db !important;
+  border-radius: 8px !important;
+  font-size: 1rem !important;
+  color: #000000 !important;
+  transition: border-color 0.2s ease !important;
+}
+
+.form-input:focus,
+input:focus {
+  outline: none !important;
+  border-color: #000000 !important;
+  box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.1) !important;
+}
+
+/* Submit button */
+.submit-btn {
+  width: 100% !important;
+  padding: 0.75rem 1rem !important;
+  background: #000000 !important;
+  color: #ffffff !important;
+  border: none !important;
+  border-radius: 8px !important;
+  font-size: 1rem !important;
+  font-weight: 600 !important;
+  cursor: pointer !important;
+  transition: background-color 0.2s ease !important;
+  margin-bottom: 1rem !important;
+}
+
+.submit-btn:hover {
+  background: #1f2937 !important;
+}
+
+.submit-btn:disabled {
+  background: #9ca3af !important;
+  cursor: not-allowed !important;
+}
+
+/* Remove all background effects */
+.modern-login-page::before,
+.modern-login-page::after,
+.login-branding::before,
+.login-branding::after,
+.form-container::before,
+.form-container::after {
+  display: none !important;
+}
+
+/* ========== ADDITIONAL COLOR OVERRIDES ========== */
+/* Target all possible blue/teal colored elements */
+
+/* Icons - Force all icons to be black */
+.modern-login-page svg,
+.modern-login-page i,
+.modern-login-page .icon,
+.modern-login-page .btn-icon,
+.modern-login-page .btn-arrow,
+.modern-login-page .feature-icon,
+.modern-login-page .logo-icon,
+.form-container svg,
+.form-container i,
+.branding-content svg,
+.branding-content i,
+.submit-btn svg,
+.submit-btn i,
+.toggle-btn svg,
+.toggle-btn i {
+  color: #000000 !important;
+  fill: #000000 !important;
+  stroke: #000000 !important;
+}
+
+/* Submit button icons should be white */
+.submit-btn svg,
+.submit-btn i,
+.submit-btn .btn-icon,
+.submit-btn .btn-arrow {
+  color: #ffffff !important;
+  fill: #ffffff !important;
+  stroke: #ffffff !important;
+}
+
+/* Text elements that might have blue/teal colors */
+.modern-login-page .text-accent,
+.modern-login-page .accent-text,
+.modern-login-page .highlight,
+.modern-login-page .primary-text,
+.modern-login-page .secondary-text,
+.modern-login-page .link-text,
+.modern-login-page a,
+.form-container a,
+.branding-content a,
+.auth-switch a,
+.auth-switch span,
+.auth-switch p {
+  color: #000000 !important;
+  -webkit-text-fill-color: #000000 !important;
+}
+
+/* Features list styling */
+.features-list,
+.features-list li,
+.feature-item,
+.feature-item span,
+.feature-item p {
+  color: #000000 !important;
+  -webkit-text-fill-color: #000000 !important;
+}
+
+/* Testimonial styling */
+.testimonial,
+.testimonial *,
+.testimonial p,
+.testimonial span,
+.testimonial .author {
+  color: #000000 !important;
+  -webkit-text-fill-color: #000000 !important;
+}
+
+/* Divider text */
+.divider,
+.divider span,
+.divider::before,
+.divider::after {
+  color: #6b7280 !important;
+  border-color: #e5e7eb !important;
+}
+
+/* Google login wrapper */
+.google-login-wrapper,
+.google-login-wrapper * {
+  background: #ffffff !important;
+}
+
+/* Auth switch (Create Account / Sign In links) */
+.auth-switch,
+.auth-switch span,
+.auth-switch a,
+.auth-switch p {
+  color: #000000 !important;
+  -webkit-text-fill-color: #000000 !important;
+}
+
+/* Password strength indicator */
+.password-strength,
+.password-strength *,
+.strength-indicator,
+.strength-text {
+  color: #000000 !important;
+  -webkit-text-fill-color: #000000 !important;
+}
+
+/* Loading states */
+.loading-dots,
+.loading-dots span,
+.loading-spinner {
+  background: #ffffff !important;
+  border-color: #ffffff !important;
+}
+
+/* Toast messages */
+.toast-message,
+.toast-message * {
+  color: #000000 !important;
+  background: #ffffff !important;
+  border-color: #e5e7eb !important;
+}
+
+/* ========== COMPREHENSIVE COLOR OVERRIDES ========== */
+/* Override any remaining blue/teal colors */
+
+/* Target specific color values that might appear */
+.modern-login-page [style*="color: #64ffda"],
+.modern-login-page [style*="color: #4fd1c7"],
+.modern-login-page [style*="color: rgb(100, 255, 218)"],
+.modern-login-page [style*="color: #00a3ff"],
+.modern-login-page [style*="color: #0066ff"],
+.modern-login-page [style*="color: blue"],
+.modern-login-page [style*="color: teal"],
+.modern-login-page [style*="color: cyan"] {
+  color: #000000 !important;
+  -webkit-text-fill-color: #000000 !important;
+}
+
+/* Override any inline styles with blue backgrounds */
+.modern-login-page [style*="background: #64ffda"],
+.modern-login-page [style*="background: #4fd1c7"],
+.modern-login-page [style*="background-color: #64ffda"],
+.modern-login-page [style*="background-color: #4fd1c7"],
+.modern-login-page [style*="background: linear-gradient"] {
+  background: #ffffff !important;
+  background-color: #ffffff !important;
+  background-image: none !important;
+}
+
+/* Force all possible text elements to black */
+.modern-login-page *:not(.submit-btn):not(.toggle-btn.active) {
+  color: #000000 !important;
+  -webkit-text-fill-color: #000000 !important;
+}
+
+/* Ensure submit button and active toggle remain white text */
+.submit-btn,
+.submit-btn *,
+.toggle-btn.active,
+.toggle-btn.active * {
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+}
+
+/* Override any CSS custom properties (variables) */
+.modern-login-page {
+  --accent-color: #000000 !important;
+  --primary-color: #000000 !important;
+  --secondary-color: #6b7280 !important;
+  --text-color: #000000 !important;
+  --bg-color: #ffffff !important;
+  --border-color: #e5e7eb !important;
+}
+
+/* Additional icon targeting */
+.modern-login-page .fa,
+.modern-login-page .fas,
+.modern-login-page .far,
+.modern-login-page .fab,
+.modern-login-page .fi,
+.modern-login-page [class*="icon-"],
+.modern-login-page [class*="Icon"] {
+  color: #000000 !important;
+  fill: #000000 !important;
+}
+
+/* Submit button icons remain white */
+.submit-btn .fa,
+.submit-btn .fas,
+.submit-btn .far,
+.submit-btn .fab,
+.submit-btn .fi,
+.submit-btn [class*="icon-"],
+.submit-btn [class*="Icon"] {
+  color: #ffffff !important;
+  fill: #ffffff !important;
+}
+
 /* ULTIMATE BORDER REMOVAL: Override ALL possible border sources */
 .modern-login-page,
 .modern-login-page *,

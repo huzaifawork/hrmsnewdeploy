@@ -87,6 +87,52 @@ const Profile = () => {
   const [historyLoading, setHistoryLoading] = useState(true);
   const navigate = useNavigate();
 
+  // Force white background and black text for all elements
+  useEffect(() => {
+    const forceWhiteTheme = () => {
+      const profilePage = document.querySelector('.modern-profile-page');
+      if (profilePage) {
+        // Force white background on all elements
+        const allElements = profilePage.querySelectorAll('*');
+        allElements.forEach(element => {
+          element.style.setProperty('background', '#ffffff', 'important');
+          element.style.setProperty('background-color', '#ffffff', 'important');
+          element.style.setProperty('background-image', 'none', 'important');
+          element.style.setProperty('color', '#000000', 'important');
+          element.style.setProperty('border-color', '#e5e7eb', 'important');
+          element.style.setProperty('backdrop-filter', 'none', 'important');
+          element.style.setProperty('-webkit-backdrop-filter', 'none', 'important');
+        });
+
+        // Special handling for buttons
+        const buttons = profilePage.querySelectorAll('.save-btn, .tab-button.active, .btn-primary');
+        buttons.forEach(button => {
+          button.style.setProperty('background', '#000000', 'important');
+          button.style.setProperty('background-color', '#000000', 'important');
+          button.style.setProperty('color', '#ffffff', 'important');
+        });
+      }
+    };
+
+    // Apply immediately
+    forceWhiteTheme();
+
+    // Apply after a short delay to catch dynamically loaded content
+    const timer = setTimeout(forceWhiteTheme, 100);
+
+    // Apply when tab changes
+    const observer = new MutationObserver(forceWhiteTheme);
+    const profilePage = document.querySelector('.modern-profile-page');
+    if (profilePage) {
+      observer.observe(profilePage, { childList: true, subtree: true });
+    }
+
+    return () => {
+      clearTimeout(timer);
+      observer.disconnect();
+    };
+  }, [activeTab]);
+
   // Fetch user profile data and comprehensive stats
   useEffect(() => {
     const fetchProfile = async () => {

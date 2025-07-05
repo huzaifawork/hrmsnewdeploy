@@ -8,12 +8,20 @@ import './MainContentCarousel.css';
 const MainContentCarousel = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [isLoaded, setIsLoaded] = useState(false);
+  const [imageErrors, setImageErrors] = useState({});
   const navigate = useNavigate();
   const location = useLocation();
 
   // Get dynamic hotel content
   const hotelInfo = useHotelInfo();
   const heroContent = useHeroContent();
+
+  // Fallback images in case Unsplash fails
+  const fallbackImages = [
+    "https://via.placeholder.com/2070x1380/1a365d/ffffff?text=Luxury+Hotel",
+    "https://via.placeholder.com/2070x1380/2d3748/ffffff?text=Fine+Dining",
+    "https://via.placeholder.com/2070x1380/4a5568/ffffff?text=Premium+Experience"
+  ];
 
   // Debug: Check if router context is available
   useEffect(() => {
@@ -36,24 +44,34 @@ const MainContentCarousel = () => {
 
   const heroSlides = [
     {
-      image: "https://images.unsplash.com/photo-1566073771259-6a8506099945?q=80&w=2070&auto=format&fit=crop",
+      image: "https://images.unsplash.com/photo-1566073771259-6a8506099945?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80",
       title: heroContent.mainTitle,
       subtitle: heroContent.subtitle,
       description: heroContent.description
     },
     {
-      image: "https://images.unsplash.com/photo-1414235077428-338989a2e8c0?q=80&w=2070&auto=format&fit=crop",
+      image: "https://images.unsplash.com/photo-1414235077428-338989a2e8c0?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80",
       title: "Culinary Excellence Awaits",
       subtitle: "AUTHENTIC FLAVORS",
       description: `Finest cuisine at ${hotelInfo.hotelName}`
     },
     {
-      image: "https://images.unsplash.com/photo-1551632811-561732d1e306?q=80&w=2070&auto=format&fit=crop",
-      title: "Elegant Dining Experience",
-      subtitle: "RESERVE YOUR TABLE",
-      description: `Beautiful restaurants with city views at ${hotelInfo.hotelName}`
+      image: "https://images.unsplash.com/photo-1551632811-561732d1e306?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80",
+      title: "Premium Dining Experience",
+      subtitle: "RESTAURANT",
+      description: `Exceptional cuisine and service at ${hotelInfo.hotelName}`
     }
   ];
+
+  // Handle image loading errors
+  const handleImageError = (index) => {
+    setImageErrors(prev => ({ ...prev, [index]: true }));
+  };
+
+  // Get image URL with fallback
+  const getImageUrl = (slide, index) => {
+    return imageErrors[index] ? fallbackImages[index] : slide.image;
+  };
 
   useEffect(() => {
     setIsLoaded(true);
@@ -63,6 +81,21 @@ const MainContentCarousel = () => {
     return () => clearInterval(interval);
   }, [heroSlides.length]);
 
+  // Preload images to ensure they display
+  useEffect(() => {
+    heroSlides.forEach((slide, index) => {
+      const img = new Image();
+      img.onload = () => {
+        console.log(`Image ${index} loaded successfully`);
+      };
+      img.onerror = () => {
+        console.log(`Image ${index} failed to load, using fallback`);
+        handleImageError(index);
+      };
+      img.src = slide.image;
+    });
+  }, [heroSlides]);
+
   return (
     <div className={`hero-section ${isLoaded ? 'loaded' : ''}`}>
       {/* Background Images with Parallax Effect */}
@@ -70,7 +103,12 @@ const MainContentCarousel = () => {
         <div
           key={index}
           className={`hero-background ${index === currentSlide ? 'active' : ''}`}
-          style={{ backgroundImage: `url(${slide.image})` }}
+          style={{
+            backgroundImage: `url(${getImageUrl(slide, index)})`,
+            backgroundSize: 'cover',
+            backgroundPosition: 'center',
+            backgroundRepeat: 'no-repeat'
+          }}
         />
       ))}
 

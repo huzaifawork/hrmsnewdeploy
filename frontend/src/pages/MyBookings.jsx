@@ -258,11 +258,13 @@ const MyBookings = () => {
                         Booked on {new Date(booking.bookingDate).toLocaleDateString()}
                       </p>
                     </div>
-                    <div className={`booking-status status-${booking.status.toLowerCase()}`}>
-                      {booking.status === 'Pending' && <FiClock />}
-                      {booking.status === 'Confirmed' && <FiCheckCircle />}
-                      {booking.status === 'Cancelled' && <FiXCircle />}
-                      <span>{booking.status}</span>
+                    <div className="booking-status-wrapper">
+                      <div className={`booking-status status-${booking.status.toLowerCase()}`}>
+                        {booking.status === 'Pending' && <FiClock />}
+                        {booking.status === 'Confirmed' && <FiCheckCircle />}
+                        {booking.status === 'Cancelled' && <FiXCircle />}
+                        <span>{booking.status}</span>
+                      </div>
                     </div>
                   </div>
 

@@ -518,8 +518,8 @@ const RoomPage = () => {
         </div>
         {score && (
           <div style={{
-            background: 'rgba(100, 255, 218, 0.2)',
-            color: '#64ffda',
+            background: '#f3f4f6',
+            color: '#374151',
             padding: '0.3rem 0.6rem',
             borderRadius: '0.4rem',
             fontSize: '0.7rem',
@@ -527,7 +527,7 @@ const RoomPage = () => {
             display: 'flex',
             alignItems: 'center',
             gap: '0.3rem',
-            border: '1px solid rgba(100, 255, 218, 0.3)'
+            border: '1px solid #d1d5db'
           }}>
             <FiTarget size={10} />
             {score.toFixed(1)} rating
@@ -535,7 +535,7 @@ const RoomPage = () => {
         )}
         {confidence && (
           <div style={{
-            color: '#bb86fc',
+            color: '#6b7280',
             fontSize: '0.65rem',
             fontWeight: '500',
             textAlign: 'center',
@@ -552,10 +552,9 @@ const RoomPage = () => {
     <>
       <Header />
       <div style={{
-        background: '#0A192F',
+        background: '#ffffff',
         minHeight: '100vh',
         position: 'relative',
-        overflow: 'hidden',
         width: '100%',
         margin: 0,
         padding: 0,
@@ -565,10 +564,9 @@ const RoomPage = () => {
         {/* Main Content */}
         <div style={{
           position: 'relative',
-          zIndex: 2,
           width: '100%',
           margin: '0',
-          padding: '60px 1.5rem 1.5rem'
+          padding: '2rem 1.5rem 1.5rem'
         }}>
           {/* Hero Section */}
           <div className="room-page-hero" style={{
@@ -579,23 +577,21 @@ const RoomPage = () => {
             <h1 className="room-page-title" style={{
               fontSize: '2.5rem',
               fontWeight: '700',
-              background: 'linear-gradient(135deg, #ffffff 0%, #64ffda 30%, #bb86fc 70%, #ff6b9d 100%)',
-              WebkitBackgroundClip: 'text',
-              WebkitTextFillColor: 'transparent',
-              backgroundClip: 'text',
-              marginBottom: '0.5rem',
-              lineHeight: '1.1',
-              textShadow: '0 0 30px rgba(100, 255, 218, 0.3)',
-              animation: 'slideInUp 0.8s ease-out'
+              color: '#000000',
+              marginBottom: '1rem',
+              lineHeight: '1.2',
+              fontFamily: 'Inter, sans-serif'
             }}>
-              Luxury Accommodations
+              Premium Rooms
             </h1>
             <p className="room-page-subtitle" style={{
-              fontSize: '1rem',
-              color: 'rgba(255, 255, 255, 0.8)',
+              fontSize: '1.125rem',
+              color: '#6b7280',
               margin: '0',
-              lineHeight: '1.4',
-              animation: 'slideInUp 0.8s ease-out 0.2s both'
+              lineHeight: '1.5',
+              maxWidth: '600px',
+              marginLeft: 'auto',
+              marginRight: 'auto'
             }}>
               Experience unparalleled comfort and elegance in our premium rooms
             </p>
@@ -621,13 +617,12 @@ const RoomPage = () => {
 
           {/* Modern Filters and Tabs */}
           <div className="room-page-filters" style={{
-            background: 'linear-gradient(145deg, rgba(17, 34, 64, 0.6) 0%, rgba(26, 35, 50, 0.4) 100%)',
-            backdropFilter: 'blur(20px)',
-            border: '1px solid rgba(255, 255, 255, 0.1)',
+            background: '#ffffff',
+            border: '1px solid #e5e7eb',
             borderRadius: '1rem',
             padding: '1.5rem',
             marginBottom: '2rem',
-            animation: 'slideInUp 0.8s ease-out 0.4s both'
+            boxShadow: '0 2px 4px rgba(0, 0, 0, 0.05)'
           }}>
             {/* Tabs */}
             <div className="room-page-tabs" style={{
@@ -640,20 +635,19 @@ const RoomPage = () => {
                 className="room-page-tab-button"
                 onClick={() => setActiveTab('all')}
                 style={{
-                  padding: '0.5rem 1rem',
-                  background: activeTab === 'all'
-                    ? 'linear-gradient(135deg, #64ffda 0%, #bb86fc 100%)'
-                    : 'rgba(255, 255, 255, 0.1)',
-                  border: activeTab === 'all' ? 'none' : '1px solid rgba(255, 255, 255, 0.2)',
-                  borderRadius: '0.75rem',
-                  color: activeTab === 'all' ? '#0a0a0a' : '#fff',
-                  fontSize: '0.8rem',
-                  fontWeight: '600',
+                  padding: '0.75rem 1rem',
+                  background: activeTab === 'all' ? '#000000' : '#f3f4f6',
+                  border: 'none',
+                  borderRadius: '0.5rem',
+                  color: activeTab === 'all' ? '#ffffff' : '#374151',
+                  fontSize: '0.875rem',
+                  fontWeight: '500',
                   cursor: 'pointer',
-                  transition: 'all 0.3s ease',
+                  transition: 'all 0.2s ease',
                   display: 'flex',
                   alignItems: 'center',
-                  gap: '0.4rem'
+                  gap: '0.5rem',
+                  fontFamily: 'Inter, sans-serif'
                 }}
               >
                 <FiFilter size={14} />
@@ -665,20 +659,19 @@ const RoomPage = () => {
                   className="room-page-tab-button"
                   onClick={() => setActiveTab('recommended')}
                   style={{
-                    padding: '0.5rem 1rem',
-                    background: activeTab === 'recommended'
-                      ? 'linear-gradient(135deg, #64ffda 0%, #bb86fc 100%)'
-                      : 'rgba(255, 255, 255, 0.1)',
-                    border: activeTab === 'recommended' ? 'none' : '1px solid rgba(255, 255, 255, 0.2)',
-                    borderRadius: '0.75rem',
-                    color: activeTab === 'recommended' ? '#0a0a0a' : '#fff',
-                    fontSize: '0.8rem',
-                    fontWeight: '600',
+                    padding: '0.75rem 1rem',
+                    background: activeTab === 'recommended' ? '#000000' : '#f3f4f6',
+                    border: 'none',
+                    borderRadius: '0.5rem',
+                    color: activeTab === 'recommended' ? '#ffffff' : '#374151',
+                    fontSize: '0.875rem',
+                    fontWeight: '500',
                     cursor: 'pointer',
-                    transition: 'all 0.3s ease',
+                    transition: 'all 0.2s ease',
                     display: 'flex',
                     alignItems: 'center',
-                    gap: '0.4rem'
+                    gap: '0.5rem',
+                    fontFamily: 'Inter, sans-serif'
                   }}
                 >
                   <FiHeart size={14} />
@@ -700,20 +693,19 @@ const RoomPage = () => {
                 className="room-page-tab-button"
                 onClick={() => setActiveTab('popular')}
                 style={{
-                  padding: '0.5rem 1rem',
-                  background: activeTab === 'popular'
-                    ? 'linear-gradient(135deg, #64ffda 0%, #bb86fc 100%)'
-                    : 'rgba(255, 255, 255, 0.1)',
-                  border: activeTab === 'popular' ? 'none' : '1px solid rgba(255, 255, 255, 0.2)',
-                  borderRadius: '0.75rem',
-                  color: activeTab === 'popular' ? '#0a0a0a' : '#fff',
-                  fontSize: '0.8rem',
-                  fontWeight: '600',
+                  padding: '0.75rem 1rem',
+                  background: activeTab === 'popular' ? '#000000' : '#f3f4f6',
+                  border: 'none',
+                  borderRadius: '0.5rem',
+                  color: activeTab === 'popular' ? '#ffffff' : '#374151',
+                  fontSize: '0.875rem',
+                  fontWeight: '500',
                   cursor: 'pointer',
-                  transition: 'all 0.3s ease',
+                  transition: 'all 0.2s ease',
                   display: 'flex',
                   alignItems: 'center',
-                  gap: '0.4rem'
+                  gap: '0.5rem',
+                  fontFamily: 'Inter, sans-serif'
                 }}
               >
                 <FiTrendingUp size={14} />
@@ -731,10 +723,11 @@ const RoomPage = () => {
               <div>
                 <label style={{
                   display: 'block',
-                  marginBottom: '0.4rem',
-                  color: 'rgba(255, 255, 255, 0.9)',
-                  fontSize: '0.8rem',
-                  fontWeight: '500'
+                  marginBottom: '0.5rem',
+                  color: '#374151',
+                  fontSize: '0.875rem',
+                  fontWeight: '500',
+                  fontFamily: 'Inter, sans-serif'
                 }}>
                   Price Range
                 </label>
@@ -743,29 +736,39 @@ const RoomPage = () => {
                   onChange={(e) => setFilters({...filters, priceRange: e.target.value})}
                   style={{
                     width: '100%',
-                    padding: '0.6rem',
-                    background: 'rgba(255, 255, 255, 0.05)',
-                    border: '1px solid rgba(255, 255, 255, 0.1)',
+                    padding: '0.75rem',
+                    background: '#ffffff',
+                    border: '1px solid #d1d5db',
                     borderRadius: '0.5rem',
-                    color: '#fff',
-                    fontSize: '0.8rem'
+                    color: '#000000',
+                    fontSize: '0.875rem',
+                    fontFamily: 'Inter, sans-serif',
+                    appearance: 'none',
+                    WebkitAppearance: 'none',
+                    MozAppearance: 'none',
+                    backgroundImage: `url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m6 8 4 4 4-4'/%3e%3c/svg%3e")`,
+                    backgroundPosition: 'right 0.5rem center',
+                    backgroundRepeat: 'no-repeat',
+                    backgroundSize: '1.5em 1.5em',
+                    paddingRight: '2.5rem'
                   }}
                 >
-                  <option value="">All Prices</option>
-                  <option value="budget">Budget (≤ Rs. 5,000)</option>
-                  <option value="standard">Standard (Rs. 5,001-10,000)</option>
-                  <option value="premium">Premium (Rs. 10,001-20,000)</option>
-                  <option value="luxury">Luxury (Rs. 20,001+)</option>
+                  <option value="" style={{ background: '#ffffff', color: '#000000' }}>All Prices</option>
+                  <option value="budget" style={{ background: '#ffffff', color: '#000000' }}>Budget (≤ Rs. 5,000)</option>
+                  <option value="standard" style={{ background: '#ffffff', color: '#000000' }}>Standard (Rs. 5,001-10,000)</option>
+                  <option value="premium" style={{ background: '#ffffff', color: '#000000' }}>Premium (Rs. 10,001-20,000)</option>
+                  <option value="luxury" style={{ background: '#ffffff', color: '#000000' }}>Luxury (Rs. 20,001+)</option>
                 </select>
               </div>
 
               <div>
                 <label style={{
                   display: 'block',
-                  marginBottom: '0.4rem',
-                  color: 'rgba(255, 255, 255, 0.9)',
-                  fontSize: '0.8rem',
-                  fontWeight: '500'
+                  marginBottom: '0.5rem',
+                  color: '#374151',
+                  fontSize: '0.875rem',
+                  fontWeight: '500',
+                  fontFamily: 'Inter, sans-serif'
                 }}>
                   Room Type
                 </label>
@@ -774,22 +777,31 @@ const RoomPage = () => {
                   onChange={(e) => setFilters({...filters, roomType: e.target.value})}
                   style={{
                     width: '100%',
-                    padding: '0.6rem',
-                    background: 'rgba(255, 255, 255, 0.05)',
-                    border: '1px solid rgba(255, 255, 255, 0.1)',
+                    padding: '0.75rem',
+                    background: '#ffffff',
+                    border: '1px solid #d1d5db',
                     borderRadius: '0.5rem',
-                    color: '#fff',
-                    fontSize: '0.8rem'
+                    color: '#000000',
+                    fontSize: '0.875rem',
+                    fontFamily: 'Inter, sans-serif',
+                    appearance: 'none',
+                    WebkitAppearance: 'none',
+                    MozAppearance: 'none',
+                    backgroundImage: `url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m6 8 4 4 4-4'/%3e%3c/svg%3e")`,
+                    backgroundPosition: 'right 0.5rem center',
+                    backgroundRepeat: 'no-repeat',
+                    backgroundSize: '1.5em 1.5em',
+                    paddingRight: '2.5rem'
                   }}
                 >
-                  <option value="">All Types</option>
-                  <option value="Single">Single</option>
-                  <option value="Double">Double</option>
-                  <option value="Twin">Twin</option>
-                  <option value="Suite">Suite</option>
-                  <option value="Family">Family</option>
-                  <option value="Deluxe">Deluxe</option>
-                  <option value="Presidential">Presidential</option>
+                  <option value="" style={{ background: '#ffffff', color: '#000000' }}>All Types</option>
+                  <option value="Single" style={{ background: '#ffffff', color: '#000000' }}>Single</option>
+                  <option value="Double" style={{ background: '#ffffff', color: '#000000' }}>Double</option>
+                  <option value="Twin" style={{ background: '#ffffff', color: '#000000' }}>Twin</option>
+                  <option value="Suite" style={{ background: '#ffffff', color: '#000000' }}>Suite</option>
+                  <option value="Family" style={{ background: '#ffffff', color: '#000000' }}>Family</option>
+                  <option value="Deluxe" style={{ background: '#ffffff', color: '#000000' }}>Deluxe</option>
+                  <option value="Presidential" style={{ background: '#ffffff', color: '#000000' }}>Presidential</option>
                 </select>
               </div>
 
@@ -797,18 +809,19 @@ const RoomPage = () => {
                 <button
                   onClick={() => setShowAdvancedFilters(!showAdvancedFilters)}
                   style={{
-                    padding: '0.6rem 1rem',
-                    background: 'rgba(100, 255, 218, 0.1)',
-                    border: '1px solid rgba(100, 255, 218, 0.3)',
+                    padding: '0.75rem 1rem',
+                    background: '#f3f4f6',
+                    border: '1px solid #d1d5db',
                     borderRadius: '0.5rem',
-                    color: '#64ffda',
-                    fontSize: '0.8rem',
-                    fontWeight: '600',
+                    color: '#374151',
+                    fontSize: '0.875rem',
+                    fontWeight: '500',
                     cursor: 'pointer',
-                    transition: 'all 0.3s ease',
+                    transition: 'all 0.2s ease',
                     display: 'flex',
                     alignItems: 'center',
-                    gap: '0.4rem'
+                    gap: '0.5rem',
+                    fontFamily: 'Inter, sans-serif'
                   }}
                 >
                   <FiSliders size={14} />
@@ -819,15 +832,16 @@ const RoomPage = () => {
                   <button
                     onClick={clearFilters}
                     style={{
-                      padding: '0.6rem 1rem',
-                      background: 'rgba(255, 107, 157, 0.1)',
-                      border: '1px solid rgba(255, 107, 157, 0.3)',
+                      padding: '0.75rem 1rem',
+                      background: '#fef2f2',
+                      border: '1px solid #fecaca',
                       borderRadius: '0.5rem',
-                      color: '#ff6b9d',
-                      fontSize: '0.8rem',
-                      fontWeight: '600',
+                      color: '#dc2626',
+                      fontSize: '0.875rem',
+                      fontWeight: '500',
                       cursor: 'pointer',
-                      transition: 'all 0.3s ease'
+                      transition: 'all 0.2s ease',
+                      fontFamily: 'Inter, sans-serif'
                     }}
                   >
                     Clear
@@ -841,19 +855,19 @@ const RoomPage = () => {
 
           {!user && activeTab === 'recommended' && (
             <div style={{
-              background: 'rgba(255, 193, 7, 0.1)',
-              border: '1px solid rgba(255, 193, 7, 0.3)',
+              background: '#fef3c7',
+              border: '1px solid #fbbf24',
               borderRadius: '1rem',
               padding: '1rem',
               marginBottom: '2rem',
-              color: '#ffc107',
+              color: '#92400e',
               display: 'flex',
               alignItems: 'center',
               gap: '0.5rem'
             }}>
               <FiInfo />
               <div>
-                <strong>Login Required:</strong> Please <Link to="/login" style={{ color: '#ffc107', textDecoration: 'underline' }}>login</Link> to see personalized room recommendations.
+                <strong>Login Required:</strong> Please <Link to="/login" style={{ color: '#92400e', textDecoration: 'underline' }}>login</Link> to see personalized room recommendations.
               </div>
             </div>
           )}
@@ -861,19 +875,19 @@ const RoomPage = () => {
           {/* Advanced Filters Panel */}
           {showAdvancedFilters && (
             <div style={{
-              background: 'linear-gradient(145deg, rgba(17, 34, 64, 0.6) 0%, rgba(26, 35, 50, 0.4) 100%)',
-              backdropFilter: 'blur(20px)',
-              border: '1px solid rgba(255, 255, 255, 0.1)',
+              background: '#f8fafc',
+              border: '1px solid #e2e8f0',
               borderRadius: '1.5rem',
               padding: '2rem',
               marginBottom: '3rem',
               animation: 'slideInUp 0.8s ease-out 0.6s both'
             }}>
               <h3 style={{
-                color: '#64ffda',
+                color: '#000000',
                 marginBottom: '1.5rem',
                 fontSize: '1.25rem',
-                fontWeight: '700'
+                fontWeight: '600',
+                fontFamily: 'Inter, sans-serif'
               }}>
                 Advanced Filters
               </h3>
@@ -888,7 +902,7 @@ const RoomPage = () => {
                   <label style={{
                     display: 'block',
                     marginBottom: '0.5rem',
-                    color: 'rgba(255, 255, 255, 0.9)',
+                    color: '#374151',
                     fontSize: '0.9rem',
                     fontWeight: '500'
                   }}>
@@ -900,11 +914,12 @@ const RoomPage = () => {
                     style={{
                       width: '100%',
                       padding: '0.75rem',
-                      background: 'rgba(255, 255, 255, 0.05)',
-                      border: '1px solid rgba(255, 255, 255, 0.1)',
-                      borderRadius: '0.75rem',
-                      color: '#fff',
-                      fontSize: '0.9rem'
+                      background: '#ffffff',
+                      border: '1px solid #d1d5db',
+                      borderRadius: '0.5rem',
+                      color: '#000000',
+                      fontSize: '0.875rem',
+                      fontFamily: 'Inter, sans-serif'
                     }}
                   >
                     <option value="">Any Capacity</option>
@@ -920,7 +935,7 @@ const RoomPage = () => {
                   <label style={{
                     display: 'block',
                     marginBottom: '0.5rem',
-                    color: 'rgba(255, 255, 255, 0.9)',
+                    color: '#374151',
                     fontSize: '0.9rem',
                     fontWeight: '500'
                   }}>
@@ -932,10 +947,10 @@ const RoomPage = () => {
                     style={{
                       width: '100%',
                       padding: '0.75rem',
-                      background: 'rgba(255, 255, 255, 0.05)',
-                      border: '1px solid rgba(255, 255, 255, 0.1)',
+                      background: '#ffffff',
+                      border: '1px solid #d1d5db',
                       borderRadius: '0.75rem',
-                      color: '#fff',
+                      color: '#000000',
                       fontSize: '0.9rem'
                     }}
                   >
@@ -952,7 +967,7 @@ const RoomPage = () => {
                   <label style={{
                     display: 'block',
                     marginBottom: '0.5rem',
-                    color: 'rgba(255, 255, 255, 0.9)',
+                    color: '#374151',
                     fontSize: '0.9rem',
                     fontWeight: '500'
                   }}>
@@ -964,10 +979,10 @@ const RoomPage = () => {
                     style={{
                       width: '100%',
                       padding: '0.75rem',
-                      background: 'rgba(255, 255, 255, 0.05)',
-                      border: '1px solid rgba(255, 255, 255, 0.1)',
+                      background: '#ffffff',
+                      border: '1px solid #d1d5db',
                       borderRadius: '0.75rem',
-                      color: '#fff',
+                      color: '#000000',
                       fontSize: '0.9rem'
                     }}
                   >
@@ -983,7 +998,7 @@ const RoomPage = () => {
                   <label style={{
                     display: 'block',
                     marginBottom: '0.5rem',
-                    color: 'rgba(255, 255, 255, 0.9)',
+                    color: '#374151',
                     fontSize: '0.9rem',
                     fontWeight: '500'
                   }}>
@@ -994,7 +1009,7 @@ const RoomPage = () => {
                       display: 'flex',
                       alignItems: 'center',
                       gap: '0.5rem',
-                      color: 'rgba(255, 255, 255, 0.8)',
+                      color: '#374151',
                       fontSize: '0.85rem',
                       cursor: 'pointer'
                     }}>
@@ -1002,7 +1017,7 @@ const RoomPage = () => {
                         type="checkbox"
                         checked={filters.petFriendly}
                         onChange={(e) => setFilters({...filters, petFriendly: e.target.checked})}
-                        style={{ accentColor: '#64ffda' }}
+                        style={{ accentColor: '#000000' }}
                       />
                       Pet Friendly
                     </label>
@@ -1010,15 +1025,16 @@ const RoomPage = () => {
                       display: 'flex',
                       alignItems: 'center',
                       gap: '0.5rem',
-                      color: 'rgba(255, 255, 255, 0.8)',
-                      fontSize: '0.85rem',
-                      cursor: 'pointer'
+                      color: '#374151',
+                      fontSize: '0.875rem',
+                      cursor: 'pointer',
+                      fontFamily: 'Inter, sans-serif'
                     }}>
                       <input
                         type="checkbox"
                         checked={filters.smokingAllowed}
                         onChange={(e) => setFilters({...filters, smokingAllowed: e.target.checked})}
-                        style={{ accentColor: '#64ffda' }}
+                        style={{ accentColor: '#000000' }}
                       />
                       Smoking Allowed
                     </label>
@@ -1030,7 +1046,7 @@ const RoomPage = () => {
                 <label style={{
                   display: 'block',
                   marginBottom: '1rem',
-                  color: 'rgba(255, 255, 255, 0.9)',
+                  color: '#374151',
                   fontSize: '0.9rem',
                   fontWeight: '500'
                 }}>
@@ -1048,17 +1064,17 @@ const RoomPage = () => {
                         display: 'flex',
                         alignItems: 'center',
                         gap: '0.5rem',
-                        color: 'rgba(255, 255, 255, 0.8)',
+                        color: '#374151',
                         fontSize: '0.85rem',
                         cursor: 'pointer',
                         padding: '0.5rem',
                         background: filters.amenities.includes(amenity)
-                          ? 'rgba(100, 255, 218, 0.1)'
-                          : 'rgba(255, 255, 255, 0.05)',
+                          ? '#f0f9ff'
+                          : '#ffffff',
                         borderRadius: '0.5rem',
                         border: filters.amenities.includes(amenity)
-                          ? '1px solid rgba(100, 255, 218, 0.3)'
-                          : '1px solid rgba(255, 255, 255, 0.1)',
+                          ? '1px solid #0ea5e9'
+                          : '1px solid #e2e8f0',
                         transition: 'all 0.3s ease'
                       }}
                     >
@@ -1066,7 +1082,7 @@ const RoomPage = () => {
                         type="checkbox"
                         checked={filters.amenities.includes(amenity)}
                         onChange={() => handleAmenityFilter(amenity)}
-                        style={{ accentColor: '#64ffda' }}
+                        style={{ accentColor: '#000000' }}
                       />
                       {amenity}
                     </label>
@@ -1078,16 +1094,15 @@ const RoomPage = () => {
 
           {/* Booking Validation Form */}
           <div className="booking-form" style={{
-            background: 'linear-gradient(145deg, rgba(17, 34, 64, 0.6) 0%, rgba(26, 35, 50, 0.4) 100%)',
-            backdropFilter: 'blur(20px)',
-            border: '1px solid rgba(255, 255, 255, 0.1)',
+            background: '#f8fafc',
+            border: '1px solid #e2e8f0',
             borderRadius: '1rem',
             padding: '1.5rem',
             marginBottom: '2rem',
             animation: 'slideInUp 0.8s ease-out 0.8s both'
           }}>
             <h3 style={{
-              color: '#64ffda',
+              color: '#000000',
               marginBottom: '1rem',
               fontSize: '1.1rem',
               fontWeight: '600',
@@ -1110,7 +1125,7 @@ const RoomPage = () => {
                 <label style={{
                   display: 'block',
                   marginBottom: '0.4rem',
-                  color: 'rgba(255, 255, 255, 0.9)',
+                  color: '#374151',
                   fontSize: '0.8rem',
                   fontWeight: '500'
                 }}>
@@ -1129,10 +1144,10 @@ const RoomPage = () => {
                   style={{
                     width: '100%',
                     padding: '0.6rem',
-                    background: 'rgba(255, 255, 255, 0.05)',
-                    border: '1px solid rgba(255, 255, 255, 0.1)',
+                    background: '#ffffff',
+                    border: '1px solid #d1d5db',
                     borderRadius: '0.5rem',
-                    color: '#fff',
+                    color: '#000000',
                     fontSize: '0.8rem'
                   }}
                 />
@@ -1142,7 +1157,7 @@ const RoomPage = () => {
                 <label style={{
                   display: 'block',
                   marginBottom: '0.4rem',
-                  color: 'rgba(255, 255, 255, 0.9)',
+                  color: '#374151',
                   fontSize: '0.8rem',
                   fontWeight: '500'
                 }}>
@@ -1161,10 +1176,10 @@ const RoomPage = () => {
                   style={{
                     width: '100%',
                     padding: '0.6rem',
-                    background: 'rgba(255, 255, 255, 0.05)',
-                    border: '1px solid rgba(255, 255, 255, 0.1)',
+                    background: '#ffffff',
+                    border: '1px solid #d1d5db',
                     borderRadius: '0.5rem',
-                    color: '#fff',
+                    color: '#000000',
                     fontSize: '0.8rem'
                   }}
                 />
@@ -1174,7 +1189,7 @@ const RoomPage = () => {
                 <label style={{
                   display: 'block',
                   marginBottom: '0.4rem',
-                  color: 'rgba(255, 255, 255, 0.9)',
+                  color: '#374151',
                   fontSize: '0.8rem',
                   fontWeight: '500'
                 }}>
@@ -1193,14 +1208,14 @@ const RoomPage = () => {
                   style={{
                     width: '100%',
                     padding: '0.6rem',
-                    background: 'rgba(255, 255, 255, 0.05)',
-                    border: '1px solid rgba(255, 255, 255, 0.1)',
+                    background: '#ffffff',
+                    border: '1px solid #d1d5db',
                     borderRadius: '0.5rem',
-                    color: '#fff',
+                    color: '#000000',
                     fontSize: '0.8rem'
                   }}
                 />
-                <small style={{ color: 'rgba(255, 255, 255, 0.6)', fontSize: '0.7rem' }}>Max 10 guests</small>
+                <small style={{ color: '#6b7280', fontSize: '0.7rem' }}>Max 10 guests</small>
               </div>
 
               <button
@@ -1210,19 +1225,20 @@ const RoomPage = () => {
                   }
                 }}
                 style={{
-                  padding: '0.6rem 1rem',
-                  background: 'linear-gradient(135deg, #64ffda 0%, #bb86fc 100%)',
+                  padding: '0.75rem 1rem',
+                  background: '#000000',
                   border: 'none',
                   borderRadius: '0.5rem',
-                  color: '#0a0a0a',
-                  fontSize: '0.8rem',
-                  fontWeight: '600',
+                  color: '#ffffff',
+                  fontSize: '0.875rem',
+                  fontWeight: '500',
                   cursor: 'pointer',
-                  transition: 'all 0.3s ease',
+                  transition: 'all 0.2s ease',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
-                  gap: '0.4rem'
+                  gap: '0.5rem',
+                  fontFamily: 'Inter, sans-serif'
                 }}
               >
                 <FiSearch size={14} />
@@ -1251,11 +1267,11 @@ const RoomPage = () => {
             {/* Booking Summary */}
             {bookingValidation.checkInDate && bookingValidation.checkOutDate && bookingValidation.errors.length === 0 && (
               <div style={{
-                background: 'rgba(100, 255, 218, 0.1)',
-                border: '1px solid rgba(100, 255, 218, 0.3)',
+                background: '#f0f9ff',
+                border: '1px solid #0ea5e9',
                 borderRadius: '0.75rem',
                 padding: '1rem',
-                color: '#64ffda'
+                color: '#0c4a6e'
               }}>
                 <strong>Booking Details:</strong> {bookingValidation.guests} guest(s) from{' '}
                 {new Date(bookingValidation.checkInDate).toLocaleDateString()} to{' '}
@@ -1328,26 +1344,30 @@ const RoomPage = () => {
                     key={room._id || roomItem.roomId}
                     className="room-page-card"
                     style={{
-                      background: 'linear-gradient(145deg, rgba(17, 34, 64, 0.6) 0%, rgba(26, 35, 50, 0.4) 100%)',
-                      backdropFilter: 'blur(20px)',
+                      background: '#ffffff',
                       border: isRecommended
-                        ? '1px solid rgba(100, 255, 218, 0.4)'
-                        : '1px solid rgba(255, 255, 255, 0.1)',
-                      borderRadius: '1.5rem',
+                        ? '2px solid #0ea5e9'
+                        : '1px solid #e5e7eb',
+                      borderRadius: '12px',
                       overflow: 'hidden',
-                      transition: 'all 0.4s cubic-bezier(0.4, 0, 0.2, 1)',
+                      transition: 'all 0.3s ease',
                       cursor: 'pointer',
                       animation: `slideInUp 0.8s ease-out ${1 + index * 0.1}s both`,
                       position: 'relative',
-                      boxShadow: '0 8px 25px rgba(0, 0, 0, 0.2)'
+                      boxShadow: isRecommended
+                        ? '0 4px 20px rgba(14, 165, 233, 0.15)'
+                        : '0 2px 8px rgba(0, 0, 0, 0.1)'
                     }}
                     onMouseEnter={(e) => {
-                      e.currentTarget.style.transform = 'translateY(-8px) scale(1.02)';
-                      e.currentTarget.style.boxShadow = '0 20px 40px rgba(0, 0, 0, 0.4)';
+                      e.currentTarget.style.transform = 'translateY(-4px)';
+                      e.currentTarget.style.boxShadow = '0 8px 25px rgba(0, 0, 0, 0.15)';
                     }}
                     onMouseLeave={(e) => {
-                      e.currentTarget.style.transform = 'translateY(0) scale(1)';
-                      e.currentTarget.style.boxShadow = '0 8px 25px rgba(0, 0, 0, 0.2)';
+                      e.currentTarget.style.transform = 'translateY(0)';
+                      const isRecommended = activeTab === 'recommended';
+                      e.currentTarget.style.boxShadow = isRecommended
+                        ? '0 4px 20px rgba(14, 165, 233, 0.15)'
+                        : '0 2px 8px rgba(0, 0, 0, 0.1)';
                     }}
                   >
                     {/* Image Section */}
@@ -1375,15 +1395,16 @@ const RoomPage = () => {
                         position: 'absolute',
                         top: '1rem',
                         right: '1rem',
-                        background: 'linear-gradient(135deg, #64ffda 0%, #bb86fc 100%)',
-                        color: '#0a0a0a',
+                        background: '#000000',
+                        color: '#ffffff',
                         padding: '0.5rem 1rem',
-                        borderRadius: '1rem',
-                        fontSize: '0.9rem',
-                        fontWeight: '700',
-                        boxShadow: '0 4px 15px rgba(100, 255, 218, 0.3)'
+                        borderRadius: '0.5rem',
+                        fontSize: '0.875rem',
+                        fontWeight: '600',
+                        boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',
+                        fontFamily: 'Inter, sans-serif'
                       }}>
-                        {formatPrice(room.price)}<small style={{ fontSize: '0.7rem' }}>/night</small>
+                        {formatPrice(room.price)}<small style={{ fontSize: '0.75rem' }}>/night</small>
                       </div>
 
                       {/* Recommendation Badge */}
@@ -1440,18 +1461,14 @@ const RoomPage = () => {
                           <h3 className="room-page-card-title" style={{
                             fontSize: '1.25rem',
                             fontWeight: '700',
-                            color: '#fff',
-                            marginBottom: '0.25rem',
-                            background: 'linear-gradient(135deg, #ffffff 0%, rgba(255, 255, 255, 0.9) 100%)',
-                            WebkitBackgroundClip: 'text',
-                            WebkitTextFillColor: 'transparent',
-                            backgroundClip: 'text'
+                            color: '#111827',
+                            marginBottom: '0.25rem'
                           }}>
                             Room {room.roomNumber || room.roomName}
                           </h3>
                           <span style={{
                             fontSize: '0.85rem',
-                            color: '#64ffda',
+                            color: '#6b7280',
                             fontWeight: '500'
                           }}>
                             {room.roomType}
@@ -1484,7 +1501,7 @@ const RoomPage = () => {
 
                       {/* Description */}
                       <p className="room-page-card-description" style={{
-                        color: 'rgba(255, 255, 255, 0.8)',
+                        color: '#6b7280',
                         fontSize: '0.9rem',
                         lineHeight: '1.5',
                         marginBottom: '1rem',
@@ -1510,11 +1527,11 @@ const RoomPage = () => {
                             className="room-page-amenity"
                             style={{
                               padding: '0.25rem 0.75rem',
-                              background: 'rgba(100, 255, 218, 0.1)',
-                              border: '1px solid rgba(100, 255, 218, 0.3)',
+                              background: '#f8fafc',
+                              border: '1px solid #e2e8f0',
                               borderRadius: '1rem',
                               fontSize: '0.75rem',
-                              color: '#64ffda',
+                              color: '#374151',
                               fontWeight: '500'
                             }}
                           >
@@ -1528,7 +1545,7 @@ const RoomPage = () => {
                             border: '1px solid rgba(187, 134, 252, 0.3)',
                             borderRadius: '1rem',
                             fontSize: '0.75rem',
-                            color: '#bb86fc',
+                            color: '#374151',
                             fontWeight: '500',
                             display: 'flex',
                             alignItems: 'center',
@@ -1553,18 +1570,19 @@ const RoomPage = () => {
                           style={{
                             flex: 1,
                             padding: '0.75rem 1rem',
-                            background: 'linear-gradient(135deg, #64ffda 0%, #bb86fc 100%)',
+                            background: '#000000',
                             border: 'none',
-                            borderRadius: '0.75rem',
-                            color: '#0a0a0a',
-                            fontSize: '0.9rem',
-                            fontWeight: '600',
+                            borderRadius: '0.5rem',
+                            color: '#ffffff',
+                            fontSize: '0.875rem',
+                            fontWeight: '500',
                             cursor: 'pointer',
-                            transition: 'all 0.3s ease',
+                            transition: 'all 0.2s ease',
                             display: 'flex',
                             alignItems: 'center',
                             justifyContent: 'center',
-                            gap: '0.5rem'
+                            gap: '0.5rem',
+                            fontFamily: 'Inter, sans-serif'
                           }}
                         >
                           <FiShoppingCart size={14} />
@@ -1576,18 +1594,19 @@ const RoomPage = () => {
                           onClick={() => handleViewDetails(room, roomItem)}
                           style={{
                             padding: '0.75rem 1rem',
-                            background: 'rgba(255, 255, 255, 0.1)',
-                            border: '1px solid rgba(255, 255, 255, 0.2)',
-                            borderRadius: '0.75rem',
-                            color: '#fff',
-                            fontSize: '0.9rem',
-                            fontWeight: '600',
+                            background: 'transparent',
+                            border: '1px solid #e5e7eb',
+                            borderRadius: '0.5rem',
+                            color: '#374151',
+                            fontSize: '0.875rem',
+                            fontWeight: '500',
                             cursor: 'pointer',
-                            transition: 'all 0.3s ease',
+                            transition: 'all 0.2s ease',
                             display: 'flex',
                             alignItems: 'center',
                             justifyContent: 'center',
-                            gap: '0.5rem'
+                            gap: '0.5rem',
+                            fontFamily: 'Inter, sans-serif'
                           }}
                         >
                           <FiEye size={14} />
@@ -1608,16 +1627,16 @@ const RoomPage = () => {
               padding: '4rem 2rem',
               color: 'rgba(255, 255, 255, 0.8)'
             }}>
-              <FiInfo size={64} style={{ color: 'rgba(255, 255, 255, 0.4)', marginBottom: '1.5rem' }} />
+              <FiInfo size={64} style={{ color: '#9ca3af', marginBottom: '1.5rem' }} />
               <h3 style={{
                 fontSize: '1.5rem',
                 fontWeight: '600',
-                color: '#fff',
+                color: '#111827',
                 marginBottom: '0.5rem'
               }}>
                 No rooms found
               </h3>
-              <p style={{ fontSize: '1rem', color: 'rgba(255, 255, 255, 0.6)' }}>
+              <p style={{ fontSize: '1rem', color: '#6b7280' }}>
                 Please try adjusting your filters or try again later
               </p>
             </div>
