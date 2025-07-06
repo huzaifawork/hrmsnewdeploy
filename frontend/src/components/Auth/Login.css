@@ -1,6 +1,126 @@
 /* Modern Login Page CSS */
 
+/* PROPER ICON STYLING - REACT ICONS (FEATHER ICONS) */
+.modern-login-page .feature-item .feature-icon,
+.login-form-section .feature-item .feature-icon,
+.feature-item .feature-icon {
+  display: inline-block !important;
+  width: 20px !important;
+  height: 20px !important;
+  margin-right: 12px !important;
+  color: #3b82f6 !important;
+  stroke: #3b82f6 !important;
+  fill: none !important;
+  stroke-width: 2 !important;
+  vertical-align: middle !important;
+}
+
+.modern-login-page .label-icon,
+.login-form-section .label-icon,
+.label-icon {
+  display: inline-block !important;
+  width: 16px !important;
+  height: 16px !important;
+  margin-right: 8px !important;
+  color: #374151 !important;
+  stroke: #374151 !important;
+  fill: none !important;
+  stroke-width: 2 !important;
+  vertical-align: middle !important;
+}
+
+.modern-login-page .btn-icon,
+.login-form-section .btn-icon,
+.btn-icon,
+.modern-login-page .btn-arrow,
+.login-form-section .btn-arrow,
+.btn-arrow {
+  display: inline-block !important;
+  width: 16px !important;
+  height: 16px !important;
+  margin: 0 4px !important;
+  color: #ffffff !important;
+  stroke: #ffffff !important;
+  fill: none !important;
+  stroke-width: 2 !important;
+  vertical-align: middle !important;
+}
+
+.modern-login-page .toast-icon,
+.login-form-section .toast-icon,
+.toast-icon {
+  display: inline-block !important;
+  width: 18px !important;
+  height: 18px !important;
+  margin-right: 8px !important;
+  color: #10b981 !important;
+  stroke: #10b981 !important;
+  fill: none !important;
+  stroke-width: 2 !important;
+  vertical-align: middle !important;
+}
+
+/* Password Toggle Eye Icon */
+.modern-login-page .password-toggle,
+.login-form-section .password-toggle,
+.password-toggle {
+  position: absolute !important;
+  right: 0.75rem !important;
+  top: 50% !important;
+  transform: translateY(-50%) !important;
+  background: transparent !important;
+  border: none !important;
+  cursor: pointer !important;
+  padding: 8px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  border-radius: 6px !important;
+  transition: all 0.2s ease !important;
+  z-index: 10 !important;
+}
+
+.modern-login-page .password-toggle:hover,
+.login-form-section .password-toggle:hover,
+.password-toggle:hover {
+  background: #f3f4f6 !important;
+}
+
+.modern-login-page .password-toggle svg,
+.login-form-section .password-toggle svg,
+.password-toggle svg {
+  display: inline-block !important;
+  width: 18px !important;
+  height: 18px !important;
+  color: #6b7280 !important;
+  stroke: #6b7280 !important;
+  fill: none !important;
+  stroke-width: 2 !important;
+  transition: color 0.2s ease !important;
+}
+
+.modern-login-page .password-toggle:hover svg,
+.login-form-section .password-toggle:hover svg,
+.password-toggle:hover svg {
+  color: #374151 !important;
+  stroke: #374151 !important;
+}
+
 /* ========== BLACK & WHITE THEME OVERRIDES ========== */
+/* UNIVERSAL BORDER REMOVAL - STRONGEST OVERRIDES */
+.modern-login-page *,
+.login-form-section *,
+.form-container *,
+.modern-login-page *::before,
+.modern-login-page *::after,
+.login-form-section *::before,
+.login-form-section *::after {
+  border: none !important;
+  box-shadow: none !important;
+  backdrop-filter: none !important;
+  outline: none !important;
+}
+
 /* Main container styling */
 .modern-login-page {
   background: #ffffff !important;
@@ -23,15 +143,38 @@
   padding: 2rem !important;
 }
 
-/* Right side form section */
+/* Right side form section - STRONGEST OVERRIDES */
+.modern-login-page .login-form-section,
 .login-form-section {
   background: #ffffff !important;
   background-color: #ffffff !important;
-  flex: 1 !important;
+  background-image: none !important;
+  backdrop-filter: none !important;
+  border: none !important;
+  box-shadow: none !important;
+  flex: 1.2 !important;
   display: flex !important;
   align-items: center !important;
   justify-content: center !important;
-  padding: 2rem !important;
+  padding: 3rem 2rem !important;
+  min-width: 0 !important;
+  position: relative !important;
+}
+
+/* Remove any interfering pseudo-elements */
+.modern-login-page .login-form-section::before,
+.login-form-section::before,
+.modern-login-page .login-form-section::after,
+.login-form-section::after {
+  display: none !important;
+  content: none !important;
+  background: none !important;
+  backdrop-filter: none !important;
+}
+
+.modern-login-page .form-container::before,
+.form-container::before {
+  display: none !important;
 }
 
 /* All text elements */
@@ -57,16 +200,23 @@
   -webkit-text-fill-color: #000000 !important;
 }
 
-/* Form container */
+/* Form container - STRONGEST OVERRIDES */
+.modern-login-page .form-container,
+.login-form-section .form-container,
 .form-container {
-  background: #ffffff !important;
-  background-color: #ffffff !important;
-  border: 1px solid #e5e7eb !important;
-  border-radius: 12px !important;
-  padding: 2rem !important;
-  max-width: 400px !important;
+  background: transparent !important;
+  background-color: transparent !important;
+  background-image: none !important;
+  border: none !important;
+  border-radius: 0 !important;
+  padding: 2.5rem !important;
+  max-width: 600px !important;
   width: 100% !important;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05) !important;
+  box-shadow: none !important;
+  backdrop-filter: none !important;
+  position: relative !important;
+  z-index: 10 !important;
+  outline: none !important;
 }
 
 /* Branding content */
@@ -95,30 +245,37 @@
   margin-bottom: 2rem !important;
 }
 
-/* Form elements */
+/* Form elements - STRONGEST OVERRIDES */
+.modern-login-page .form-header,
+.form-container .form-header,
 .form-header {
   text-align: center !important;
-  margin-bottom: 1.5rem !important;
+  margin-bottom: 2rem !important;
 }
 
+.modern-login-page .form-title,
+.form-container .form-title,
 .form-title {
-  font-size: 1.5rem !important;
+  font-size: 1.75rem !important;
   font-weight: 600 !important;
   color: #000000 !important;
-  margin-bottom: 0.5rem !important;
+  margin-bottom: 0.75rem !important;
 }
 
+.modern-login-page .form-subtitle,
+.form-container .form-subtitle,
 .form-subtitle {
-  font-size: 0.875rem !important;
+  font-size: 0.9rem !important;
   color: #6b7280 !important;
+  line-height: 1.5 !important;
 }
 
 /* Toggle buttons */
 .auth-toggle {
   display: flex !important;
-  background: #f3f4f6 !important;
-  border-radius: 8px !important;
-  padding: 4px !important;
+  background: transparent !important;
+  border-radius: 0 !important;
+  padding: 0 !important;
   margin-bottom: 1.5rem !important;
 }
 
@@ -140,62 +297,110 @@
   color: #ffffff !important;
 }
 
-/* Form inputs */
+/* Form inputs - STRONGEST OVERRIDES */
+.modern-login-page .form-group,
+.form-container .form-group,
 .form-group {
-  margin-bottom: 1rem !important;
+  margin-bottom: 1.5rem !important;
 }
 
+.modern-login-page .form-label,
+.form-container .form-label,
 .form-label {
-  display: block !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 0.5rem !important;
   font-size: 0.875rem !important;
   font-weight: 500 !important;
   color: #000000 !important;
-  margin-bottom: 0.5rem !important;
+  margin-bottom: 0.75rem !important;
 }
 
+.modern-login-page .form-input,
+.form-container .form-input,
+.modern-login-page input[type="text"],
+.modern-login-page input[type="email"],
+.modern-login-page input[type="password"],
+.form-container input[type="text"],
+.form-container input[type="email"],
+.form-container input[type="password"],
 .form-input,
 input[type="text"],
 input[type="email"],
 input[type="password"] {
   width: 100% !important;
-  padding: 0.75rem !important;
+  padding: 1.1rem 1.25rem !important;
   background: #ffffff !important;
   border: 1px solid #d1d5db !important;
   border-radius: 8px !important;
   font-size: 1rem !important;
   color: #000000 !important;
-  transition: border-color 0.2s ease !important;
+  transition: all 0.2s ease !important;
+  box-sizing: border-box !important;
+  min-height: 54px !important;
 }
 
+.modern-login-page .form-input:focus,
+.form-container .form-input:focus,
+.modern-login-page input:focus,
+.form-container input:focus,
 .form-input:focus,
 input:focus {
   outline: none !important;
-  border-color: #000000 !important;
-  box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.1) !important;
+  border-color: #374151 !important;
+  box-shadow: 0 0 0 3px rgba(55, 65, 81, 0.1) !important;
 }
 
-/* Submit button */
+/* Password input with eye icon - add right padding to prevent overlap */
+.password-wrapper .form-input,
+.password-wrapper input[type="password"],
+.password-wrapper input[type="text"] {
+  padding-right: 3.5rem !important;
+}
+
+/* Password wrapper positioning */
+.password-wrapper {
+  position: relative !important;
+  display: block !important;
+  width: 100% !important;
+}
+
+/* Submit button - STRONGEST OVERRIDES */
+.modern-login-page .submit-btn,
+.form-container .submit-btn,
 .submit-btn {
   width: 100% !important;
-  padding: 0.75rem 1rem !important;
-  background: #000000 !important;
+  padding: 1rem 1.25rem !important;
+  background: linear-gradient(135deg, #3b82f6 0%, #60a5fa 50%, #93c5fd 100%) !important;
   color: #ffffff !important;
   border: none !important;
   border-radius: 8px !important;
   font-size: 1rem !important;
   font-weight: 600 !important;
   cursor: pointer !important;
-  transition: background-color 0.2s ease !important;
-  margin-bottom: 1rem !important;
+  transition: all 0.2s ease !important;
+  margin: 1.5rem 0 1rem 0 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 0.4rem !important;
+  min-height: 54px !important;
+  white-space: nowrap !important;
 }
 
+.modern-login-page .submit-btn:hover,
+.form-container .submit-btn:hover,
 .submit-btn:hover {
   background: #1f2937 !important;
+  transform: translateY(-1px) !important;
 }
 
+.modern-login-page .submit-btn:disabled,
+.form-container .submit-btn:disabled,
 .submit-btn:disabled {
   background: #9ca3af !important;
   cursor: not-allowed !important;
+  transform: none !important;
 }
 
 /* Remove all background effects */
@@ -211,7 +416,7 @@ input:focus {
 /* ========== ADDITIONAL COLOR OVERRIDES ========== */
 /* Target all possible blue/teal colored elements */
 
-/* Icons - Force all icons to be black */
+/* Icons - Better visibility with subtle styling */
 .modern-login-page svg,
 .modern-login-page i,
 .modern-login-page .icon,
@@ -223,13 +428,20 @@ input:focus {
 .form-container i,
 .branding-content svg,
 .branding-content i,
-.submit-btn svg,
-.submit-btn i,
 .toggle-btn svg,
 .toggle-btn i {
-  color: #000000 !important;
-  fill: #000000 !important;
-  stroke: #000000 !important;
+  color: #4b5563 !important;
+  fill: #4b5563 !important;
+  stroke: #4b5563 !important;
+  opacity: 0.8 !important;
+}
+
+/* Label icons - more visible */
+.label-icon {
+  color: #374151 !important;
+  fill: #374151 !important;
+  stroke: #374151 !important;
+  opacity: 1 !important;
 }
 
 /* Submit button icons should be white */
@@ -240,6 +452,36 @@ input:focus {
   color: #ffffff !important;
   fill: #ffffff !important;
   stroke: #ffffff !important;
+}
+
+/* Divider and Google login spacing */
+.modern-login-page .divider,
+.form-container .divider,
+.divider {
+  margin: 2rem 0 1.5rem 0 !important;
+  text-align: center !important;
+  color: #374151 !important;
+  font-size: 0.875rem !important;
+  font-weight: 500 !important;
+}
+
+.divider span {
+  background: #ffffff !important;
+  padding: 0 1rem !important;
+  color: #374151 !important;
+}
+
+.modern-login-page .google-login-wrapper,
+.form-container .google-login-wrapper,
+.google-login-wrapper {
+  margin-bottom: 1.5rem !important;
+}
+
+.modern-login-page .auth-toggle,
+.form-container .auth-toggle,
+.auth-toggle {
+  text-align: center !important;
+  margin-top: 1rem !important;
 }
 
 /* Text elements that might have blue/teal colors */
@@ -294,6 +536,20 @@ input:focus {
   background: #ffffff !important;
 }
 
+/* Remove outline from Google icon specifically */
+.google-login-wrapper svg,
+.google-login-wrapper img,
+.google-login-wrapper .google-icon,
+.google-login-wrapper [role="img"],
+.google-login-wrapper > div > div > div > svg,
+.google-login-wrapper > div > div > div > img {
+  border: none !important;
+  outline: none !important;
+  box-shadow: none !important;
+  stroke: none !important;
+  stroke-width: 0 !important;
+}
+
 /* Auth switch (Create Account / Sign In links) */
 .auth-switch,
 .auth-switch span,
@@ -312,11 +568,8 @@ input:focus {
   -webkit-text-fill-color: #000000 !important;
 }
 
-/* Loading states */
-.loading-dots,
-.loading-dots span,
+/* Loading states - Remove conflicting overrides */
 .loading-spinner {
-  background: #ffffff !important;
   border-color: #ffffff !important;
 }
 
@@ -511,7 +764,7 @@ h1.brand-title {
   flex: 1;
   background: rgba(255, 255, 255, 0.02);
   backdrop-filter: blur(20px);
-  border-right: 1px solid rgba(100, 255, 218, 0.1);
+  border-right: none !important;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -805,7 +1058,7 @@ h1.brand-title {
   max-width: 480px;
   background: rgba(255, 255, 255, 0.05);
   backdrop-filter: blur(30px);
-  border: 2px solid rgba(100, 255, 218, 0.15);
+  border: none !important;
   border-radius: 28px;
   padding: 3rem;
   box-shadow:
@@ -919,7 +1172,7 @@ h1.brand-title {
   padding: 1.2rem 1.5rem;
   background: rgba(255, 255, 255, 0.08);
   backdrop-filter: blur(10px);
-  border: 2px solid rgba(100, 255, 218, 0.2);
+  border: none !important;
   border-radius: 25px;
   color: #ffffff;
   font-size: 1rem;
@@ -1118,7 +1371,7 @@ h1.brand-title {
   transform: translateY(-50%);
   background: rgba(100, 255, 218, 0.1);
   backdrop-filter: blur(10px);
-  border: 1px solid rgba(100, 255, 218, 0.2);
+  border: none !important;
   color: #64ffda;
   cursor: pointer;
   padding: 0.6rem;
@@ -1236,7 +1489,7 @@ button.submit-btn:hover,
 .loading-dots span {
   width: 6px;
   height: 6px;
-  background: #0a192f;
+  background: #ffffff;
   border-radius: 50%;
   animation: loadingDots 1.4s infinite ease-in-out both;
 }
@@ -1374,22 +1627,18 @@ button.submit-btn:hover,
 
 /* Custom Google Button Styling with Enhanced Animation */
 .google-login-wrapper > div {
-  border-radius: 16px !important;
+  border-radius: 8px !important;
   overflow: hidden !important;
-  box-shadow:
-    0 8px 25px rgba(0, 0, 0, 0.15),
-    0 4px 12px rgba(100, 255, 218, 0.1) !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1) !important;
+  border: none !important;
   transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1) !important;
   position: relative !important;
   z-index: 1 !important;
 }
 
 .google-login-wrapper > div:hover {
-  transform: translateY(-3px) scale(1.02) !important;
-  box-shadow:
-    0 15px 40px rgba(0, 0, 0, 0.25),
-    0 8px 20px rgba(100, 255, 218, 0.2),
-    0 4px 12px rgba(59, 130, 246, 0.15) !important;
+  transform: translateY(-1px) !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
 }
 
 /* Pulse Animation on Focus */
@@ -1425,17 +1674,16 @@ button.submit-btn:hover,
 }
 
 .toggle-btn {
-  background: none;
-  border: none;
-  color: #64ffda;
-  font-weight: 600;
-  cursor: pointer;
-  text-decoration: none;
-  transition: all 0.3s ease;
-  padding: 0.5rem 1rem;
-  border-radius: 25px;
-  position: relative;
-  border: 1px solid rgba(100, 255, 218, 0.2);
+  background: transparent !important;
+  border: none !important;
+  color: #3b82f6 !important;
+  font-weight: 600 !important;
+  cursor: pointer !important;
+  text-decoration: none !important;
+  transition: all 0.3s ease !important;
+  padding: 0.5rem 1rem !important;
+  border-radius: 6px !important;
+  position: relative !important;
 }
 
 .toggle-btn::after {
@@ -1451,10 +1699,10 @@ button.submit-btn:hover,
 }
 
 .toggle-btn:hover:not(:disabled) {
-  color: #ffffff;
-  background: rgba(100, 255, 218, 0.1);
-  border-color: rgba(100, 255, 218, 0.4);
-  transform: scale(1.05);
+  color: #1d4ed8 !important;
+  background: transparent !important;
+  border: none !important;
+  transform: none !important;
 }
 
 .toggle-btn:hover:not(:disabled)::after {
@@ -1522,16 +1770,49 @@ button.submit-btn:hover,
   }
 }
 
-/* Tablet Responsive Design */
-@media (max-width: 768px) {
+/* ========== COMPREHENSIVE RESPONSIVE DESIGN ========== */
+
+/* Tablets and Small Laptops (768px - 1024px) */
+@media (max-width: 1024px) and (min-width: 769px) {
   .modern-login-page {
-    flex-direction: column;
+    padding: 1rem !important;
   }
 
   .login-branding {
-    flex: none;
-    min-height: 35vh;
-    padding: 2rem 1rem;
+    flex: 0.8 !important;
+    padding: 1.5rem !important;
+  }
+
+  .login-form-section {
+    flex: 1.2 !important;
+    padding: 1.5rem !important;
+  }
+
+  .form-container {
+    max-width: 500px !important;
+    padding: 2rem !important;
+  }
+}
+
+/* Mobile Devices (up to 768px) - HIDE LEFT SIDE, SHOW ONLY FORM */
+@media (max-width: 768px) {
+  .modern-login-page {
+    flex-direction: column !important;
+    background: #ffffff !important;
+    min-height: 100vh !important;
+    padding: 0 !important;
+  }
+
+  /* COMPLETELY HIDE the left branding section on mobile */
+  .login-branding {
+    display: none !important;
+    visibility: hidden !important;
+    height: 0 !important;
+    min-height: 0 !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    overflow: hidden !important;
+    flex: none !important;
   }
 
   .branding-content {
@@ -1579,22 +1860,43 @@ button.submit-btn:hover,
     font-size: 0.95rem;
   }
 
+  /* Form section takes full screen on mobile */
   .login-form-section {
-    flex: none;
-    min-height: 65vh;
-    padding: 2rem 1rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    flex: 1 !important;
+    width: 100% !important;
+    min-height: 100vh !important;
+    padding: 3rem 1rem 2rem 1rem !important;
+    display: flex !important;
+    align-items: flex-start !important;
+    justify-content: center !important;
+    background: #ffffff !important;
+    padding-top: 4rem !important;
+  }
+
+  /* Hide form header text on mobile */
+  .form-header {
+    display: none !important;
+    visibility: hidden !important;
+  }
+
+  .form-title,
+  .form-subtitle {
+    display: none !important;
+    visibility: hidden !important;
+    height: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
   }
 
   .form-container {
-    padding: 2rem;
-    max-width: 500px;
-    width: 100%;
-    background: rgba(255, 255, 255, 0.02);
-    border-radius: 16px;
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 1.5rem !important;
+    max-width: 100% !important;
+    width: 100% !important;
+    background: transparent !important;
+    border-radius: 0 !important;
+    border: none !important;
+    box-shadow: none !important;
+    margin: 0 !important;
   }
 
   .form-header {
@@ -1744,24 +2046,29 @@ h1.brand-title {
 /* Enhanced Mobile Responsive Styles */
 @media (max-width: 768px) {
   .modern-login-page {
-    flex-direction: column;
-    height: 100vh;
-    background: linear-gradient(135deg, #0a192f 0%, #112240 50%, #1a365d 100%);
-    padding-top: 0;
-    overflow: hidden;
+    flex-direction: column !important;
+    height: 100vh !important;
+    background: #ffffff !important;
+    padding-top: 0 !important;
+    overflow: auto !important;
   }
 
   .login-branding {
-    height: 25vh;
-    padding: 0.5rem;
-    flex: none;
-    background: rgba(255, 255, 255, 0.03);
-    backdrop-filter: blur(15px);
-    border-bottom: 1px solid rgba(100, 255, 218, 0.1);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    overflow: hidden;
+    display: none !important;
+    visibility: hidden !important;
+    height: 0 !important;
+    overflow: hidden !important;
+  }
+
+  /* Hide form header text on mobile */
+  .form-header,
+  .form-title,
+  .form-subtitle {
+    display: none !important;
+    visibility: hidden !important;
+    height: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
   }
 
   .branding-content {
@@ -2006,11 +2313,109 @@ h1.brand-title {
   }
 }
 
-/* Ultra Mobile Responsive - Small Phones */
+/* Small Mobile Devices (up to 480px) */
 @media (max-width: 480px) {
   .modern-login-page {
-    background: linear-gradient(135deg, #0a192f 0%, #112240 100%);
-    padding-top: 0;
+    background: #ffffff !important;
+    padding: 0 !important;
+    min-height: 100vh !important;
+  }
+
+  .login-branding {
+    display: none !important;
+  }
+
+  .login-form-section {
+    padding: 1rem 0.75rem !important;
+    min-height: 100vh !important;
+  }
+
+  .form-container {
+    padding: 1rem !important;
+    max-width: 100% !important;
+  }
+
+  /* Hide form header text on small mobile */
+  .form-header,
+  .form-title,
+  .form-subtitle {
+    display: none !important;
+    visibility: hidden !important;
+    height: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  .form-group {
+    margin-bottom: 1rem !important;
+  }
+
+  .form-input {
+    padding: 0.75rem !important;
+    font-size: 0.85rem !important;
+    min-height: 48px !important;
+  }
+
+  /* Password field mobile fix */
+  .password-wrapper .form-input {
+    padding-right: 3rem !important;
+  }
+
+  .password-toggle {
+    right: 0.5rem !important;
+    padding: 6px !important;
+  }
+
+  /* Submit button mobile */
+  .submit-btn {
+    font-size: 0.8rem !important;
+    padding: 0.875rem 1rem !important;
+    min-height: 48px !important;
+  }
+
+  /* Form labels mobile */
+  .form-label {
+    font-size: 0.8rem !important;
+    margin-bottom: 0.5rem !important;
+  }
+
+  /* Google button mobile */
+  .google-login-wrapper > div {
+    max-width: 100% !important;
+    min-width: 200px !important;
+  }
+
+  .google-login-wrapper > div > div {
+    font-size: 0.8rem !important;
+  }
+
+  /* Divider mobile */
+  .divider {
+    font-size: 0.8rem !important;
+    margin: 1.25rem 0 !important;
+  }
+
+  /* Toggle button mobile */
+  .toggle-btn {
+    font-size: 0.8rem !important;
+  }
+
+  .submit-btn {
+    padding: 0.75rem 1rem !important;
+    font-size: 0.9rem !important;
+  }
+
+  .google-login-wrapper {
+    margin: 1rem 0 !important;
+  }
+
+  .auth-toggle {
+    margin-top: 1rem !important;
+  }
+
+  .toggle-btn {
+    font-size: 0.875rem !important;
+    padding: 0.5rem 0.75rem !important;
   }
 
   .login-branding {
@@ -2236,7 +2641,7 @@ h1.brand-title {
   .loading-dots span {
     width: 5px;
     height: 5px;
-    background: #0a192f;
+    background: #ffffff;
     border-radius: 50%;
     animation: loadingDots 1.4s infinite ease-in-out both;
   }
@@ -2250,5 +2655,84 @@ h1.brand-title {
     border-radius: 50%;
     animation: spin 1s linear infinite;
     margin-right: 0.5rem;
+  }
+}
+
+/* Extra Small Mobile Devices (up to 360px) */
+@media (max-width: 360px) {
+  .login-form-section {
+    padding: 0.75rem 0.5rem !important;
+    min-height: 100vh !important;
+  }
+
+  .form-container {
+    padding: 0.75rem !important;
+    max-width: 100% !important;
+  }
+
+  /* Hide form header text on extra small mobile */
+  .form-header,
+  .form-title,
+  .form-subtitle {
+    display: none !important;
+    visibility: hidden !important;
+    height: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  .form-input {
+    padding: 0.625rem !important;
+    font-size: 0.8rem !important;
+    min-height: 44px !important;
+  }
+
+  /* Password field extra small mobile fix */
+  .password-wrapper .form-input {
+    padding-right: 2.75rem !important;
+  }
+
+  /* Submit button extra small mobile */
+  .submit-btn {
+    font-size: 0.75rem !important;
+    padding: 0.75rem 0.875rem !important;
+    min-height: 44px !important;
+  }
+
+  /* Google button extra small mobile */
+  .google-login-wrapper > div > div {
+    font-size: 0.75rem !important;
+  }
+
+  .submit-btn {
+    padding: 0.625rem 0.875rem !important;
+    font-size: 0.875rem !important;
+  }
+
+  .password-toggle {
+    padding: 0.5rem !important;
+  }
+
+  .password-toggle svg {
+    width: 16px !important;
+    height: 16px !important;
+  }
+
+  .google-login-wrapper {
+    margin: 0.75rem 0 !important;
+  }
+
+  .divider {
+    margin: 0.75rem 0 !important;
+    font-size: 0.75rem !important;
+  }
+
+  .auth-toggle p {
+    font-size: 0.75rem !important;
+  }
+
+  .toggle-btn {
+    font-size: 0.8rem !important;
+    padding: 0.4rem 0.6rem !important;
   }
 }

@@ -910,24 +910,41 @@ body {
     border: 2px solid #ffffff;
   }
 
-  /* Modern Hamburger Menu */
+  /* Modern Hamburger Menu - Remove Blue Colors */
   .navbar-custom .navbar-toggler,
   .navbar-custom .mobile-menu {
     flex: 0 0 auto !important;
     align-self: center;
     position: relative;
-    background: rgba(0, 212, 170, 0.08) !important;
-    border: 1px solid rgba(0, 212, 170, 0.2) !important;
-    border-radius: 12px !important;
+    background: #f9fafb !important;
+    border: 1px solid #d1d5db !important;
+    border-radius: 8px !important;
     padding: 0.75rem !important;
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   }
 
   .mobile-menu:hover {
-    background: rgba(0, 212, 170, 0.15) !important;
-    border-color: rgba(0, 212, 170, 0.4) !important;
+    background: #f3f4f6 !important;
+    border-color: #9ca3af !important;
     transform: translateY(-1px);
-    box-shadow: 0 4px 12px rgba(0, 212, 170, 0.2);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1) !important;
+  }
+
+  /* Hamburger icon colors */
+  .mobile-menu .hamburger span {
+    background: #374151 !important;
+  }
+
+  .mobile-menu .hamburger svg {
+    color: #374151 !important;
+  }
+
+  .mobile-menu:hover .hamburger span {
+    background: #000000 !important;
+  }
+
+  .mobile-menu:hover .hamburger svg {
+    color: #000000 !important;
   }
 
   /* Override Bootstrap's default navbar behavior */
@@ -987,15 +1004,209 @@ body {
     background: rgba(255, 255, 255, 0.4);
   }
 
-  /* Hide scrollbar completely on mobile for cleaner look */
+  /* Mobile Menu Color Overrides - Remove Blue Colors */
   @media (max-width: 768px) {
     .navbar-collapse {
-      scrollbar-width: none;
-      -ms-overflow-style: none;
+      background: #ffffff !important;
+      background-image: none !important;
+      border: 1px solid #e5e7eb !important;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
+      scrollbar-width: thin !important;
+      scrollbar-color: #d1d5db #f9fafb !important;
     }
 
+    /* Show scrollbar on mobile for better UX */
     .navbar-collapse::-webkit-scrollbar {
-      display: none;
+      display: block !important;
+      width: 6px !important;
+    }
+
+    .navbar-collapse::-webkit-scrollbar-track {
+      background: #f9fafb !important;
+      border-radius: 3px !important;
+    }
+
+    .navbar-collapse::-webkit-scrollbar-thumb {
+      background: #d1d5db !important;
+      border-radius: 3px !important;
+      transition: all 0.3s ease !important;
+    }
+
+    .navbar-collapse::-webkit-scrollbar-thumb:hover {
+      background: #9ca3af !important;
+    }
+
+    /* Mobile Menu Text Colors - Black Text */
+    .navbar-collapse .nav-link {
+      color: #000000 !important;
+      background: transparent !important;
+      border: none !important;
+      padding: 1rem 1.5rem !important;
+      font-weight: 500 !important;
+      transition: all 0.2s ease !important;
+    }
+
+    .navbar-collapse .nav-link:hover {
+      color: #374151 !important;
+      background: #f9fafb !important;
+    }
+
+    /* Remove any blue backgrounds or borders */
+    .navbar-collapse .navbar-nav,
+    .navbar-collapse .auth-section {
+      background: transparent !important;
+    }
+
+    /* User dropdown in mobile menu */
+    .navbar-collapse .user-greeting {
+      color: #000000 !important;
+      background: transparent !important;
+      border: none !important;
+    }
+
+    .navbar-collapse .user-greeting:hover {
+      color: #374151 !important;
+      background: #f9fafb !important;
+    }
+
+    /* Profile text in mobile header (outside dropdown) */
+    .mobile-header-actions .user-greeting,
+    .mobile-header-actions .user-greeting span,
+    .mobile-header-actions .user-greeting svg {
+      color: #000000 !important;
+    }
+
+    /* Mobile dropdown menu styling */
+    .navbar-collapse .dropdown-menu,
+    .navbar-collapse .dropdown-menu-custom {
+      background: #ffffff !important;
+      border: 1px solid #e5e7eb !important;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
+    }
+
+    .navbar-collapse .dropdown-item {
+      color: #000000 !important;
+      background: transparent !important;
+      padding: 0.75rem 1rem !important;
+    }
+
+    .navbar-collapse .dropdown-item:hover {
+      color: #374151 !important;
+      background: #f9fafb !important;
+    }
+
+    /* Mobile dropdown icons */
+    .navbar-collapse .dropdown-item svg {
+      color: #000000 !important;
+    }
+
+    .navbar-collapse .dropdown-item:hover svg {
+      color: #374151 !important;
+    }
+
+    /* Additional mobile profile overrides */
+    .auth-section .user-greeting,
+    .auth-section .user-greeting span,
+    .auth-section .user-greeting svg {
+      color: #000000 !important;
+    }
+
+    /* Mobile dropdown toggle button */
+    .navbar-collapse .dropdown-toggle {
+      color: #000000 !important;
+      background: transparent !important;
+      border: none !important;
+    }
+
+    .navbar-collapse .dropdown-toggle:hover {
+      color: #374151 !important;
+      background: #f9fafb !important;
+    }
+
+    .navbar-collapse .dropdown-toggle::after {
+      border-top-color: #000000 !important;
+    }
+
+    /* Remove any blue backgrounds from Bootstrap dropdown */
+    .navbar-collapse .dropdown-menu .dropdown-item:focus,
+    .navbar-collapse .dropdown-menu .dropdown-item:active {
+      background: #f9fafb !important;
+      color: #374151 !important;
+    }
+
+    /* Fix user name text visibility in mobile menu */
+    .navbar-collapse .user-greeting span,
+    .navbar-collapse .dropdown-toggle span,
+    .navbar-collapse .text-light {
+      color: #000000 !important;
+    }
+
+    /* Override any light text classes in mobile menu */
+    .navbar-collapse .text-light,
+    .navbar-collapse .text-white,
+    .navbar-collapse .text-muted {
+      color: #000000 !important;
+    }
+
+    /* Specific override for user name after feedback */
+    .navbar-collapse .nav-link span,
+    .navbar-collapse .dropdown-item span,
+    .navbar-collapse .user-greeting .text-light {
+      color: #000000 !important;
+      opacity: 1 !important;
+    }
+
+    /* STRONGEST overrides for user name visibility */
+    .navbar-collapse * {
+      color: #000000 !important;
+    }
+
+    .navbar-collapse .dropdown-toggle *,
+    .navbar-collapse .user-greeting *,
+    .navbar-collapse .auth-section *,
+    .navbar-collapse .dropdown-menu * {
+      color: #000000 !important;
+      opacity: 1 !important;
+    }
+
+    /* Override any Bootstrap or custom text color classes */
+    .navbar-collapse [class*="text-"],
+    .navbar-collapse .text-light,
+    .navbar-collapse .text-white,
+    .navbar-collapse .text-muted,
+    .navbar-collapse .text-secondary {
+      color: #000000 !important;
+    }
+
+    /* Force all text elements in mobile menu */
+    .navbar-collapse span,
+    .navbar-collapse a,
+    .navbar-collapse button,
+    .navbar-collapse .nav-link,
+    .navbar-collapse .dropdown-item {
+      color: #000000 !important;
+    }
+
+    /* SPECIFIC override for the exact user name element */
+    .navbar-collapse .user-greeting span.text-light,
+    .navbar-collapse .dropdown-toggle span.text-light,
+    .navbar-collapse span.text-light {
+      color: #000000 !important;
+      opacity: 1 !important;
+      text-shadow: none !important;
+    }
+
+    /* Override the exact structure from Header.jsx */
+    .navbar-collapse .user-greeting.d-flex.align-items-center.gap-2 span.text-light {
+      color: #000000 !important;
+    }
+
+    /* Nuclear option - override everything with text-light class */
+    .navbar-collapse .text-light,
+    .navbar-collapse .text-light:hover,
+    .navbar-collapse .text-light:focus,
+    .navbar-collapse .text-light:active {
+      color: #000000 !important;
     }
   }
 

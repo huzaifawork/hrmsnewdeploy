@@ -106,38 +106,104 @@ const AdminViewTables = () => {
         </button>
       </div>
 
-      <div className="simple-table-container">
-        <table className="simple-table">
+      {/* Table scroll hint for mobile */}
+      <div
+        style={{
+          marginBottom: "10px",
+          fontSize: "14px",
+          color: "#6b7280",
+          textAlign: "center",
+        }}
+      >
+        {window.innerWidth <= 768 && (
+          <span>← Swipe left/right to see all columns →</span>
+        )}
+      </div>
+
+      <div
+        className="simple-table-container"
+        style={{ overflowX: "auto", width: "100%" }}
+      >
+        <table
+          className="simple-table"
+          style={{ minWidth: "800px", width: "100%" }}
+        >
           <thead>
             <tr>
-              <th>Table Number</th>
-              <th>Capacity</th>
-              <th>Location</th>
-              <th>Type</th>
-              <th>Status</th>
-              <th>Description</th>
-              <th>Actions</th>
+              <th style={{ minWidth: "100px" }}>Image</th>
+              <th style={{ minWidth: "120px" }}>Table Name</th>
+              <th style={{ minWidth: "100px" }}>Capacity</th>
+              <th style={{ minWidth: "120px" }}>Location</th>
+              <th style={{ minWidth: "100px" }}>Type</th>
+              <th style={{ minWidth: "100px" }}>Status</th>
+              <th style={{ minWidth: "200px" }}>Description</th>
+              <th style={{ minWidth: "120px" }}>Actions</th>
             </tr>
           </thead>
           <tbody>
             {filteredTables.map((table) => (
               <tr key={table._id}>
-                <td>{table.tableNumber}</td>
-                <td>{table.capacity} people</td>
-                <td>{table.location}</td>
-                <td>{table.tableType}</td>
-                <td>
+                <td style={{ minWidth: "100px" }}>
+                  {table.image ? (
+                    <img
+                      src={
+                        table.image.startsWith("http")
+                          ? table.image
+                          : `${
+                              process.env.REACT_APP_API_URL ||
+                              "https://hrms-bace.vercel.app"
+                            }${table.image}`
+                      }
+                      alt={table.tableName}
+                      className="simple-room-image"
+                      style={{
+                        width: "60px",
+                        height: "40px",
+                        objectFit: "cover",
+                        borderRadius: "4px",
+                      }}
+                      onError={(e) => {
+                        e.target.src =
+                          "https://via.placeholder.com/60x40/e5e7eb/9ca3af?text=No+Image";
+                        e.target.onerror = null;
+                      }}
+                    />
+                  ) : (
+                    <div
+                      className="simple-no-image"
+                      style={{ fontSize: "12px", color: "#6b7280" }}
+                    >
+                      No Image
+                    </div>
+                  )}
+                </td>
+                <td style={{ minWidth: "120px" }}>{table.tableName}</td>
+                <td style={{ minWidth: "100px" }}>{table.capacity} people</td>
+                <td style={{ minWidth: "120px" }}>{table.location}</td>
+                <td style={{ minWidth: "100px" }}>{table.tableType}</td>
+                <td style={{ minWidth: "100px" }}>
                   <span
                     className={`simple-status simple-status-${table.status?.toLowerCase()}`}
                   >
                     {table.status}
                   </span>
                 </td>
-                <td className="simple-description">{table.description}</td>
-                <td>
+                <td
+                  style={{
+                    minWidth: "200px",
+                    maxWidth: "200px",
+                    overflow: "hidden",
+                    textOverflow: "ellipsis",
+                    whiteSpace: "nowrap",
+                  }}
+                >
+                  {table.description}
+                </td>
+                <td style={{ minWidth: "120px" }}>
                   <button
                     onClick={() => handleDelete(table._id)}
                     className="simple-btn simple-btn-small simple-btn-danger"
+                    style={{ whiteSpace: "nowrap" }}
                   >
                     Delete
                   </button>

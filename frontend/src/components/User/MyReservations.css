@@ -192,7 +192,7 @@
   min-height: 100vh;
   background: #ffffff;
   color: #000000;
-  margin-top: 80px;
+  margin-top: 120px;
 }
 
 /* Hero Section - Ultra Compact */
@@ -755,7 +755,7 @@
 /* Responsive Design */
 @media (max-width: 768px) {
   .modern-reservations-page {
-    margin-top: 60px;
+    margin-top: 100px;
   }
 
   .reservations-hero {
@@ -959,7 +959,7 @@
 
 @media (max-width: 480px) {
   .modern-reservations-page {
-    margin-top: 50px;
+    margin-top: 90px;
   }
 
   .reservations-hero {
@@ -1280,4 +1280,169 @@ html body .modern-reservations-page .download-btn span {
 .modern-reservations-page .action-btn:hover * {
   color: #ffffff !important;
   -webkit-text-fill-color: #ffffff !important;
+}
+
+/* ========== STATUS BADGES POSITIONING AND STYLING ========== */
+
+/* Position status section on the left and style badges */
+.status-section {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: flex-start !important;
+  gap: 0.5rem !important;
+  margin-bottom: 1rem !important;
+}
+
+/* Make "Confirmed" text white on cards */
+.reservation-status.confirmed,
+.reservation-status.confirmed span,
+.status-section .reservation-status.confirmed,
+.status-section .reservation-status.confirmed span {
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+  background: #10b981 !important;
+  padding: 0.25rem 0.75rem !important;
+  border-radius: 1rem !important;
+  font-size: 0.875rem !important;
+  font-weight: 500 !important;
+}
+
+/* Style for completed/past reservations */
+.reservation-status.past,
+.reservation-status.past span {
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+  background: #6b7280 !important;
+  padding: 0.25rem 0.75rem !important;
+  border-radius: 1rem !important;
+  font-size: 0.875rem !important;
+  font-weight: 500 !important;
+}
+
+/* Payment status styling */
+.payment-status {
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+  padding: 0.25rem 0.75rem !important;
+  border-radius: 1rem !important;
+  font-size: 0.75rem !important;
+  font-weight: 500 !important;
+}
+
+.payment-status.status-succeeded {
+  background: #059669 !important;
+}
+
+.payment-status.status-pending {
+  background: #d97706 !important;
+}
+
+.payment-status.status-failed {
+  background: #dc2626 !important;
+}
+
+/* Reservation header layout fix */
+.reservation-header {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 1rem !important;
+  margin-bottom: 1rem !important;
+}
+
+.table-info {
+  display: flex !important;
+  justify-content: space-between !important;
+  align-items: center !important;
+}
+
+/* ========== REFRESH BUTTON ICON ONLY ========== */
+
+/* Style refresh button as icon-only */
+.refresh-btn {
+  padding: 0.5rem !important;
+  min-width: 40px !important;
+  width: 40px !important;
+  height: 40px !important;
+  border-radius: 50% !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  background: #000000 !important;
+  color: #ffffff !important;
+  border: 1px solid #000000 !important;
+}
+
+.refresh-btn:hover {
+  background: #374151 !important;
+  transform: scale(1.05) !important;
+}
+
+/* ========== OVERFLOW HANDLING ========== */
+
+/* Add overflow handling to main container */
+.modern-reservations-page {
+  overflow-x: hidden !important;
+  overflow-y: auto !important;
+}
+
+/* Add overflow handling to reservation cards */
+.modern-reservation-card {
+  overflow: hidden !important;
+}
+
+/* Add overflow handling to reservation content */
+.reservation-details {
+  overflow: hidden !important;
+}
+
+/* Add overflow handling to text elements */
+.reservation-id,
+.table-name,
+.detail-value {
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  white-space: nowrap !important;
+}
+
+/* Add overflow handling to mobile */
+@media (max-width: 768px) {
+  .modern-reservations-page {
+    overflow-x: hidden !important;
+  }
+
+  .container-fluid {
+    overflow-x: hidden !important;
+  }
+
+  .reservations-grid {
+    overflow-x: hidden !important;
+  }
+
+  /* Mobile status badge positioning */
+  .status-section {
+    width: 100% !important;
+    margin-bottom: 0.75rem !important;
+  }
+
+  .reservation-header {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 0.75rem !important;
+  }
+
+  .table-info {
+    width: 100% !important;
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 0.5rem !important;
+  }
+
+  /* Ensure status badges are visible on mobile */
+  .reservation-status,
+  .payment-status {
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 0.25rem !important;
+    max-width: fit-content !important;
+  }
 }

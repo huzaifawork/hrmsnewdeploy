@@ -1579,3 +1579,93 @@ p, span, div, label {
     min-width: 180px;
   }
 }
+
+/* ========== SPECIFIC TEXT COLOR OVERRIDES ========== */
+
+/* Force black text for "Reservation Details" heading */
+.section-title,
+h2.section-title {
+  color: #000000 !important;
+  -webkit-text-fill-color: #000000 !important;
+}
+
+/* Force black text for "View All Reservations" button text only */
+.action-btn.secondary span,
+.action-btn span {
+  color: #000000 !important;
+  -webkit-text-fill-color: #000000 !important;
+}
+
+/* Force white text for Download Invoice button */
+.action-btn.primary span,
+.action-btn:not(.secondary) span,
+button[class*="download"] span,
+button[class*="invoice"] span {
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+}
+
+/* ========== MINIMAL TEXT COLOR OVERRIDES ========== */
+
+/* Force black text for Reservation Details text only */
+.reservation-details,
+.reservation-details h1,
+.reservation-details h2,
+.reservation-details h3,
+.reservation-details h4,
+.reservation-details h5,
+.reservation-details h6,
+.reservation-details p,
+.reservation-details span,
+.reservation-details div,
+.confirmation-details,
+.confirmation-details h1,
+.confirmation-details h2,
+.confirmation-details h3,
+.confirmation-details h4,
+.confirmation-details h5,
+.confirmation-details h6,
+.confirmation-details p,
+.confirmation-details span,
+.confirmation-details div {
+  color: #000000 !important;
+  -webkit-text-fill-color: #000000 !important;
+}
+
+/* Force black text for View Reservations button text only (no styling changes) */
+.view-reservations-btn,
+.action-btn,
+button[class*="view"],
+button[class*="reservation"] {
+  color: #000000 !important;
+  -webkit-text-fill-color: #000000 !important;
+}
+
+/* ========== REMOVE BLUE BACKGROUND FROM BUTTONS ========== */
+
+/* Mobile overrides to remove blue background */
+@media (max-width: 768px) {
+  .action-button.back {
+    background: #ffffff !important;
+    border: 1px solid #000000 !important;
+    color: #000000 !important;
+  }
+
+  .action-button.download {
+    background: #000000 !important;
+    color: #ffffff !important;
+    border: none !important;
+  }
+
+  /* Override any CSS variables that might be causing blue */
+  .action-button {
+    background: var(--primary-bg, #ffffff) !important;
+    border: 1px solid var(--border-color, #000000) !important;
+    color: var(--text-color, #000000) !important;
+  }
+
+  .action-button.download {
+    background: #000000 !important;
+    color: #ffffff !important;
+  }
+}

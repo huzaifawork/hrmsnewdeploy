@@ -338,7 +338,8 @@ export default function OrderFood() {
                                     position: 'absolute',
                                     left: '0.75rem',
                                     color: '#9ca3af',
-                                    zIndex: 2
+                                    zIndex: 2,
+                                    marginRight:"2 rem"
                                 }} />
                                 <input
                                     type="text"

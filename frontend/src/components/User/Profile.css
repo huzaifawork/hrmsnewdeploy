@@ -39,13 +39,13 @@
   color: #000000 !important;
 }
 
-/* Icons should be black */
+/* Icons should have natural colors - REMOVED BLACK OVERRIDE */
 .modern-profile-page svg,
 .modern-profile-page i,
 .stat-icon,
 .hero-stat-icon {
-  color: #000000 !important;
-  fill: #000000 !important;
+  color: inherit !important;
+  fill: currentColor !important;
 }
 
 /* Form elements */
@@ -167,23 +167,33 @@ select {
   background-color: #ffffff !important;
 }
 
-/* Ensure all text in tabs is black */
-.analytics-section *,
-.history-section *,
-.preferences-section *,
-.timeline-content *,
-.spending-breakdown *,
-.preference-item * {
+/* REMOVE UNIVERSAL OVERRIDES - ONLY TARGET TEXT */
+.analytics-section h1,
+.analytics-section h2,
+.analytics-section h3,
+.analytics-section h4,
+.analytics-section h5,
+.analytics-section h6,
+.analytics-section p,
+.analytics-section span:not([class*="icon"]):not([class*="fi-"]):not(svg),
+.history-section h1,
+.history-section h2,
+.history-section h3,
+.history-section h4,
+.history-section h5,
+.history-section h6,
+.history-section p,
+.history-section span:not([class*="icon"]):not([class*="fi-"]):not(svg) {
   color: #000000 !important;
 }
 
-/* Chart and graph elements */
+/* Chart and graph elements - ALLOW NATURAL COLORS */
 .chart-container *,
 .spending-chart *,
 .analytics-chart * {
-  color: #000000 !important;
-  fill: #000000 !important;
-  stroke: #000000 !important;
+  color: inherit !important;
+  fill: currentColor !important;
+  stroke: currentColor !important;
 }
 
 /* ========== STRONGEST OVERRIDES TO ELIMINATE ALL DARK THEMES ========== */
@@ -319,15 +329,35 @@ select {
   color: #000000 !important;
 }
 
-/* ========== NUCLEAR OPTION - OVERRIDE EVERYTHING ========== */
-/* This will override any possible dark theme that might be applied */
+/* ========== SELECTIVE OVERRIDE - PRESERVE ICON COLORS ========== */
+/* Override backgrounds but preserve icon colors */
 
 .modern-profile-page * {
   background: #ffffff !important;
   background-color: #ffffff !important;
   background-image: none !important;
+}
+
+/* COMPLETELY REMOVE COLOR OVERRIDES FOR ICONS */
+.modern-profile-page h1,
+.modern-profile-page h2,
+.modern-profile-page h3,
+.modern-profile-page h4,
+.modern-profile-page h5,
+.modern-profile-page h6,
+.modern-profile-page p {
   color: #000000 !important;
   -webkit-text-fill-color: #000000 !important;
+}
+
+/* DO NOT OVERRIDE ICON COLORS AT ALL */
+.modern-profile-page svg,
+.modern-profile-page i,
+.modern-profile-page [class*="icon"],
+.modern-profile-page [class*="fi-"] {
+  color: unset !important;
+  fill: unset !important;
+  -webkit-text-fill-color: unset !important;
 }
 
 /* Preserve button styling */
@@ -353,8 +383,8 @@ select {
   border-color: #e5e7eb !important;
 }
 
-/* Override any possible inline styles */
-.modern-profile-page [style] {
+/* Override any possible inline styles - EXCEPT ICONS */
+.modern-profile-page [style]:not(svg):not(i):not([class*="icon"]):not([class*="fi-"]) {
   background: #ffffff !important;
   background-color: #ffffff !important;
   color: #000000 !important;
@@ -1612,7 +1642,7 @@ html body div.modern-profile-page article {
 /* Responsive Design */
 @media (max-width: 768px) {
   .modern-profile-page {
-    margin-top: 60px;
+    margin-top: 100px;
   }
 
   .profile-hero {
@@ -1806,7 +1836,7 @@ html body div.modern-profile-page article {
 
 @media (max-width: 480px) {
   .modern-profile-page {
-    margin-top: 50px;
+    margin-top: 90px;
   }
 
   .profile-hero {
@@ -2033,5 +2063,264 @@ html body div.modern-profile-page article {
   .loyalty-progress small {
     font-size: 0.7rem;
   }
+}
+
+/* ========== COMPLETE ICON NEUTRALIZATION ========== */
+
+/* REMOVE ALL COLOR OVERRIDES - LET ICONS BE NATURAL */
+.modern-profile-page svg,
+.modern-profile-page i,
+.section-icon,
+.tab-icon,
+.hero-stat-icon,
+.user-avatar svg,
+.form-icon,
+.stat-icon,
+.activity-icon,
+.timeline-icon svg,
+.success-icon,
+.error-icon,
+.warning-icon,
+.nav-tab .tab-icon,
+.nav-tab.active .tab-icon {
+  color: unset !important;
+  fill: unset !important;
+  -webkit-text-fill-color: unset !important;
+  background: unset !important;
+  background-color: unset !important;
+}
+
+/* ========== SECURITY TAB RESPONSIVE FIXES ========== */
+
+/* Security tab form responsiveness */
+.password-form {
+  width: 100% !important;
+}
+
+.password-form .form-row {
+  display: grid !important;
+  grid-template-columns: 1fr !important;
+  gap: 1.5rem !important;
+}
+
+.password-form .form-group {
+  width: 100% !important;
+}
+
+.password-form .form-input {
+  width: 100% !important;
+  box-sizing: border-box !important;
+}
+
+/* Mobile specific security tab fixes */
+@media (max-width: 768px) {
+  .password-form {
+    padding: 0 !important;
+  }
+
+  .password-form .form-row {
+    grid-template-columns: 1fr !important;
+    gap: 1rem !important;
+  }
+
+  .password-form .form-group {
+    margin-bottom: 1rem !important;
+  }
+
+  .password-form .form-input {
+    padding: 0.875rem !important;
+    font-size: 1rem !important;
+  }
+
+  .password-form label {
+    font-size: 0.9rem !important;
+    margin-bottom: 0.5rem !important;
+  }
+
+  .button-group {
+    flex-direction: column !important;
+    gap: 0.75rem !important;
+  }
+
+  .btn-primary,
+  .btn-secondary {
+    width: 100% !important;
+    padding: 0.875rem 1rem !important;
+    font-size: 0.9rem !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .password-form .form-input {
+    padding: 0.75rem !important;
+    font-size: 0.9rem !important;
+  }
+
+  .password-form label {
+    font-size: 0.85rem !important;
+  }
+
+  .section-header h3 {
+    font-size: 1.1rem !important;
+  }
+
+  .profile-section {
+    padding: 1.5rem !important;
+  }
+}
+
+/* ========== COMPREHENSIVE ICON RESTORATION ========== */
+
+/* Remove any global overrides that make icons black */
+.modern-profile-page * {
+  color: inherit !important;
+}
+
+/* Restore natural icon behavior */
+.modern-profile-page svg,
+.modern-profile-page i {
+  opacity: 1 !important;
+  visibility: visible !important;
+  color: inherit !important;
+  fill: currentColor !important;
+}
+
+/* Specific icon type restoration with natural colors */
+.modern-profile-page .section-icon {
+  color: #3b82f6 !important;
+  fill: #3b82f6 !important;
+}
+
+.modern-profile-page .tab-icon {
+  color: #6b7280 !important;
+  fill: #6b7280 !important;
+}
+
+.modern-profile-page .nav-tab.active .tab-icon {
+  color: #3b82f6 !important;
+  fill: #3b82f6 !important;
+}
+
+.modern-profile-page .hero-stat-icon {
+  color: #10b981 !important;
+  fill: #10b981 !important;
+}
+
+.modern-profile-page .stat-icon {
+  color: #8b5cf6 !important;
+  fill: #8b5cf6 !important;
+}
+
+.modern-profile-page .form-icon {
+  color: #6b7280 !important;
+  fill: #6b7280 !important;
+}
+
+.modern-profile-page .activity-icon {
+  color: #f59e0b !important;
+  fill: #f59e0b !important;
+}
+
+/* Button icons should inherit button colors */
+.modern-profile-page .btn-primary svg {
+  color: #ffffff !important;
+  fill: #ffffff !important;
+}
+
+.modern-profile-page .btn-secondary svg {
+  color: #374151 !important;
+  fill: #374151 !important;
+}
+
+/* Mobile responsive icon restoration */
+@media (max-width: 768px) {
+  .modern-profile-page svg,
+  .modern-profile-page i {
+    opacity: 1 !important;
+    visibility: visible !important;
+    color: inherit !important;
+    fill: currentColor !important;
+  }
+
+  .modern-profile-page .section-icon {
+    color: #3b82f6 !important;
+    fill: #3b82f6 !important;
+  }
+
+  .modern-profile-page .nav-tab.active .tab-icon {
+    color: #3b82f6 !important;
+    fill: #3b82f6 !important;
+  }
+
+  .modern-profile-page .hero-stat-icon {
+    color: #10b981 !important;
+    fill: #10b981 !important;
+  }
+}
+
+/* ========== COMPLETE ICON NEUTRALIZATION ========== */
+
+/* COMPLETELY REMOVE ALL COLOR OVERRIDES FROM ICONS */
+.modern-profile-page svg,
+.modern-profile-page i,
+.modern-profile-page [class*="icon"],
+.modern-profile-page [class*="fi-"],
+html body .modern-profile-page svg,
+html body .modern-profile-page i,
+html body .modern-profile-page [class*="icon"],
+html body .modern-profile-page [class*="fi-"] {
+  color: unset !important;
+  fill: unset !important;
+  -webkit-text-fill-color: unset !important;
+  background: transparent !important;
+  background-color: transparent !important;
+}
+
+/* Remove any inline style overrides on icons */
+.modern-profile-page svg[style*="color"],
+.modern-profile-page i[style*="color"],
+.modern-profile-page [class*="icon"][style*="color"],
+.modern-profile-page [class*="fi-"][style*="color"] {
+  color: unset !important;
+  fill: unset !important;
+  -webkit-text-fill-color: unset !important;
+}
+
+/* Neutralize ALL possible icon selectors */
+.section-icon,
+.tab-icon,
+.hero-stat-icon,
+.stat-icon,
+.form-icon,
+.activity-icon,
+.timeline-icon,
+.analytics-icon,
+.user-avatar svg,
+.modern-profile-page .section-icon,
+.modern-profile-page .tab-icon,
+.modern-profile-page .hero-stat-icon,
+.modern-profile-page .stat-icon,
+.modern-profile-page .form-icon,
+.modern-profile-page .activity-icon,
+.modern-profile-page .timeline-icon,
+.modern-profile-page .analytics-icon,
+.modern-profile-page .user-avatar svg {
+  color: unset !important;
+  fill: unset !important;
+  -webkit-text-fill-color: unset !important;
+  background: transparent !important;
+  background-color: transparent !important;
+}
+
+/* ULTIMATE OVERRIDE - Remove any JavaScript-applied inline styles */
+.modern-profile-page svg[style],
+.modern-profile-page i[style],
+.modern-profile-page [class*="icon"][style],
+.modern-profile-page [class*="fi-"][style] {
+  color: unset !important;
+  fill: unset !important;
+  -webkit-text-fill-color: unset !important;
+  background: transparent !important;
+  background-color: transparent !important;
 }
   

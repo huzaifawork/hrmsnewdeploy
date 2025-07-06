@@ -106,50 +106,92 @@ const AdminViewRooms = () => {
         </button>
       </div>
 
-      <div className="simple-table-container">
-        <table className="simple-table">
+      {/* Table scroll hint for mobile */}
+      <div
+        style={{
+          marginBottom: "10px",
+          fontSize: "14px",
+          color: "#6b7280",
+          textAlign: "center",
+        }}
+      >
+        {window.innerWidth <= 768 && (
+          <span>← Swipe left/right to see all columns →</span>
+        )}
+      </div>
+
+      <div
+        className="simple-table-container"
+        style={{ overflowX: "auto", width: "100%" }}
+      >
+        <table
+          className="simple-table"
+          style={{ minWidth: "900px", width: "100%" }}
+        >
           <thead>
             <tr>
-              <th>Image</th>
-              <th>Room Number</th>
-              <th>Room Type</th>
-              <th>Capacity</th>
-              <th>Price</th>
-              <th>Status</th>
-              <th>Description</th>
-              <th>Actions</th>
+              <th style={{ minWidth: "100px" }}>Image</th>
+              <th style={{ minWidth: "120px" }}>Room Number</th>
+              <th style={{ minWidth: "120px" }}>Room Type</th>
+              <th style={{ minWidth: "100px" }}>Capacity</th>
+              <th style={{ minWidth: "120px" }}>Price</th>
+              <th style={{ minWidth: "100px" }}>Status</th>
+              <th style={{ minWidth: "200px" }}>Description</th>
+              <th style={{ minWidth: "120px" }}>Actions</th>
             </tr>
           </thead>
           <tbody>
             {filteredRooms.map((room) => (
               <tr key={room._id}>
-                <td>
+                <td style={{ minWidth: "100px" }}>
                   {room.image ? (
                     <img
                       src={room.image}
                       alt={room.roomType}
                       className="simple-room-image"
+                      style={{
+                        width: "60px",
+                        height: "40px",
+                        objectFit: "cover",
+                        borderRadius: "4px",
+                      }}
                     />
                   ) : (
-                    <div className="simple-no-image">No Image</div>
+                    <div
+                      className="simple-no-image"
+                      style={{ fontSize: "12px", color: "#6b7280" }}
+                    >
+                      No Image
+                    </div>
                   )}
                 </td>
-                <td>{room.roomNumber}</td>
-                <td>{room.roomType}</td>
-                <td>{room.capacity} people</td>
-                <td>Rs. {room.price}/night</td>
-                <td>
+                <td style={{ minWidth: "120px" }}>{room.roomNumber}</td>
+                <td style={{ minWidth: "120px" }}>{room.roomType}</td>
+                <td style={{ minWidth: "100px" }}>{room.capacity} people</td>
+                <td style={{ minWidth: "120px" }}>Rs. {room.price}/night</td>
+                <td style={{ minWidth: "100px" }}>
                   <span
                     className={`simple-status simple-status-${room.status?.toLowerCase()}`}
                   >
                     {room.status}
                   </span>
                 </td>
-                <td className="simple-description">{room.description}</td>
-                <td>
+                <td
+                  style={{
+                    minWidth: "200px",
+                    maxWidth: "200px",
+                    overflow: "hidden",
+                    textOverflow: "ellipsis",
+                    whiteSpace: "nowrap",
+                  }}
+                >
+                  {room.description}
+                </td>
+                <td style={{ minWidth: "120px" }}>
                   <button
                     onClick={() => handleDelete(room._id)}
                     className="simple-btn simple-btn-small simple-btn-danger"
+                    style={{ whiteSpace: "nowrap" }}
                   >
                     Delete
                   </button>

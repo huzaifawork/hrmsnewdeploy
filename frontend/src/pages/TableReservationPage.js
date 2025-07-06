@@ -12,8 +12,8 @@ import './TableReservationPage.css';
 // Initialize Stripe
 const stripePromise = loadStripe('pk_test_51RQDO0QHBrXA72xgYssbECOe9bubZ2bWHA4m0T6EY6AvvmAfCzIDmKUCkRjpwVVIJ4IMaOiQBUawECn5GD8ADHbn00GRVmjExI');
 
-// Payment Form Component
-const PaymentForm = ({ onPaymentSuccess, totalPrice }) => {
+// Payment Form Component (Modal Style like BookingPage)
+const PaymentForm = ({ onPaymentSuccess, totalPrice, onCancel }) => {
   const stripe = useStripe();
   const elements = useElements();
   const [processing, setProcessing] = useState(false);
@@ -43,8 +43,7 @@ const PaymentForm = ({ onPaymentSuccess, totalPrice }) => {
         return;
       }
 
-      // Call the success handler with the payment method ID
-      onPaymentSuccess(paymentMethod.id);
+      await onPaymentSuccess(paymentMethod.id);
     } catch (err) {
       setError('An unexpected error occurred.');
       setProcessing(false);
@@ -53,58 +52,51 @@ const PaymentForm = ({ onPaymentSuccess, totalPrice }) => {
 
   return (
     <div style={{
-      background: '#ffffff',
+      background: '#1f2937',
       borderRadius: '1rem',
-      padding: '1.5rem',
-      border: '1px solid #e5e7eb',
-      boxShadow: '0 4px 6px rgba(0, 0, 0, 0.05)'
+      padding: '2rem',
+      maxWidth: '500px',
+      width: '100%',
+      margin: '0 auto'
     }}>
-      <form onSubmit={handleSubmit} className="payment-form">
-        <div className="form-group">
-          <label className="form-label" style={{
-            display: 'flex',
-            alignItems: 'center',
-            gap: '0.5rem',
-            marginBottom: '0.75rem',
-            color: '#000000',
-            fontWeight: '600',
-            fontSize: '1rem'
-          }}>
-            <FiCreditCard />
-            Card Details
-          </label>
-          <div style={{
-            padding: '1rem',
-            border: '1px solid #d1d5db',
-            borderRadius: '0.5rem',
-            background: '#ffffff',
-            transition: 'all 0.3s ease'
-          }}>
-            <CardElement
-              options={{
-                style: {
-                  base: {
-                    fontSize: '16px',
-                    color: '#000000',
-                    fontFamily: 'Inter, sans-serif',
-                    '::placeholder': {
-                      color: '#9ca3af',
-                    },
-                  },
-                  invalid: {
-                    color: '#ef4444',
+      <h3 style={{
+        fontSize: '1.5rem',
+        fontWeight: '600',
+        color: '#ffffff',
+        marginBottom: '1.5rem',
+        textAlign: 'center'
+      }}>
+        Payment Details
+      </h3>
+      <form onSubmit={handleSubmit} style={{ display: 'grid', gap: '1.5rem' }}>
+        <div style={{
+          padding: '1rem',
+          border: '1px solid #374151',
+          borderRadius: '0.5rem',
+          background: '#ffffff'
+        }}>
+          <CardElement
+            options={{
+              style: {
+                base: {
+                  fontSize: '16px',
+                  color: '#000000',
+                  fontFamily: 'system-ui, -apple-system, sans-serif',
+                  '::placeholder': {
+                    color: '#9ca3af',
                   },
                 },
-                hidePostalCode: true
-              }}
-            />
-          </div>
+                invalid: {
+                  color: '#ef4444',
+                },
+              },
+            }}
+          />
         </div>
         {error && (
           <div style={{
             color: '#ef4444',
             fontSize: '0.9rem',
-            marginTop: '0.5rem',
             background: '#fef2f2',
             border: '1px solid #fecaca',
             borderRadius: '0.5rem',
@@ -113,25 +105,44 @@ const PaymentForm = ({ onPaymentSuccess, totalPrice }) => {
             {error}
           </div>
         )}
-        <button
-          type="submit"
-          disabled={!stripe || processing}
-          style={{
-            background: processing ? '#9ca3af' : '#000000',
-            color: '#ffffff',
-            border: 'none',
-            padding: '0.75rem 1.5rem',
-            borderRadius: '0.5rem',
-            fontWeight: '600',
-            cursor: processing ? 'not-allowed' : 'pointer',
-            transition: 'all 0.3s ease',
-            width: '100%',
-            fontSize: '1rem',
-            marginTop: '1rem'
-          }}
-        >
-          {processing ? 'Processing...' : `Pay Rs. ${totalPrice.toLocaleString('en-PK')}`}
-        </button>
+        <div style={{
+          display: 'flex',
+          gap: '1rem',
+          justifyContent: 'space-between'
+        }}>
+          <button
+            type="button"
+            onClick={onCancel}
+            style={{
+              background: '#6b7280',
+              border: 'none',
+              borderRadius: '0.5rem',
+              padding: '0.75rem 1.5rem',
+              color: '#ffffff',
+              fontWeight: '600',
+              cursor: 'pointer',
+              flex: 1
+            }}
+          >
+            Back
+          </button>
+          <button
+            type="submit"
+            disabled={!stripe || processing}
+            style={{
+              background: processing ? '#9ca3af' : '#000000',
+              border: 'none',
+              borderRadius: '0.5rem',
+              padding: '0.75rem 1.5rem',
+              color: '#ffffff',
+              fontWeight: '600',
+              cursor: processing ? 'not-allowed' : 'pointer',
+              flex: 2
+            }}
+          >
+            {processing ? 'Processing...' : `Pay Rs. ${totalPrice.toLocaleString('en-PK')}`}
+          </button>
+        </div>
       </form>
     </div>
   );
@@ -157,7 +168,7 @@ const TableReservationPage = () => {
   });
   const [showPaymentForm, setShowPaymentForm] = useState(false);
 
-  // Scroll to top utility function
+  // Scroll to top utility function (like BookingPage)
   const scrollToTop = () => {
     window.scrollTo({
       top: 0,
@@ -165,11 +176,19 @@ const TableReservationPage = () => {
     });
   };
 
-  // Scroll to top when payment form is shown
+  // Scroll to top when payment form is shown and manage body scroll
   useEffect(() => {
     if (showPaymentForm) {
       scrollToTop();
+      document.body.classList.add('payment-open');
+    } else {
+      document.body.classList.remove('payment-open');
     }
+
+    // Cleanup on unmount
+    return () => {
+      document.body.classList.remove('payment-open');
+    };
   }, [showPaymentForm]);
 
   useEffect(() => {
@@ -291,6 +310,7 @@ const TableReservationPage = () => {
   const handlePaymentSuccess = async (paymentMethodId) => {
     try {
       await handleSubmit(null, paymentMethodId);
+      setShowPaymentForm(false); // Close payment modal on success
     } catch (error) {
       console.error('Payment error:', error);
       toast.error(error.message || 'Payment failed. Please try again.');
@@ -624,22 +644,37 @@ const TableReservationPage = () => {
                   </div>
                 </form>
 
-                {showPaymentForm && (
-                  <div className="payment-section mt-4">
-                    <h3 className="text-accent h5 mb-3">Payment Details</h3>
-                    <Elements stripe={stripePromise}>
-                      <PaymentForm
-                        onPaymentSuccess={handlePaymentSuccess}
-                        totalPrice={tableDetails.tableCapacity * 500}
-                      />
-                    </Elements>
-                  </div>
-                )}
+
               </div>
             </div>
           </div>
         </div>
       </div>
+
+      {/* Payment Modal Overlay */}
+      {showPaymentForm && (
+        <div style={{
+          position: 'fixed',
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          background: 'rgba(0, 0, 0, 0.8)',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          zIndex: 9999,
+          padding: '1rem'
+        }}>
+          <Elements stripe={stripePromise}>
+            <PaymentForm
+              onPaymentSuccess={handlePaymentSuccess}
+              totalPrice={tableDetails.tableCapacity * 500}
+              onCancel={() => setShowPaymentForm(false)}
+            />
+          </Elements>
+        </div>
+      )}
     </PageLayout>
   );
 };

@@ -1145,3 +1145,158 @@ button[style*="Select Dates"] {
     width: 100% !important;
   }
 }
+
+/* ========== FORCE ALL BOOKING SUMMARY TEXT TO BE WHITE ========== */
+
+/* Target all text in booking summary section with black background */
+div[style*="background: '#000000'"] *,
+div[style*="background: '#000000'"] span,
+div[style*="background: '#000000'"] div,
+div[style*="background: '#000000'"] h3,
+div[style*="background: '#000000'"] h4 {
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+}
+
+/* Force day numbers to be white */
+div[style*="fontSize: '2rem'"] {
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+}
+
+/* Force night/nights text to be white */
+div[style*="fontSize: '0.9rem'"] {
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+}
+
+/* Force all spans in booking summary to be white */
+div[style*="background: '#000000'"] span,
+div[style*="background: '#374151'"] span {
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+}
+
+/* Force all divs with flex layout to have white text */
+div[style*="display: 'flex'"] span,
+div[style*="justifyContent: 'space-between'"] span,
+div[style*="padding: '0.75rem 0'"] span {
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+}
+
+/* Force amenities text to be white */
+div[style*="color: '#d1d5db'"] {
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+}
+
+/* Universal override for booking summary container */
+div[style*="Right Side - Booking Summary"] *,
+div[style*="Booking Summary"] * {
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+}
+
+/* Target specific booking summary elements by their container */
+div[style*="borderRadius: '1rem'"][style*="background: '#000000'"] * {
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+}
+
+/* ========== ULTRA AGGRESSIVE BOOKING SUMMARY OVERRIDES ========== */
+
+/* Force ALL text elements in booking summary to be white */
+div[style*="background: '#000000'"] * {
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+}
+
+/* Specifically target the day number and night text */
+div[style*="textAlign: 'center'"] div[style*="fontSize: '2rem'"],
+div[style*="textAlign: 'center'"] div[style*="fontSize: '0.9rem'"] {
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+  text-shadow: none !important;
+}
+
+/* Target the gray background container for day/night */
+div[style*="background: '#374151'"] div,
+div[style*="background: '#374151'"] span {
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+}
+
+/* Override any color styles in booking summary */
+div[style*="background: '#000000'"] div[style*="color:"],
+div[style*="background: '#000000'"] span[style*="color:"] {
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+}
+
+/* Force specific font size elements to be white */
+[style*="fontSize: '2rem'"],
+[style*="fontSize: '0.9rem'"],
+[style*="fontSize: '1.25rem'"] {
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+}
+
+/* ========== BOOKING PAGE SPECIFIC OVERRIDES ========== */
+
+/* Target all elements within booking-page class */
+.booking-page * {
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+}
+
+/* Specifically target booking summary in booking-page */
+.booking-page div[style*="background: '#000000'"] *,
+.booking-page div[style*="background: '#374151'"] * {
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+}
+
+/* Nuclear option - force all text in booking page to be white */
+.booking-page div,
+.booking-page span,
+.booking-page h1,
+.booking-page h2,
+.booking-page h3,
+.booking-page h4,
+.booking-page h5,
+.booking-page h6,
+.booking-page p {
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+}
+
+/* ========== BOOKING PAGE CONTAINER SPECIFIC OVERRIDES ========== */
+
+/* Target the new booking-page-container class */
+.booking-page-container * {
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+}
+
+/* Specifically target booking summary elements */
+.booking-page-container div[style*="background: '#000000'"] *,
+.booking-page-container div[style*="background: '#374151'"] * {
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+}
+
+/* Target day numbers and night text specifically */
+.booking-page-container div[style*="fontSize: '2rem'"],
+.booking-page-container div[style*="fontSize: '0.9rem'"] {
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+}
+
+/* Force all text elements in booking summary to be white */
+.booking-page-container div,
+.booking-page-container span,
+.booking-page-container h3 {
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+}

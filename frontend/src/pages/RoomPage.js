@@ -53,7 +53,7 @@ const responsiveStyles = `
     .room-page-grid {
       grid-template-columns: 1fr !important;
       gap: 1rem !important;
-      margin: 0 1rem !important;
+      margin: 0 1rem 2rem 1rem !important;
     }
     .room-page-card {
       margin: 0 !important;
@@ -78,6 +78,13 @@ const responsiveStyles = `
     .room-page-amenity {
       font-size: 0.7rem !important;
       padding: 0.25rem 0.5rem !important;
+    }
+  }
+
+  @media (max-width: 1024px) {
+    .room-page-grid {
+      grid-template-columns: repeat(2, 1fr) !important;
+      gap: 1.25rem !important;
     }
   }
 
@@ -367,17 +374,74 @@ const RoomPage = () => {
 
 
   // Enhanced room booking handler - Always allow booking, let user fill details manually
-  const handleBookRoom = async (room) => {
+  const handleBookRoom = async (room, roomItem = null) => {
     const { checkInDate, checkOutDate, guests } = bookingValidation;
 
     try {
+      // Handle different room object structures (recommended vs regular rooms)
+      let roomId, roomDetails;
+
+      if (roomItem) {
+        // For recommended rooms, try multiple ways to get the room ID
+        roomId = room._id || roomItem.roomId || roomItem._id;
+        roomDetails = room.roomDetails || room;
+
+        // Special handling for recommended rooms where roomId might be in different places
+        if (!roomId && roomItem.roomDetails && roomItem.roomDetails._id) {
+          roomId = roomItem.roomDetails._id;
+        }
+      } else {
+        // For regular rooms
+        roomId = room._id || room.roomId;
+        roomDetails = room;
+      }
+
+      // Ensure roomId is a string, not an object
+      if (typeof roomId === 'object' && roomId !== null) {
+        if (roomId._id) {
+          roomId = roomId._id;
+        } else if (roomId.toString && roomId.toString() !== '[object Object]') {
+          roomId = roomId.toString();
+        } else {
+          console.error('Room ID is an object without _id property:', roomId);
+          roomId = null;
+        }
+      }
+
+      console.log('Booking attempt:', {
+        room,
+        roomItem,
+        roomId,
+        roomIdType: typeof roomId,
+        roomDetails,
+        activeTab
+      });
+
+      if (!roomId) {
+        console.error('Room ID is undefined:', {
+          room,
+          roomItem,
+          activeTab,
+          roomKeys: Object.keys(room),
+          roomItemKeys: roomItem ? Object.keys(roomItem) : null
+        });
+        alert('Unable to book this room. Room ID not found. Please try again.');
+        return;
+      }
+
+      if (!roomDetails || !roomDetails.roomType) {
+        console.error('Room details are incomplete:', { roomDetails, room, roomItem });
+        alert('Unable to book this room. Room details are incomplete. Please try again.');
+        return;
+      }
+
       // Record booking interaction
-      await recordInteraction(room._id, 'booking', {
+      await recordInteraction(roomId, 'booking', {
         checkInDate: checkInDate || null,
         checkOutDate: checkOutDate || null,
         guests: guests || 1,
-        roomType: room.roomType,
-        price: room.price
+        roomType: roomDetails.roomType,
+        price: roomDetails.price
       });
 
       // Clear any previous validation errors
@@ -385,24 +449,32 @@ const RoomPage = () => {
 
       // Navigate to booking page with room details (dates optional)
       const bookingData = {
-        roomId: room._id,
-        roomName: room.roomName || `Room ${room.roomNumber}`,
-        roomType: room.roomType,
-        roomImage: getRoomImageUrl(room.image),
-        price: room.price,
-        capacity: room.capacity,
-        amenities: room.amenities,
+        roomId: roomId,
+        roomName: roomDetails.roomName || `Room ${roomDetails.roomNumber}`,
+        roomType: roomDetails.roomType,
+        roomImage: getRoomImageUrl(roomDetails.image),
+        price: roomDetails.price,
+        capacity: roomDetails.capacity,
+        amenities: roomDetails.amenities,
         checkInDate: checkInDate || '', // Pass empty string if no date selected
         checkOutDate: checkOutDate || '', // Pass empty string if no date selected
         guests: guests || 1
       };
 
-      console.log('Booking room with ID:', room._id);
-      console.log('Navigating to:', `/booking-page/${room._id}`);
+      // Final validation before navigation
+      const finalRoomId = String(roomId);
+      if (finalRoomId === 'undefined' || finalRoomId === 'null' || finalRoomId === '[object Object]') {
+        console.error('Invalid room ID for navigation:', roomId);
+        alert('Unable to book this room. Invalid room ID. Please try again.');
+        return;
+      }
+
+      console.log('Booking room with ID:', finalRoomId);
+      console.log('Navigating to:', `/booking-page/${finalRoomId}`);
       console.log('Booking data:', bookingData);
 
       localStorage.setItem('roomBookingData', JSON.stringify(bookingData));
-      navigate(`/booking-page/${room._id}`);
+      navigate(`/booking-page/${finalRoomId}`);
 
     } catch (error) {
       console.error("Error during booking process:", error);
@@ -1284,9 +1356,11 @@ const RoomPage = () => {
           {/* Rooms Grid */}
           <div className="room-page-grid" style={{
             display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(350px, 1fr))',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
             gap: '1.5rem',
-            marginBottom: '2rem'
+            marginBottom: '2rem',
+            maxWidth: '1400px',
+            margin: '0 auto 2rem auto'
           }}>
             {loading ? (
               Array(6).fill().map((_, index) => (
@@ -1335,9 +1409,35 @@ const RoomPage = () => {
               ))
             ) : (
               getCurrentRooms().map((roomItem, index) => {
-                const room = roomItem.roomDetails || roomItem;
+                // Handle different room structures based on tab
+                let room;
+                if (activeTab === 'recommended') {
+                  // For recommended rooms, use the room properties directly or from roomDetails
+                  room = roomItem.roomDetails || roomItem;
+                  // Ensure we have the roomId available as a string
+                  if (!room._id && roomItem.roomId) {
+                    // Make sure roomId is a string, not an object
+                    const roomId = typeof roomItem.roomId === 'object' ?
+                      (roomItem.roomId._id || roomItem.roomId.toString()) :
+                      roomItem.roomId;
+                    room._id = roomId;
+                  }
+                } else {
+                  // For regular and popular rooms
+                  room = roomItem.roomDetails || roomItem;
+                }
+
                 const isRecommended = activeTab === 'recommended';
                 const isPopular = activeTab === 'popular';
+
+                // Debug logging for room structure
+                console.log('Room item structure:', {
+                  roomItem,
+                  room,
+                  roomId: room._id || roomItem.roomId,
+                  activeTab,
+                  hasRoomDetails: !!roomItem.roomDetails
+                });
 
                 return (
                   <div
@@ -1565,7 +1665,7 @@ const RoomPage = () => {
                       }}>
                         <button
                           className="room-page-button"
-                          onClick={() => handleBookRoom(room)}
+                          onClick={() => handleBookRoom(room, roomItem)}
                           disabled={false}
                           style={{
                             flex: 1,

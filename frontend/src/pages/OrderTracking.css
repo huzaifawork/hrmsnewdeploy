@@ -966,4 +966,107 @@
   border-radius: 50%;
   margin-right: 6px;
   animation: pulse 1.5s infinite;
-} 
+}
+
+/* ========== BLACK LINES AND PROGRESS OVERRIDES ========== */
+
+/* Make timeline lines black */
+.timeline-message::before {
+  background-color: #000000 !important;
+}
+
+/* Make timeline dots black when not completed */
+.message-dot {
+  background-color: #000000 !important;
+  border: 2px solid #ffffff !important;
+}
+
+/* Keep completed dots green but with black border */
+.timeline-message.completed .message-dot {
+  background-color: #10b981 !important;
+  border: 2px solid #000000 !important;
+}
+
+/* Make current dot orange but with black border */
+.timeline-message.current .message-dot {
+  background-color: #f59e0b !important;
+  border: 2px solid #000000 !important;
+}
+
+/* Make progress bar black */
+.status-progress {
+  background-color: #f3f4f6 !important;
+  border: 1px solid #000000 !important;
+}
+
+.status-progress-bar {
+  background: #000000 !important;
+  background-color: #000000 !important;
+}
+
+/* Make message content borders black */
+.message-content {
+  border: 1px solid #000000 !important;
+}
+
+.message-content::before {
+  border-right: 8px solid #f5f5f5 !important;
+  border-top: 8px solid transparent !important;
+  border-bottom: 8px solid transparent !important;
+}
+
+.timeline-message.completed .message-content::before {
+  border-right-color: rgba(76, 175, 80, 0.1) !important;
+}
+
+.timeline-message.current .message-content::before {
+  border-right-color: rgba(255, 152, 0, 0.1) !important;
+}
+
+/* Make all borders black */
+.tracking-card,
+.delivery-info,
+.order-summary,
+.delivered-card,
+.connection-status,
+.socket-debug-panel,
+.socket-events,
+.socket-event {
+  border-color: #000000 !important;
+}
+
+/* Override any remaining colored lines */
+.order-item {
+  border-bottom: 1px solid #000000 !important;
+}
+
+/* Make delivered card progress line black */
+.delivered-card::before {
+  background: #000000 !important;
+}
+
+/* Mobile responsive overrides */
+@media (max-width: 768px) {
+  .timeline-message::before {
+    background-color: #000000 !important;
+  }
+
+  .message-dot {
+    background-color: #000000 !important;
+    border: 2px solid #ffffff !important;
+  }
+
+  .timeline-message.completed .message-dot {
+    background-color: #10b981 !important;
+    border: 2px solid #000000 !important;
+  }
+
+  .timeline-message.current .message-dot {
+    background-color: #f59e0b !important;
+    border: 2px solid #000000 !important;
+  }
+
+  .status-progress-bar {
+    background: #000000 !important;
+  }
+}

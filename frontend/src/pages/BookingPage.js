@@ -46,16 +46,16 @@ const PaymentForm = ({ onPaymentSuccess, totalPrice, onCancel }) => {
 
   return (
     <div style={{
-      background: '#ffffff',
+      background: '#000000',
       borderRadius: '1rem',
       padding: '2rem',
-      boxShadow: '0 4px 6px rgba(0, 0, 0, 0.05)',
-      border: '1px solid #e5e7eb'
+      boxShadow: '0 4px 6px rgba(0, 0, 0, 0.3)',
+      border: '1px solid #374151'
     }}>
       <h3 style={{
         fontSize: '1.5rem',
         fontWeight: '600',
-        color: '#000000',
+        color: '#ffffff',
         marginBottom: '1.5rem',
         textAlign: 'center'
       }}>
@@ -64,7 +64,7 @@ const PaymentForm = ({ onPaymentSuccess, totalPrice, onCancel }) => {
       <form onSubmit={handleSubmit} style={{ display: 'grid', gap: '1.5rem' }}>
         <div style={{
           padding: '1rem',
-          border: '1px solid #d1d5db',
+          border: '1px solid #374151',
           borderRadius: '0.5rem',
           background: '#ffffff'
         }}>
@@ -76,7 +76,7 @@ const PaymentForm = ({ onPaymentSuccess, totalPrice, onCancel }) => {
                   color: '#000000',
                   fontFamily: 'Inter, sans-serif',
                   '::placeholder': {
-                    color: '#9ca3af',
+                    color: '#6b7280',
                   },
                 },
                 invalid: {
@@ -89,9 +89,9 @@ const PaymentForm = ({ onPaymentSuccess, totalPrice, onCancel }) => {
         </div>
         {error && (
           <div style={{
-            color: '#ef4444',
-            background: '#fef2f2',
-            border: '1px solid #fecaca',
+            color: '#ffffff',
+            background: '#dc2626',
+            border: '1px solid #ef4444',
             borderRadius: '0.5rem',
             padding: '0.75rem',
             fontSize: '0.9rem'
@@ -108,11 +108,11 @@ const PaymentForm = ({ onPaymentSuccess, totalPrice, onCancel }) => {
             type="button"
             onClick={onCancel}
             style={{
-              background: '#ffffff',
-              border: '1px solid #d1d5db',
+              background: '#374151',
+              border: '1px solid #6b7280',
               borderRadius: '0.5rem',
               padding: '0.75rem 1.5rem',
-              color: '#374151',
+              color: '#ffffff',
               fontSize: '1rem',
               fontWeight: '500',
               cursor: 'pointer',
@@ -519,7 +519,7 @@ const BookingPage = () => {
   if (showPayment) {
     return (
       <div style={{
-        background: '#0A192F',
+        background: 'rgba(0, 0, 0, 0.8)',
         minHeight: '100vh',
         display: 'flex',
         alignItems: 'flex-start',
@@ -528,9 +528,9 @@ const BookingPage = () => {
         paddingBottom: '50px'
       }}>
         <div style={{
-          background: 'linear-gradient(145deg, rgba(17, 34, 64, 0.6) 0%, rgba(26, 35, 50, 0.4) 100%)',
-          backdropFilter: 'blur(20px)',
-          border: '1px solid rgba(100, 255, 218, 0.1)',
+          background: '#000000',
+          backdropFilter: 'none',
+          border: '1px solid #374151',
           borderRadius: '1rem',
           padding: '2rem',
           maxWidth: '500px',
@@ -678,16 +678,16 @@ const BookingPage = () => {
         overflowY: 'auto'
       }}>
         <div style={{
-          background: '#ffffff',
+          background: '#000000',
           backdropFilter: 'none',
-          border: '1px solid #e5e7eb',
+          border: '1px solid #374151',
           borderRadius: '1rem',
           padding: '2rem',
           maxWidth: '500px',
           width: '100%',
           margin: '2rem 1rem',
           position: 'relative',
-          boxShadow: '0 10px 25px rgba(0, 0, 0, 0.15)'
+          boxShadow: '0 10px 25px rgba(0, 0, 0, 0.5)'
         }}>
           <Elements stripe={stripePromise}>
             <PaymentForm
@@ -706,15 +706,73 @@ const BookingPage = () => {
   const isTablet = () => windowWidth <= 1024 && windowWidth > 768;
 
   return (
-    <div style={{
-      background: '#ffffff',
-      minHeight: '100vh',
-      width: '100%',
-      margin: 0,
-      padding: 0,
-      paddingTop: '80px'
-    }}>
-      {/* Header with Back Button */}
+    <>
+      {/* CSS Overrides for Booking Summary Text Visibility */}
+      <style>
+        {`
+          /* Target booking summary container specifically */
+          #booking-summary-container * {
+            color: #ffffff !important;
+            -webkit-text-fill-color: #ffffff !important;
+          }
+
+          #booking-summary-container h3 {
+            color: #ffffff !important;
+            -webkit-text-fill-color: #ffffff !important;
+          }
+
+          #booking-summary-container div {
+            color: #ffffff !important;
+            -webkit-text-fill-color: #ffffff !important;
+          }
+
+          #booking-summary-container span {
+            color: #ffffff !important;
+            -webkit-text-fill-color: #ffffff !important;
+          }
+
+          /* Force day numbers and night text */
+          #booking-summary-container div[style*="fontSize: '2rem'"] {
+            color: #ffffff !important;
+            -webkit-text-fill-color: #ffffff !important;
+          }
+
+          #booking-summary-container div[style*="fontSize: '0.9rem'"] {
+            color: #ffffff !important;
+            -webkit-text-fill-color: #ffffff !important;
+          }
+
+          /* Fix the Proceed to Payment button */
+          #booking-summary-container button {
+            background: #000000 !important;
+            color: #ffffff !important;
+            border: 1px solid #ffffff !important;
+            -webkit-text-fill-color: #ffffff !important;
+          }
+
+          #booking-summary-container button:hover {
+            background: #333333 !important;
+            color: #ffffff !important;
+            -webkit-text-fill-color: #ffffff !important;
+          }
+
+          #booking-summary-container button:disabled {
+            background: #666666 !important;
+            color: #cccccc !important;
+            -webkit-text-fill-color: #cccccc !important;
+          }
+        `}
+      </style>
+
+      <div className="booking-page-container" style={{
+        background: '#ffffff',
+        minHeight: '100vh',
+        width: '100%',
+        margin: 0,
+        padding: 0,
+        paddingTop: '80px'
+      }}>
+        {/* Header with Back Button */}
       <div style={{
         position: 'sticky',
         top: '80px',
@@ -1124,7 +1182,7 @@ const BookingPage = () => {
         </div>
 
         {/* Right Side - Booking Summary */}
-        <div style={{
+        <div id="booking-summary-container" style={{
           background: '#000000',
           backdropFilter: 'none',
           border: '1px solid #374151',
@@ -1134,7 +1192,7 @@ const BookingPage = () => {
           boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
           position: isMobile() ? 'static' : 'sticky',
           top: isMobile() ? 'auto' : '180px',
-          order: isMobile() ? -1 : 0
+          order: isMobile() ? 1 : 0
         }}>
           <h3 style={{
             fontSize: '1.25rem',
@@ -1166,7 +1224,7 @@ const BookingPage = () => {
               </div>
               <div style={{
                 fontSize: '0.9rem',
-                color: '#d1d5db'
+                color: '#ffffff'
               }}>
                 {bookingSummary.nights === 1 ? 'Night' : 'Nights'}
               </div>
@@ -1181,7 +1239,7 @@ const BookingPage = () => {
               alignItems: 'center',
               padding: '0.75rem 0',
               borderBottom: '1px solid #374151',
-              color: '#d1d5db',
+              color: '#ffffff',
               fontSize: '0.9rem'
             }}>
               <span>Room Type:</span>
@@ -1194,7 +1252,7 @@ const BookingPage = () => {
               alignItems: 'center',
               padding: '0.75rem 0',
               borderBottom: '1px solid #374151',
-              color: '#d1d5db',
+              color: '#ffffff',
               fontSize: '0.9rem'
             }}>
               <span>Price per Night:</span>
@@ -1209,7 +1267,7 @@ const BookingPage = () => {
                   alignItems: 'center',
                   padding: '0.75rem 0',
                   borderBottom: '1px solid #374151',
-                  color: '#d1d5db',
+                  color: '#ffffff',
                   fontSize: '0.9rem'
                 }}>
                   <span>Number of Nights:</span>
@@ -1222,7 +1280,7 @@ const BookingPage = () => {
                   alignItems: 'center',
                   padding: '0.75rem 0',
                   borderBottom: '1px solid #374151',
-                  color: '#d1d5db',
+                  color: '#ffffff',
                   fontSize: '0.9rem'
                 }}>
                   <span>Subtotal:</span>
@@ -1235,7 +1293,7 @@ const BookingPage = () => {
                   alignItems: 'center',
                   padding: '0.75rem 0',
                   borderBottom: '2px solid #374151',
-                  color: '#d1d5db',
+                  color: '#ffffff',
                   fontSize: '0.9rem'
                 }}>
                   <span>Tax (10%):</span>
@@ -1279,7 +1337,7 @@ const BookingPage = () => {
                     display: 'flex',
                     alignItems: 'center',
                     gap: '0.5rem',
-                    color: '#d1d5db',
+                    color: '#ffffff',
                     fontSize: '0.8rem'
                   }}>
                     <FiCheck style={{ color: '#ffffff', fontSize: '0.7rem' }} />
@@ -1344,6 +1402,7 @@ const BookingPage = () => {
         </div>
       </div>
     </div>
+    </>
   );
 };
 

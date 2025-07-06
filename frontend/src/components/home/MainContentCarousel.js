@@ -27,6 +27,8 @@ const MainContentCarousel = () => {
   useEffect(() => {
     console.log('Router context available:', !!navigate);
     console.log('Current location:', location.pathname);
+    console.log('Screen width:', window.innerWidth);
+    console.log('Mobile view:', window.innerWidth <= 768);
   }, [navigate, location]);
 
   const handleNavigation = (path, event) => {
@@ -46,19 +48,16 @@ const MainContentCarousel = () => {
     {
       image: "https://images.unsplash.com/photo-1566073771259-6a8506099945?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80",
       title: heroContent.mainTitle,
-      subtitle: heroContent.subtitle,
       description: heroContent.description
     },
     {
       image: "https://images.unsplash.com/photo-1414235077428-338989a2e8c0?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80",
       title: "Culinary Excellence Awaits",
-      subtitle: "AUTHENTIC FLAVORS",
       description: `Finest cuisine at ${hotelInfo.hotelName}`
     },
     {
       image: "https://images.unsplash.com/photo-1551632811-561732d1e306?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80",
       title: "Premium Dining Experience",
-      subtitle: "RESTAURANT",
       description: `Exceptional cuisine and service at ${hotelInfo.hotelName}`
     }
   ];

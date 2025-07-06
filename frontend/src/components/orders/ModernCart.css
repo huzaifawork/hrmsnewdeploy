@@ -559,11 +559,11 @@
 }
 
 .checkout-btn:hover {
-  background: #333333 !important;
-  border-color: #333333 !important;
+  background: #000000 !important;
+  border-color: #000000 !important;
   color: #ffffff !important;
-  transform: translateY(-2px);
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+  transform: none !important;
+  box-shadow: none !important;
 }
 
 .checkout-btn *,
@@ -684,10 +684,11 @@
 }
 
 .payment-buttons .btn-primary:hover {
-  background: #333333;
-  border-color: #333333;
-  transform: translateY(-1px);
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  background: #000000 !important;
+  border-color: #000000 !important;
+  color: #ffffff !important;
+  transform: none !important;
+  box-shadow: none !important;
 }
 
 .payment-buttons .btn-primary:disabled {
@@ -714,7 +715,7 @@
 /* Responsive Design */
 @media (max-width: 768px) {
   .modern-cart-page {
-    margin-top: 60px;
+    margin-top: 100px;
   }
 
   .cart-hero {
@@ -831,7 +832,7 @@
 
 @media (max-width: 480px) {
   .modern-cart-page {
-    margin-top: 50px;
+    margin-top: 90px;
   }
 
   .cart-hero {
@@ -952,11 +953,11 @@
 @media (max-width: 768px) {
   /* CRITICAL: Full viewport mobile layout */
   .modern-cart-page {
-    margin-top: 60px !important;
+    margin-top: 100px !important;
     padding: 0 !important;
     width: 100vw !important;
     overflow-x: hidden !important;
-    min-height: calc(100vh - 60px) !important;
+    min-height: calc(100vh - 100px) !important;
   }
 
   .cart-layout {
@@ -1071,8 +1072,11 @@
   }
 
   .checkout-btn:hover {
-    transform: translateY(-2px) !important;
-    box-shadow: 0 12px 35px rgba(100, 255, 218, 0.3) !important;
+    transform: none !important;
+    box-shadow: none !important;
+    background: #000000 !important;
+    border-color: #000000 !important;
+    color: #ffffff !important;
   }
 
   /* Enhanced Summary */
@@ -1143,4 +1147,385 @@
     border-radius: 0.75rem !important;
     min-height: 56px !important;
   }
+}
+
+/* ========== BROWSE MENU BUTTON TEXT WHITE OVERRIDE ========== */
+
+/* Force Browse Menu button text to be white */
+.browse-menu-btn,
+.browse-menu-btn *,
+.browse-menu-btn span,
+.browse-menu-btn svg,
+.browse-menu-btn i,
+.modern-cart-page .browse-menu-btn,
+.modern-cart-page .browse-menu-btn *,
+.modern-cart-page .browse-menu-btn span,
+.modern-cart-page .browse-menu-btn svg,
+.modern-cart-page .browse-menu-btn i {
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+  fill: #ffffff !important;
+}
+
+/* Ultra specific override for Browse Menu button */
+html body .modern-cart-page .browse-menu-btn,
+html body .modern-cart-page .browse-menu-btn *,
+html body .modern-cart-page .browse-menu-btn span,
+html body .modern-cart-page .browse-menu-btn svg,
+html body .modern-cart-page .browse-menu-btn i {
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+  fill: #ffffff !important;
+}
+
+/* Hover state for Browse Menu button */
+.browse-menu-btn:hover,
+.browse-menu-btn:hover *,
+.browse-menu-btn:hover span,
+.browse-menu-btn:hover svg,
+.browse-menu-btn:hover i {
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+  fill: #ffffff !important;
+}
+
+/* ========== PROCEED TO PAYMENT BUTTON OVERRIDES ========== */
+
+/* Force checkout button to always be black with white text and no hover effects */
+.checkout-btn,
+.checkout-btn:hover,
+.checkout-btn:focus,
+.checkout-btn:active,
+.checkout-btn:visited {
+  background: #000000 !important;
+  border: 1px solid #000000 !important;
+  color: #ffffff !important;
+  transform: none !important;
+  box-shadow: none !important;
+  transition: none !important;
+}
+
+/* Force all text and icons inside checkout button to be white */
+.checkout-btn *,
+.checkout-btn span,
+.checkout-btn svg,
+.checkout-btn i,
+.checkout-btn .btn-icon,
+.checkout-btn:hover *,
+.checkout-btn:hover span,
+.checkout-btn:hover svg,
+.checkout-btn:hover i,
+.checkout-btn:hover .btn-icon {
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+  fill: #ffffff !important;
+}
+
+/* Ultra specific override for checkout button */
+html body .modern-cart-page .checkout-btn,
+html body .modern-cart-page .checkout-btn:hover,
+html body .modern-cart-page .checkout-btn:focus,
+html body .modern-cart-page .checkout-btn:active {
+  background: #000000 !important;
+  border: 1px solid #000000 !important;
+  color: #ffffff !important;
+  transform: none !important;
+  box-shadow: none !important;
+  transition: none !important;
+}
+
+/* Mobile specific overrides for checkout button */
+@media (max-width: 768px) {
+  .checkout-btn,
+  .checkout-btn:hover,
+  .checkout-btn:focus,
+  .checkout-btn:active {
+    background: #000000 !important;
+    border: 1px solid #000000 !important;
+    color: #ffffff !important;
+    transform: none !important;
+    box-shadow: none !important;
+    transition: none !important;
+  }
+
+  .checkout-btn *,
+  .checkout-btn span,
+  .checkout-btn svg,
+  .checkout-btn i,
+  .checkout-btn .btn-icon {
+    color: #ffffff !important;
+    -webkit-text-fill-color: #ffffff !important;
+    fill: #ffffff !important;
+  }
+}
+
+/* Extra small mobile devices */
+@media (max-width: 480px) {
+  .checkout-btn,
+  .checkout-btn:hover,
+  .checkout-btn:focus,
+  .checkout-btn:active {
+    background: #000000 !important;
+    border: 1px solid #000000 !important;
+    color: #ffffff !important;
+    transform: none !important;
+    box-shadow: none !important;
+    transition: none !important;
+  }
+}
+
+/* ========== PAYMENT FORM BUTTONS OVERRIDES ========== */
+
+/* Force payment buttons to always have correct colors and no hover effects */
+.payment-buttons .btn-primary,
+.payment-buttons .btn-primary:hover,
+.payment-buttons .btn-primary:focus,
+.payment-buttons .btn-primary:active,
+.payment-buttons .btn-primary:visited {
+  background: #000000 !important;
+  border: 1px solid #000000 !important;
+  color: #ffffff !important;
+  transform: none !important;
+  box-shadow: none !important;
+  transition: none !important;
+}
+
+/* Force all text and icons inside payment primary button to be white */
+.payment-buttons .btn-primary *,
+.payment-buttons .btn-primary span,
+.payment-buttons .btn-primary svg,
+.payment-buttons .btn-primary i,
+.payment-buttons .btn-primary:hover *,
+.payment-buttons .btn-primary:hover span,
+.payment-buttons .btn-primary:hover svg,
+.payment-buttons .btn-primary:hover i {
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+  fill: #ffffff !important;
+}
+
+/* Force payment secondary button (Back button) styling */
+.payment-buttons .btn-secondary,
+.payment-buttons .btn-secondary:hover,
+.payment-buttons .btn-secondary:focus,
+.payment-buttons .btn-secondary:active {
+  background: #ffffff !important;
+  border: 1px solid #e5e7eb !important;
+  color: #000000 !important;
+  transform: none !important;
+  box-shadow: none !important;
+  transition: none !important;
+}
+
+/* Ultra specific override for payment buttons */
+html body .modern-cart-page .payment-buttons .btn-primary,
+html body .modern-cart-page .payment-buttons .btn-primary:hover,
+html body .modern-cart-page .payment-buttons .btn-primary:focus,
+html body .modern-cart-page .payment-buttons .btn-primary:active {
+  background: #000000 !important;
+  border: 1px solid #000000 !important;
+  color: #ffffff !important;
+  transform: none !important;
+  box-shadow: none !important;
+  transition: none !important;
+}
+
+/* Mobile specific overrides for payment buttons */
+@media (max-width: 768px) {
+  .payment-buttons .btn-primary,
+  .payment-buttons .btn-primary:hover,
+  .payment-buttons .btn-primary:focus,
+  .payment-buttons .btn-primary:active {
+    background: #000000 !important;
+    border: 1px solid #000000 !important;
+    color: #ffffff !important;
+    transform: none !important;
+    box-shadow: none !important;
+    transition: none !important;
+  }
+
+  .payment-buttons .btn-primary *,
+  .payment-buttons .btn-primary span,
+  .payment-buttons .btn-primary svg,
+  .payment-buttons .btn-primary i {
+    color: #ffffff !important;
+    -webkit-text-fill-color: #ffffff !important;
+    fill: #ffffff !important;
+  }
+
+  .payment-buttons .btn-secondary,
+  .payment-buttons .btn-secondary:hover {
+    background: #ffffff !important;
+    border: 1px solid #e5e7eb !important;
+    color: #000000 !important;
+    transform: none !important;
+    box-shadow: none !important;
+  }
+}
+
+/* ========== ULTRA AGGRESSIVE PAY BUTTON TEXT OVERRIDES ========== */
+
+/* Most specific possible selectors for pay button text visibility */
+.payment-buttons button[type="submit"],
+.payment-buttons button[type="submit"]:hover,
+.payment-buttons button[type="submit"]:focus,
+.payment-buttons button[type="submit"]:active,
+.payment-buttons .btn-primary[type="submit"],
+.payment-buttons .btn-primary[type="submit"]:hover,
+.payment-buttons .btn-primary[type="submit"]:focus,
+.payment-buttons .btn-primary[type="submit"]:active {
+  background: #000000 !important;
+  background-color: #000000 !important;
+  border: 1px solid #000000 !important;
+  border-color: #000000 !important;
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+  transform: none !important;
+  box-shadow: none !important;
+  transition: none !important;
+}
+
+/* Force all text content in pay button to be white */
+.payment-buttons button[type="submit"] *,
+.payment-buttons button[type="submit"] span,
+.payment-buttons button[type="submit"] text,
+.payment-buttons .btn-primary[type="submit"] *,
+.payment-buttons .btn-primary[type="submit"] span,
+.payment-buttons .btn-primary[type="submit"] text,
+.payment-buttons button[type="submit"]:hover *,
+.payment-buttons button[type="submit"]:hover span,
+.payment-buttons .btn-primary[type="submit"]:hover *,
+.payment-buttons .btn-primary[type="submit"]:hover span {
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+  fill: #ffffff !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+}
+
+/* Ultra specific override with highest possible specificity */
+html body div .modern-cart-page .payment-buttons button[type="submit"],
+html body div .modern-cart-page .payment-buttons .btn-primary[type="submit"],
+html body div .modern-cart-page .payment-buttons button[type="submit"]:hover,
+html body div .modern-cart-page .payment-buttons .btn-primary[type="submit"]:hover {
+  background: #000000 !important;
+  background-color: #000000 !important;
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+  border: 1px solid #000000 !important;
+  transform: none !important;
+  box-shadow: none !important;
+}
+
+/* Force text nodes to be white */
+html body div .modern-cart-page .payment-buttons button[type="submit"] *,
+html body div .modern-cart-page .payment-buttons .btn-primary[type="submit"] *,
+html body div .modern-cart-page .payment-buttons button[type="submit"] span,
+html body div .modern-cart-page .payment-buttons .btn-primary[type="submit"] span {
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+  fill: #ffffff !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+}
+
+/* Mobile ultra aggressive overrides */
+@media (max-width: 768px) {
+  .payment-buttons button[type="submit"],
+  .payment-buttons .btn-primary[type="submit"],
+  .payment-buttons button[type="submit"]:hover,
+  .payment-buttons .btn-primary[type="submit"]:hover {
+    background: #000000 !important;
+    background-color: #000000 !important;
+    color: #ffffff !important;
+    -webkit-text-fill-color: #ffffff !important;
+    border: 1px solid #000000 !important;
+    transform: none !important;
+    box-shadow: none !important;
+  }
+
+  .payment-buttons button[type="submit"] *,
+  .payment-buttons .btn-primary[type="submit"] *,
+  .payment-buttons button[type="submit"] span,
+  .payment-buttons .btn-primary[type="submit"] span {
+    color: #ffffff !important;
+    -webkit-text-fill-color: #ffffff !important;
+    fill: #ffffff !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+  }
+}
+
+/* ========== NUCLEAR OPTION - OVERRIDE ALL POSSIBLE CONFLICTS ========== */
+
+/* Target any possible button class combinations */
+button.btn.btn-primary[type="submit"],
+button.btn.btn-primary[type="submit"]:hover,
+button.btn.btn-primary[type="submit"]:focus,
+button.btn.btn-primary[type="submit"]:active,
+.btn.btn-primary[type="submit"],
+.btn.btn-primary[type="submit"]:hover,
+.btn.btn-primary[type="submit"]:focus,
+.btn.btn-primary[type="submit"]:active {
+  background: #000000 !important;
+  background-color: #000000 !important;
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+  border: 1px solid #000000 !important;
+  border-color: #000000 !important;
+  transform: none !important;
+  box-shadow: none !important;
+  transition: none !important;
+}
+
+/* Override Bootstrap and any global button styles */
+.payment-container button.btn-primary,
+.payment-container button.btn-primary:hover,
+.payment-container .btn.btn-primary,
+.payment-container .btn.btn-primary:hover,
+.payment-form button.btn-primary,
+.payment-form button.btn-primary:hover,
+.payment-form .btn.btn-primary,
+.payment-form .btn.btn-primary:hover {
+  background: #000000 !important;
+  background-color: #000000 !important;
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+  border: 1px solid #000000 !important;
+  border-color: #000000 !important;
+  transform: none !important;
+  box-shadow: none !important;
+  transition: none !important;
+}
+
+/* Force text content visibility with maximum specificity */
+.payment-container button.btn-primary *,
+.payment-container .btn.btn-primary *,
+.payment-form button.btn-primary *,
+.payment-form .btn.btn-primary *,
+.payment-container button.btn-primary span,
+.payment-container .btn.btn-primary span,
+.payment-form button.btn-primary span,
+.payment-form .btn.btn-primary span {
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+  fill: #ffffff !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+  display: inline !important;
+}
+
+/* Override any text-hiding CSS */
+.payment-buttons button:not(.btn-secondary),
+.payment-buttons .btn-primary {
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+}
+
+.payment-buttons button:not(.btn-secondary) *,
+.payment-buttons .btn-primary * {
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+  opacity: 1 !important;
+  visibility: visible !important;
 }

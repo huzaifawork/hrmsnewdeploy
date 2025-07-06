@@ -77,6 +77,8 @@ const Sidebar = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [notifications, setNotifications] = useState(3);
   const [isNotificationOpen, setIsNotificationOpen] = useState(false);
+  const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
+  const [forceUpdate, setForceUpdate] = useState(0);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -84,7 +86,34 @@ const Sidebar = () => {
     if (name) {
       setUserName(name);
     }
+
+    // Handle window resize for mobile responsiveness
+    const handleResize = () => {
+      const mobile = window.innerWidth <= 768;
+      setIsMobile(mobile);
+      if (!mobile) {
+        // Close mobile menu when switching to desktop
+        setIsMobileMenuOpen(false);
+      }
+    };
+
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
   }, []);
+
+  // Monitor selectedModule changes
+  useEffect(() => {
+    console.log("selectedModule state changed to:", selectedModule);
+  }, [selectedModule]);
+
+  // Function to change module
+  const changeModule = (newModule) => {
+    console.log("=== CHANGING MODULE ===");
+    console.log("From:", selectedModule);
+    console.log("To:", newModule);
+    setSelectedModule(newModule);
+    setForceUpdate(prev => prev + 1);
+  };
 
   const handleLogout = () => {
     localStorage.clear();
@@ -92,7 +121,13 @@ const Sidebar = () => {
   };
 
   const toggleSidebar = () => {
-    setIsSidebarCollapsed(!isSidebarCollapsed);
+    if (window.innerWidth <= 768) {
+      // On mobile, toggle mobile menu instead of collapsing
+      setIsMobileMenuOpen(!isMobileMenuOpen);
+    } else {
+      // On desktop, collapse/expand sidebar
+      setIsSidebarCollapsed(!isSidebarCollapsed);
+    }
   };
 
   const toggleDropdown = (module) => {
@@ -278,29 +313,29 @@ const Sidebar = () => {
   const renderContent = () => {
     switch (selectedModule) {
       case "Dashboard":
-        return <Dashboardmodule />;
+        return <Dashboardmodule key="dashboard" />;
       case "User Profile":
-        return <UserProfileManagement />;
+        return <UserProfileManagement key="user-profile" />;
       case "AdminAddRoom":
-        return <AdminAddRoom />;
+        return <AdminAddRoom key="add-room" />;
       case "AdminViewRooms":
-        return <AdminViewRooms />;
+        return <AdminViewRooms key="view-rooms" />;
       case "AdminRoomUpdate":
-        return <AdminRoomUpdate />;
+        return <AdminRoomUpdate key="update-room" />;
       case "AdminDeleteRoom":
-        return <AdminDeleteRoom />;
+        return <AdminDeleteRoom key="delete-room" />;
       case "AdminAddTable":
-        return <AdminAddTable />;
+        return <AdminAddTable key="add-table" />;
       case "AdminViewTables":
-        return <AdminViewTables />;
+        return <AdminViewTables key="view-tables" />;
       case "AdminUpdateTable":
-        return <AdminUpdateTable />;
+        return <AdminUpdateTable key="update-table" />;
       case "AdminDeleteTable":
-        return <AdminDeleteTable />;
+        return <AdminDeleteTable key="delete-table" />;
       case "AdminManageBookings":
-        return <AdminManageBookings />;
+        return <AdminManageBookings key="manage-bookings" />;
       case "AdminManageReservations":
-        return <AdminManageReservations />;
+        return <AdminManageReservations key="manage-reservations" />;
       case "AdminCustomerManagement":
         return <AdminCustomerManagement />;
       case "Online Orders":
@@ -350,13 +385,29 @@ const Sidebar = () => {
       {/* Mobile Menu Overlay */}
       <div
         className={`mobile-overlay ${isMobileMenuOpen ? "active" : ""}`}
-        onClick={() => setIsMobileMenuOpen(false)}
-        style={{ display: isMobileMenuOpen ? "block" : "none" }}
+        onClick={(e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          console.log("Mobile overlay clicked - closing menu");
+          setIsMobileMenuOpen(false);
+        }}
+        style={{
+          display: isMobileMenuOpen ? "block" : "none",
+          position: "fixed",
+          top: 0,
+          left: 0,
+          width: "100%",
+          height: "100%",
+          backgroundColor: "rgba(0, 0, 0, 0.5)",
+          zIndex: 998
+        }}
       />
 
       {/* Clean Sidebar */}
       <aside
-        className={`admin-sidebar ${isSidebarCollapsed ? "collapsed" : ""}`}
+        className={`admin-sidebar ${isSidebarCollapsed ? "collapsed" : ""} ${
+          isMobileMenuOpen ? "mobile-open" : ""
+        }`}
       >
         {/* Sidebar Header */}
         <div className="sidebar-header">
@@ -366,6 +417,27 @@ const Sidebar = () => {
               <h3 className="sidebar-title">HRMS</h3>
               <p className="sidebar-subtitle">Dashboard</p>
             </div>
+          )}
+          {/* Mobile Close Button */}
+          {isMobile && isMobileMenuOpen && (
+            <button
+              className="mobile-close-btn"
+              onClick={() => setIsMobileMenuOpen(false)}
+              style={{
+                position: "absolute",
+                right: "15px",
+                top: "15px",
+                background: "transparent",
+                border: "none",
+                fontSize: "20px",
+                color: "#000000",
+                cursor: "pointer",
+                padding: "5px",
+                borderRadius: "4px",
+              }}
+            >
+              ×
+            </button>
           )}
         </div>
 
@@ -389,12 +461,13 @@ const Sidebar = () => {
                 return (
                   <React.Fragment key={item.name}>
                     <li className="nav-item">
-                      <a
-                        href="#"
+                      <div
                         className={`nav-link ${isActive ? "active" : ""}`}
                         style={{
                           color: "#000000 !important",
                           textDecoration: "none",
+                          cursor: "pointer",
+                          userSelect: "none"
                         }}
                         onMouseEnter={(e) => {
                           e.target.style.color = "#000000";
@@ -404,13 +477,18 @@ const Sidebar = () => {
                         }}
                         onClick={(e) => {
                           e.preventDefault();
+                          e.stopPropagation();
                           if (hasSubmenu) {
                             toggleDropdown(item.name);
                           } else {
-                            setSelectedModule(item.component || item.name);
-                            if (window.innerWidth <= 768) {
+                            const newModule = item.component || item.name;
+                            changeModule(newModule);
+
+                            // Close mobile menu and any open dropdowns
+                            if (isMobile) {
                               setIsMobileMenuOpen(false);
                             }
+                            setOpenDropdown(null);
                           }
                         }}
                       >
@@ -448,7 +526,7 @@ const Sidebar = () => {
                             )}
                           </>
                         )}
-                      </a>
+                      </div>
 
                       {isSidebarCollapsed && (
                         <div className="menu-tooltip">
@@ -475,14 +553,15 @@ const Sidebar = () => {
 
                           return (
                             <li key={subItem.name} className="nav-item">
-                              <a
-                                href="#"
+                              <div
                                 className={`nav-link submenu-link ${
                                   isSubActive ? "active" : ""
                                 }`}
                                 style={{
                                   color: "#000000 !important",
                                   textDecoration: "none",
+                                  cursor: "pointer",
+                                  userSelect: "none"
                                 }}
                                 onMouseEnter={(e) => {
                                   e.target.style.color = "#000000";
@@ -492,10 +571,15 @@ const Sidebar = () => {
                                 }}
                                 onClick={(e) => {
                                   e.preventDefault();
-                                  setSelectedModule(subItem.component);
-                                  if (window.innerWidth <= 768) {
+                                  e.stopPropagation();
+                                  const newModule = subItem.component;
+                                  changeModule(newModule);
+
+                                  // Close mobile menu and dropdowns
+                                  if (isMobile) {
                                     setIsMobileMenuOpen(false);
                                   }
+                                  setOpenDropdown(null);
                                 }}
                               >
                                 <SubIconComponent
@@ -511,7 +595,7 @@ const Sidebar = () => {
                                 <span style={{ color: "#000000 !important" }}>
                                   {subItem.name}
                                 </span>
-                              </a>
+                              </div>
                             </li>
                           );
                         })}
@@ -532,7 +616,7 @@ const Sidebar = () => {
                 </div>
                 {!isSidebarCollapsed && (
                   <div className="user-info">
-                    <p className="user-name">{userName || "Default Admin"}</p>
+                    <p className="user-name">{userName || "Admin"}</p>
                     <p className="user-role">ADMINISTRATOR</p>
                   </div>
                 )}
@@ -593,36 +677,55 @@ const Sidebar = () => {
               <FiMenu />
             </button>
             <div>
-              <h1 className="header-title">Hi, {userName || "Sarah"}!</h1>
-              <p className="header-subtitle">
-                Whole data about your business here.
-              </p>
+              <h1 className="header-title">Hi, Admin!</h1>
+              <p className="header-subtitle">Welcome to your dashboard</p>
+              <div style={{
+                background: "yellow",
+                padding: "5px",
+                fontSize: "12px",
+                marginTop: "5px",
+                borderRadius: "4px",
+                color: "black"
+              }}>
+                Current Module: {selectedModule} | Force Update: {forceUpdate}
+              </div>
             </div>
           </div>
 
           <div className="header-right">
-            <div className="header-search">
-              <FiSearch className="search-icon" />
-              <input
-                type="text"
-                placeholder="Global search..."
-                className="search-input"
-              />
-            </div>
+            {/* Hide search and notifications on mobile for cleaner look */}
+            {!isMobile && (
+              <>
+                <div className="header-search">
+                  <FiSearch className="search-icon" />
+                  <input
+                    type="text"
+                    placeholder="Global search..."
+                    className="search-input"
+                  />
+                </div>
 
-            <div className="header-actions">
-              <button className="header-btn">
-                <FiBell />
-              </button>
-              <button className="header-btn">
-                <FiMail />
-              </button>
-            </div>
+                <div className="header-actions">
+                  <button className="header-btn">
+                    <FiBell />
+                  </button>
+                  <button className="header-btn">
+                    <FiMail />
+                  </button>
+                </div>
+              </>
+            )}
           </div>
         </header>
 
         {/* Dashboard Content */}
-        <div className="admin-content">{renderContent()}</div>
+        <div
+          className="admin-content"
+          key={`${selectedModule}-${forceUpdate}`}
+
+        >
+          {renderContent()}
+        </div>
       </main>
     </div>
   );

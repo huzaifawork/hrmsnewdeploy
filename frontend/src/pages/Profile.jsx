@@ -92,9 +92,31 @@ const Profile = () => {
     const forceWhiteTheme = () => {
       const profilePage = document.querySelector('.modern-profile-page');
       if (profilePage) {
-        // Force white background on all elements
+        // Force white background on all elements EXCEPT icons
         const allElements = profilePage.querySelectorAll('*');
         allElements.forEach(element => {
+          // Skip icons and SVG elements
+          const tagName = element.tagName ? element.tagName.toLowerCase() : '';
+          const className = element.className ? element.className.toString() : '';
+
+          if (tagName === 'svg' ||
+              tagName === 'i' ||
+              element.classList.contains('tab-icon') ||
+              element.classList.contains('section-icon') ||
+              element.classList.contains('hero-stat-icon') ||
+              element.classList.contains('stat-icon') ||
+              element.classList.contains('form-icon') ||
+              element.classList.contains('activity-icon') ||
+              className.includes('icon') ||
+              className.includes('fi-')) {
+            // Only set background for icons, not color
+            element.style.setProperty('background', 'transparent', 'important');
+            element.style.setProperty('background-color', 'transparent', 'important');
+            element.style.setProperty('background-image', 'none', 'important');
+            return; // Skip color override for icons
+          }
+
+          // Apply theme to non-icon elements
           element.style.setProperty('background', '#ffffff', 'important');
           element.style.setProperty('background-color', '#ffffff', 'important');
           element.style.setProperty('background-image', 'none', 'important');
