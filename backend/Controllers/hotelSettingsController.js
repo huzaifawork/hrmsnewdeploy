@@ -237,11 +237,160 @@ const isValidEmail = (email) => {
   return emailRegex.test(email);
 };
 
+// Upload logo endpoint
+const uploadLogo = async (req, res) => {
+  try {
+    const { logoType } = req.body; // 'primary', 'secondary', 'loginLogo', 'favicon'
+    const userId = req.user?.id;
+
+    if (!req.file) {
+      return res.status(400).json({
+        success: false,
+        message: 'No logo file provided',
+        timestamp: new Date().toISOString()
+      });
+    }
+
+    const validLogoTypes = ['primary', 'secondary', 'loginLogo', 'favicon'];
+    if (!logoType || !validLogoTypes.includes(logoType)) {
+      return res.status(400).json({
+        success: false,
+        message: `Invalid logo type. Valid types are: ${validLogoTypes.join(', ')}`,
+        timestamp: new Date().toISOString()
+      });
+    }
+
+    // Handle logo upload
+    let logoUrl = null;
+    if (req.file.filename) {
+      // Disk storage (development)
+      logoUrl = `/uploads/${req.file.filename}`;
+      console.log('Development logo upload - saved to disk:', logoUrl);
+    } else {
+      // Memory storage (production) - for serverless, we'll return the file data
+      // In production, you might want to upload to a cloud service like Cloudinary or AWS S3
+      console.log('Production environment detected - file upload not supported on serverless');
+      console.log('File details:', {
+        originalname: req.file.originalname,
+        mimetype: req.file.mimetype,
+        size: req.file.size
+      });
+
+      // For now, we'll return an error in production for file uploads
+      // You can integrate with cloud storage services here
+      return res.status(400).json({
+        success: false,
+        message: 'File upload not supported in production environment. Please use image URLs instead.',
+        timestamp: new Date().toISOString()
+      });
+    }
+
+    // Update hotel settings with new logo URL
+    const settings = await HotelSettings.getSingleton();
+    if (!settings.branding) {
+      settings.branding = { logo: {}, colors: {}, fonts: {} };
+    }
+    if (!settings.branding.logo) {
+      settings.branding.logo = {};
+    }
+
+    settings.branding.logo[logoType] = logoUrl;
+    settings.settings.lastUpdated = new Date();
+    if (userId) {
+      settings.settings.updatedBy = userId;
+    }
+
+    await settings.save();
+
+    res.status(200).json({
+      success: true,
+      data: {
+        logoType,
+        logoUrl,
+        branding: settings.branding
+      },
+      message: `${logoType} logo uploaded successfully`,
+      timestamp: new Date().toISOString()
+    });
+  } catch (error) {
+    console.error('Error uploading logo:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Failed to upload logo',
+      error: error.message,
+      timestamp: new Date().toISOString()
+    });
+  }
+};
+
+// Update branding settings (including logo URLs)
+const updateBrandingSettings = async (req, res) => {
+  try {
+    const userId = req.user?.id;
+    const brandingData = req.body;
+
+    // Validate branding data structure
+    const allowedFields = ['logo', 'colors', 'fonts'];
+    const updateData = {};
+
+    allowedFields.forEach(field => {
+      if (brandingData[field]) {
+        updateData[field] = brandingData[field];
+      }
+    });
+
+    if (Object.keys(updateData).length === 0) {
+      return res.status(400).json({
+        success: false,
+        message: 'No valid branding data provided',
+        timestamp: new Date().toISOString()
+      });
+    }
+
+    // Update settings
+    const settings = await HotelSettings.getSingleton();
+    if (!settings.branding) {
+      settings.branding = { logo: {}, colors: {}, fonts: {} };
+    }
+
+    // Merge the branding data
+    Object.keys(updateData).forEach(key => {
+      if (updateData[key]) {
+        settings.branding[key] = { ...settings.branding[key], ...updateData[key] };
+      }
+    });
+
+    settings.settings.lastUpdated = new Date();
+    if (userId) {
+      settings.settings.updatedBy = userId;
+    }
+
+    await settings.save();
+
+    res.status(200).json({
+      success: true,
+      data: settings.branding,
+      message: 'Branding settings updated successfully',
+      timestamp: new Date().toISOString()
+    });
+  } catch (error) {
+    console.error('Error updating branding settings:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Failed to update branding settings',
+      error: error.message,
+      timestamp: new Date().toISOString()
+    });
+  }
+};
+
 module.exports = {
   getHotelSettings,
   updateHotelSettings,
   resetHotelSettings,
   getPublicHotelSettings,
   updateHotelSection,
-  getHotelSettingsMetadata
+  getHotelSettingsMetadata,
+  uploadLogo,
+  updateBrandingSettings
 };

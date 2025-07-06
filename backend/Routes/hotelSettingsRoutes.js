@@ -1,12 +1,15 @@
 const express = require('express');
 const router = express.Router();
+const upload = require('../Middlewares/uploadpic');
 const {
   getHotelSettings,
   updateHotelSettings,
   resetHotelSettings,
   getPublicHotelSettings,
   updateHotelSection,
-  getHotelSettingsMetadata
+  getHotelSettingsMetadata,
+  uploadLogo,
+  updateBrandingSettings
 } = require('../Controllers/hotelSettingsController');
 const { ensureAuthenticated, ensureAdmin } = require('../Middlewares/Auth');
 
@@ -22,6 +25,12 @@ router.get('/', getHotelSettings);
 
 // Update hotel settings (admin only)
 router.put('/', updateHotelSettings);
+
+// Logo upload endpoints (admin only)
+router.post('/upload-logo', upload.single('logo'), uploadLogo);
+
+// Update branding settings with logo URLs (admin only)
+router.put('/branding', updateBrandingSettings);
 
 // Reset hotel settings to defaults (admin only)
 router.post('/reset', resetHotelSettings);

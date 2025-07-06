@@ -33,7 +33,27 @@ const HotelBrandingSettings = () => {
         fullAddress: ''
       },
       website: ''
+    },
+    branding: {
+      logo: {
+        primary: '',
+        secondary: '',
+        loginLogo: '',
+        favicon: ''
+      },
+      colors: {
+        primary: '#64ffda',
+        secondary: '#0A192F',
+        accent: '#ffffff'
+      }
     }
+  });
+
+  const [logoUploading, setLogoUploading] = useState({
+    primary: false,
+    secondary: false,
+    loginLogo: false,
+    favicon: false
   });
 
   // Load current settings from the database
@@ -66,6 +86,19 @@ const HotelBrandingSettings = () => {
               fullAddress: data.contact?.address?.fullAddress || ''
             },
             website: data.contact?.website || ''
+          },
+          branding: {
+            logo: {
+              primary: data.branding?.logo?.primary || '',
+              secondary: data.branding?.logo?.secondary || '',
+              loginLogo: data.branding?.logo?.loginLogo || '',
+              favicon: data.branding?.logo?.favicon || ''
+            },
+            colors: {
+              primary: data.branding?.colors?.primary || '#64ffda',
+              secondary: data.branding?.colors?.secondary || '#0A192F',
+              accent: data.branding?.colors?.accent || '#ffffff'
+            }
           }
         });
       }
@@ -118,6 +151,76 @@ const HotelBrandingSettings = () => {
         [field]: value
       }));
     }
+  };
+
+  // Handle logo upload
+  const handleLogoUpload = async (logoType, file) => {
+    if (!file) return;
+
+    setLogoUploading(prev => ({ ...prev, [logoType]: true }));
+
+    try {
+      const result = await hotelSettingsService.uploadLogo(file, logoType);
+
+      if (result.success) {
+        // Update the settings state with the new logo URL
+        setSettings(prev => ({
+          ...prev,
+          branding: {
+            ...prev.branding,
+            logo: {
+              ...prev.branding.logo,
+              [logoType]: result.data.logoUrl
+            }
+          }
+        }));
+
+        toast.success(`${logoType} logo uploaded successfully!`);
+
+        // Refresh the context to update all components
+        await loadSettings(true);
+
+        // Trigger a custom event to notify other components
+        window.dispatchEvent(new CustomEvent('hotelSettingsChanged', {
+          detail: { settings: result.data }
+        }));
+      } else {
+        toast.error(result.error || 'Failed to upload logo');
+      }
+    } catch (error) {
+      console.error('Error uploading logo:', error);
+      toast.error('Failed to upload logo');
+    } finally {
+      setLogoUploading(prev => ({ ...prev, [logoType]: false }));
+    }
+  };
+
+  // Handle logo URL input change
+  const handleLogoUrlChange = (logoType, url) => {
+    setSettings(prev => ({
+      ...prev,
+      branding: {
+        ...prev.branding,
+        logo: {
+          ...prev.branding.logo,
+          [logoType]: url
+        }
+      }
+    }));
+  };
+
+  // Handle color change
+  const handleColorChange = (colorType, color) => {
+    setSettings(prev => ({
+      ...prev,
+      branding: {
+        ...prev.branding,
+        colors: {
+          ...prev.branding.colors,
+          [colorType]: color
+        }
+      }
+    }));
   };
 
   const handleSave = async () => {
@@ -363,6 +466,215 @@ const HotelBrandingSettings = () => {
                 placeholder="Enter hotel description"
                 rows="4"
               />
+            </div>
+          </form>
+        </div>
+      </div>
+
+      {/* Branding Settings */}
+      <div className="simple-table-container" style={{ marginTop: '30px' }}>
+        <div style={{ padding: '20px', borderBottom: '1px solid #e5e7eb' }}>
+          <h3 style={{ margin: 0, color: '#000000' }}>Branding & Logo Settings</h3>
+        </div>
+        <div style={{ padding: '20px' }}>
+          <form className="simple-form">
+            {/* Logo Upload Section */}
+            <div style={{ marginBottom: '30px' }}>
+              <h4 style={{ color: '#000000', marginBottom: '20px' }}>Logo Management</h4>
+
+              {/* Primary Logo */}
+              <div className="simple-form-row" style={{ marginBottom: '20px' }}>
+                <div style={{ display: 'flex', flexDirection: 'column', flex: 1 }}>
+                  <label style={{ marginBottom: '5px', color: '#000000', fontWeight: 'bold' }}>
+                    Primary Logo (Header)
+                  </label>
+                  <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
+                    <input
+                      type="url"
+                      value={settings.branding.logo.primary}
+                      onChange={(e) => handleLogoUrlChange('primary', e.target.value)}
+                      placeholder="Enter logo URL or upload file"
+                      style={{ flex: 1 }}
+                    />
+                    <input
+                      type="file"
+                      accept="image/*"
+                      onChange={(e) => handleLogoUpload('primary', e.target.files[0])}
+                      style={{ display: 'none' }}
+                      id="primary-logo-upload"
+                    />
+                    <label
+                      htmlFor="primary-logo-upload"
+                      style={{
+                        padding: '8px 16px',
+                        backgroundColor: logoUploading.primary ? '#ccc' : '#007bff',
+                        color: 'white',
+                        border: 'none',
+                        borderRadius: '4px',
+                        cursor: logoUploading.primary ? 'not-allowed' : 'pointer',
+                        fontSize: '14px'
+                      }}
+                    >
+                      {logoUploading.primary ? 'Uploading...' : 'Upload'}
+                    </label>
+                  </div>
+                  {settings.branding.logo.primary && (
+                    <div style={{ marginTop: '10px' }}>
+                      <img
+                        src={settings.branding.logo.primary}
+                        alt="Primary Logo Preview"
+                        style={{ maxHeight: '50px', maxWidth: '200px', objectFit: 'contain' }}
+                        onError={(e) => {
+                          e.target.style.display = 'none';
+                        }}
+                      />
+                    </div>
+                  )}
+                </div>
+              </div>
+
+              {/* Login Logo */}
+              <div className="simple-form-row" style={{ marginBottom: '20px' }}>
+                <div style={{ display: 'flex', flexDirection: 'column', flex: 1 }}>
+                  <label style={{ marginBottom: '5px', color: '#000000', fontWeight: 'bold' }}>
+                    Login Page Logo
+                  </label>
+                  <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
+                    <input
+                      type="url"
+                      value={settings.branding.logo.loginLogo}
+                      onChange={(e) => handleLogoUrlChange('loginLogo', e.target.value)}
+                      placeholder="Enter login logo URL or upload file"
+                      style={{ flex: 1 }}
+                    />
+                    <input
+                      type="file"
+                      accept="image/*"
+                      onChange={(e) => handleLogoUpload('loginLogo', e.target.files[0])}
+                      style={{ display: 'none' }}
+                      id="login-logo-upload"
+                    />
+                    <label
+                      htmlFor="login-logo-upload"
+                      style={{
+                        padding: '8px 16px',
+                        backgroundColor: logoUploading.loginLogo ? '#ccc' : '#007bff',
+                        color: 'white',
+                        border: 'none',
+                        borderRadius: '4px',
+                        cursor: logoUploading.loginLogo ? 'not-allowed' : 'pointer',
+                        fontSize: '14px'
+                      }}
+                    >
+                      {logoUploading.loginLogo ? 'Uploading...' : 'Upload'}
+                    </label>
+                  </div>
+                  {settings.branding.logo.loginLogo && (
+                    <div style={{ marginTop: '10px' }}>
+                      <img
+                        src={settings.branding.logo.loginLogo}
+                        alt="Login Logo Preview"
+                        style={{ maxHeight: '50px', maxWidth: '200px', objectFit: 'contain' }}
+                        onError={(e) => {
+                          e.target.style.display = 'none';
+                        }}
+                      />
+                    </div>
+                  )}
+                </div>
+              </div>
+
+              {/* Secondary Logo */}
+              <div className="simple-form-row" style={{ marginBottom: '20px' }}>
+                <div style={{ display: 'flex', flexDirection: 'column', flex: 1 }}>
+                  <label style={{ marginBottom: '5px', color: '#000000', fontWeight: 'bold' }}>
+                    Secondary Logo (Optional)
+                  </label>
+                  <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
+                    <input
+                      type="url"
+                      value={settings.branding.logo.secondary}
+                      onChange={(e) => handleLogoUrlChange('secondary', e.target.value)}
+                      placeholder="Enter secondary logo URL or upload file"
+                      style={{ flex: 1 }}
+                    />
+                    <input
+                      type="file"
+                      accept="image/*"
+                      onChange={(e) => handleLogoUpload('secondary', e.target.files[0])}
+                      style={{ display: 'none' }}
+                      id="secondary-logo-upload"
+                    />
+                    <label
+                      htmlFor="secondary-logo-upload"
+                      style={{
+                        padding: '8px 16px',
+                        backgroundColor: logoUploading.secondary ? '#ccc' : '#007bff',
+                        color: 'white',
+                        border: 'none',
+                        borderRadius: '4px',
+                        cursor: logoUploading.secondary ? 'not-allowed' : 'pointer',
+                        fontSize: '14px'
+                      }}
+                    >
+                      {logoUploading.secondary ? 'Uploading...' : 'Upload'}
+                    </label>
+                  </div>
+                  {settings.branding.logo.secondary && (
+                    <div style={{ marginTop: '10px' }}>
+                      <img
+                        src={settings.branding.logo.secondary}
+                        alt="Secondary Logo Preview"
+                        style={{ maxHeight: '50px', maxWidth: '200px', objectFit: 'contain' }}
+                        onError={(e) => {
+                          e.target.style.display = 'none';
+                        }}
+                      />
+                    </div>
+                  )}
+                </div>
+              </div>
+            </div>
+
+            {/* Brand Colors Section */}
+            <div style={{ marginBottom: '20px' }}>
+              <h4 style={{ color: '#000000', marginBottom: '20px' }}>Brand Colors</h4>
+
+              <div className="simple-form-row">
+                <div style={{ display: 'flex', flexDirection: 'column' }}>
+                  <label style={{ marginBottom: '5px', color: '#000000', fontWeight: 'bold' }}>
+                    Primary Color
+                  </label>
+                  <input
+                    type="color"
+                    value={settings.branding.colors.primary}
+                    onChange={(e) => handleColorChange('primary', e.target.value)}
+                    style={{ width: '100px', height: '40px' }}
+                  />
+                </div>
+                <div style={{ display: 'flex', flexDirection: 'column' }}>
+                  <label style={{ marginBottom: '5px', color: '#000000', fontWeight: 'bold' }}>
+                    Secondary Color
+                  </label>
+                  <input
+                    type="color"
+                    value={settings.branding.colors.secondary}
+                    onChange={(e) => handleColorChange('secondary', e.target.value)}
+                    style={{ width: '100px', height: '40px' }}
+                  />
+                </div>
+                <div style={{ display: 'flex', flexDirection: 'column' }}>
+                  <label style={{ marginBottom: '5px', color: '#000000', fontWeight: 'bold' }}>
+                    Accent Color
+                  </label>
+                  <input
+                    type="color"
+                    value={settings.branding.colors.accent}
+                    onChange={(e) => handleColorChange('accent', e.target.value)}
+                    style={{ width: '100px', height: '40px' }}
+                  />
+                </div>
+              </div>
             </div>
           </form>
         </div>

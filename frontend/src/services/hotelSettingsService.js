@@ -356,6 +356,78 @@ class HotelSettingsService {
     return null;
   }
 
+  /**
+   * Upload logo file
+   */
+  async uploadLogo(logoFile, logoType) {
+    try {
+      const formData = new FormData();
+      formData.append('logo', logoFile);
+      formData.append('logoType', logoType);
+
+      const token = localStorage.getItem('token');
+      const response = await axios.post(
+        `${apiConfig.endpoints.hotelSettings}/upload-logo`,
+        formData,
+        {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+            'Authorization': `Bearer ${token}`
+          }
+        }
+      );
+
+      // Clear cache after successful upload
+      this.clearCache();
+
+      return {
+        success: true,
+        data: response.data.data,
+        message: response.data.message
+      };
+    } catch (error) {
+      console.error('Error uploading logo:', error);
+      return {
+        success: false,
+        error: error.response?.data?.message || 'Failed to upload logo'
+      };
+    }
+  }
+
+  /**
+   * Update branding settings (including logo URLs)
+   */
+  async updateBrandingSettings(brandingData) {
+    try {
+      const token = localStorage.getItem('token');
+      const response = await axios.put(
+        `${apiConfig.endpoints.hotelSettings}/branding`,
+        brandingData,
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+          }
+        }
+      );
+
+      // Clear cache after successful update
+      this.clearCache();
+
+      return {
+        success: true,
+        data: response.data.data,
+        message: response.data.message
+      };
+    } catch (error) {
+      console.error('Error updating branding settings:', error);
+      return {
+        success: false,
+        error: error.response?.data?.message || 'Failed to update branding settings'
+      };
+    }
+  }
+
   clearCache() {
     try {
       localStorage.removeItem('hotelSettings');
