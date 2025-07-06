@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const { getAllUsers, updateUser, deleteUser, toggleUserStatus } = require('../Controllers/AdminController');
-const { getDashboardAnalytics } = require('../Controllers/AdminAnalyticsController');
+const { getDashboardAnalytics, getRecentActivities } = require('../Controllers/AdminAnalyticsController');
 const { ensureAuthenticated, ensureAdmin } = require('../Middlewares/Auth');
 
 // Apply authentication and admin middleware to all routes
@@ -22,5 +22,8 @@ router.patch('/users/:id/toggle-status', toggleUserStatus);
 
 // Dashboard analytics
 router.get('/dashboard/analytics', getDashboardAnalytics);
+
+// Recent activities
+router.get('/dashboard/recent-activities', getRecentActivities);
 
 module.exports = router;

@@ -310,6 +310,129 @@ const getDashboardAnalytics = async (req, res) => {
   }
 };
 
+// Get recent activities for dashboard
+const getRecentActivities = async (req, res) => {
+  try {
+    const { limit = 10 } = req.query;
+    const limitNum = parseInt(limit);
+
+    // Get recent activities from last 24 hours
+    const yesterday = new Date(Date.now() - 24 * 60 * 60 * 1000);
+
+    // Fetch recent orders
+    const recentOrders = await Order.find({
+      createdAt: { $gte: yesterday }
+    })
+    .populate('user', 'name email')
+    .sort({ createdAt: -1 })
+    .limit(limitNum)
+    .lean();
+
+    // Fetch recent bookings
+    const recentBookings = await Booking.find({
+      createdAt: { $gte: yesterday }
+    })
+    .populate('userId', 'name email')
+    .populate('roomId', 'roomNumber roomType')
+    .sort({ createdAt: -1 })
+    .limit(limitNum)
+    .lean();
+
+    // Fetch recent reservations
+    const recentReservations = await Reservation.find({
+      createdAt: { $gte: yesterday }
+    })
+    .populate('userId', 'name email')
+    .populate('tableId', 'tableName')
+    .sort({ createdAt: -1 })
+    .limit(limitNum)
+    .lean();
+
+    // Format activities
+    const activities = [];
+
+    // Add orders
+    recentOrders.forEach(order => {
+      activities.push({
+        type: 'order',
+        customer: order.user?.name || order.fullName || 'Guest Customer',
+        reference: `Order #${order._id.toString().slice(-6)}`,
+        activity: `Placed food order - Rs.${order.totalPrice?.toLocaleString() || 0}`,
+        status: order.status || 'pending',
+        timestamp: order.createdAt,
+        time: getTimeAgo(order.createdAt)
+      });
+    });
+
+    // Add bookings
+    recentBookings.forEach(booking => {
+      activities.push({
+        type: 'booking',
+        customer: booking.userId?.name || booking.fullName || 'Guest Customer',
+        reference: `Room ${booking.roomNumber || booking.roomId?.roomNumber || 'N/A'}`,
+        activity: `Booked ${booking.roomType || 'room'} - Rs.${booking.totalPrice?.toLocaleString() || 0}`,
+        status: booking.paymentStatus || 'confirmed',
+        timestamp: booking.createdAt,
+        time: getTimeAgo(booking.createdAt)
+      });
+    });
+
+    // Add reservations
+    recentReservations.forEach(reservation => {
+      activities.push({
+        type: 'reservation',
+        customer: reservation.userId?.name || reservation.fullName || 'Guest Customer',
+        reference: `Table ${reservation.tableNumber || reservation.tableId?.tableName || 'N/A'}`,
+        activity: `Reserved table for ${reservation.guests} guests - Rs.${reservation.totalPrice?.toLocaleString() || 0}`,
+        status: reservation.paymentStatus || 'confirmed',
+        timestamp: reservation.createdAt,
+        time: getTimeAgo(reservation.createdAt)
+      });
+    });
+
+    // Sort all activities by timestamp and limit
+    activities.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+    const limitedActivities = activities.slice(0, limitNum);
+
+    res.status(200).json({
+      success: true,
+      data: {
+        activities: limitedActivities,
+        total: activities.length,
+        summary: {
+          orders: recentOrders.length,
+          bookings: recentBookings.length,
+          reservations: recentReservations.length
+        }
+      },
+      timestamp: new Date().toISOString()
+    });
+
+  } catch (error) {
+    console.error('Error fetching recent activities:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Failed to fetch recent activities',
+      error: error.message,
+      timestamp: new Date().toISOString()
+    });
+  }
+};
+
+// Helper function to calculate time ago
+const getTimeAgo = (date) => {
+  const now = new Date();
+  const diffMs = now - new Date(date);
+  const diffMins = Math.floor(diffMs / (1000 * 60));
+  const diffHours = Math.floor(diffMs / (1000 * 60 * 60));
+
+  if (diffMins < 1) return 'Just now';
+  if (diffMins < 60) return `${diffMins} min${diffMins > 1 ? 's' : ''} ago`;
+  if (diffHours < 24) return `${diffHours} hour${diffHours > 1 ? 's' : ''} ago`;
+  return new Date(date).toLocaleDateString();
+};
+
 module.exports = {
-  getDashboardAnalytics
+  getDashboardAnalytics,
+  getRecentActivities
 };
