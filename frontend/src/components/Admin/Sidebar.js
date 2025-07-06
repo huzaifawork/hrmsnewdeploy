@@ -533,6 +533,10 @@ const Sidebar = () => {
                           console.log("=== TOUCH END EVENT ===");
                           console.log("Touch end detected on:", item.name);
 
+                          // Prevent click event from firing after touch
+                          e.preventDefault();
+                          e.stopPropagation();
+
                           // Trigger appropriate action for mobile
                           if (isMobile) {
                             const hasSubmenu = item.submenu && item.submenu.length > 0;
@@ -555,6 +559,13 @@ const Sidebar = () => {
                         onClick={(e) => {
                           e.preventDefault();
                           e.stopPropagation();
+
+                          // Skip click handling on mobile (use touch events instead)
+                          if (isMobile) {
+                            console.log("=== CLICK EVENT SKIPPED ON MOBILE ===");
+                            return;
+                          }
+
                           console.log("=== MENU ITEM CLICKED ===");
                           console.log("Item:", item.name);
                           console.log("Component:", item.component);
@@ -661,7 +672,11 @@ const Sidebar = () => {
                                   console.log("=== SUBMENU TOUCH END ===");
                                   console.log("Touch end on submenu:", subItem.name);
 
-                                  // Trigger click manually for mobile
+                                  // Prevent click event from firing after touch
+                                  e.preventDefault();
+                                  e.stopPropagation();
+
+                                  // Trigger navigation for mobile
                                   if (isMobile) {
                                     console.log("Mobile submenu touch - triggering navigation");
                                     const newModule = subItem.component;
@@ -674,6 +689,13 @@ const Sidebar = () => {
                                 onClick={(e) => {
                                   e.preventDefault();
                                   e.stopPropagation();
+
+                                  // Skip click handling on mobile (use touch events instead)
+                                  if (isMobile) {
+                                    console.log("=== SUBMENU CLICK EVENT SKIPPED ON MOBILE ===");
+                                    return;
+                                  }
+
                                   console.log("=== SUBMENU ITEM CLICKED ===");
                                   console.log("Submenu item:", subItem.name);
                                   console.log("Component:", subItem.component);
