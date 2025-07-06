@@ -153,13 +153,28 @@ const HotelBrandingSettings = () => {
     }
   };
 
-  // Handle logo upload
+  // Handle logo upload with multiple fallback methods
   const handleLogoUpload = async (logoType, file) => {
     if (!file) return;
+
+    // Validate file size (max 5MB)
+    if (file.size > 5 * 1024 * 1024) {
+      toast.error('File size too large. Please use an image smaller than 5MB.');
+      return;
+    }
+
+    // Validate file type
+    if (!file.type.startsWith('image/')) {
+      toast.error('Please select a valid image file.');
+      return;
+    }
 
     setLogoUploading(prev => ({ ...prev, [logoType]: true }));
 
     try {
+      // Show initial upload message
+      toast.info('Uploading logo... This may take a moment.');
+
       const result = await hotelSettingsService.uploadLogo(file, logoType);
 
       if (result.success) {
@@ -175,7 +190,7 @@ const HotelBrandingSettings = () => {
           }
         }));
 
-        toast.success(`${logoType} logo uploaded successfully!`);
+        toast.success(result.message || `${logoType} logo uploaded successfully!`);
 
         // Refresh the context to update all components
         await loadSettings(true);
@@ -189,7 +204,7 @@ const HotelBrandingSettings = () => {
       }
     } catch (error) {
       console.error('Error uploading logo:', error);
-      toast.error('Failed to upload logo');
+      toast.error('Upload failed. Please try again or use a direct image URL.');
     } finally {
       setLogoUploading(prev => ({ ...prev, [logoType]: false }));
     }
@@ -480,7 +495,25 @@ const HotelBrandingSettings = () => {
           <form className="simple-form">
             {/* Logo Upload Section */}
             <div style={{ marginBottom: '30px' }}>
-              <h4 style={{ color: '#000000', marginBottom: '20px' }}>Logo Management</h4>
+              <h4 style={{ color: '#000000', marginBottom: '10px' }}>Logo Management</h4>
+              <div style={{
+                backgroundColor: '#f3f4f6',
+                padding: '15px',
+                borderRadius: '6px',
+                marginBottom: '20px',
+                fontSize: '14px',
+                color: '#374151'
+              }}>
+                <strong>Upload Methods:</strong>
+                <ul style={{ margin: '5px 0', paddingLeft: '20px' }}>
+                  <li>🔄 <strong>Auto Upload:</strong> Upload files directly (uses multiple fallback methods)</li>
+                  <li>🔗 <strong>URL Method:</strong> Paste image URLs from Cloudinary, AWS S3, or any public hosting</li>
+                  <li>📱 <strong>Quick Tip:</strong> For production, we recommend using image hosting services</li>
+                </ul>
+                <div style={{ marginTop: '10px', fontSize: '12px', color: '#6b7280' }}>
+                  Supported formats: JPG, PNG, GIF, WebP (Max size: 5MB)
+                </div>
+              </div>
 
               {/* Primary Logo */}
               <div className="simple-form-row" style={{ marginBottom: '20px' }}>
@@ -512,11 +545,31 @@ const HotelBrandingSettings = () => {
                         border: 'none',
                         borderRadius: '4px',
                         cursor: logoUploading.primary ? 'not-allowed' : 'pointer',
+                        fontSize: '14px',
+                        marginRight: '10px'
+                      }}
+                    >
+                      {logoUploading.primary ? 'Uploading...' : '📤 Upload File'}
+                    </label>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        const testUrl = 'https://via.placeholder.com/200x80/007bff/ffffff?text=HOTEL+LOGO';
+                        handleLogoUrlChange('primary', testUrl);
+                        toast.success('Test logo applied! You can replace it with your own.');
+                      }}
+                      style={{
+                        padding: '8px 16px',
+                        backgroundColor: '#10b981',
+                        color: 'white',
+                        border: 'none',
+                        borderRadius: '4px',
+                        cursor: 'pointer',
                         fontSize: '14px'
                       }}
                     >
-                      {logoUploading.primary ? 'Uploading...' : 'Upload'}
-                    </label>
+                      🧪 Test Logo
+                    </button>
                   </div>
                   {settings.branding.logo.primary && (
                     <div style={{ marginTop: '10px' }}>
@@ -563,11 +616,31 @@ const HotelBrandingSettings = () => {
                         border: 'none',
                         borderRadius: '4px',
                         cursor: logoUploading.loginLogo ? 'not-allowed' : 'pointer',
+                        fontSize: '14px',
+                        marginRight: '10px'
+                      }}
+                    >
+                      {logoUploading.loginLogo ? 'Uploading...' : '📤 Upload File'}
+                    </label>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        const testUrl = 'https://via.placeholder.com/150x150/8b5cf6/ffffff?text=LOGIN';
+                        handleLogoUrlChange('loginLogo', testUrl);
+                        toast.success('Test login logo applied!');
+                      }}
+                      style={{
+                        padding: '8px 16px',
+                        backgroundColor: '#10b981',
+                        color: 'white',
+                        border: 'none',
+                        borderRadius: '4px',
+                        cursor: 'pointer',
                         fontSize: '14px'
                       }}
                     >
-                      {logoUploading.loginLogo ? 'Uploading...' : 'Upload'}
-                    </label>
+                      🧪 Test Logo
+                    </button>
                   </div>
                   {settings.branding.logo.loginLogo && (
                     <div style={{ marginTop: '10px' }}>

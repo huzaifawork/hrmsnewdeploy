@@ -260,27 +260,30 @@ const uploadLogo = async (req, res) => {
       });
     }
 
-    // Handle logo upload
+    // Handle logo upload - PRODUCTION HACK using base64 data URLs
     let logoUrl = null;
+
     if (req.file.filename) {
       // Disk storage (development)
       logoUrl = `/uploads/${req.file.filename}`;
       console.log('Development logo upload - saved to disk:', logoUrl);
-    } else {
-      // Memory storage (production) - for serverless, we'll return the file data
-      // In production, you might want to upload to a cloud service like Cloudinary or AWS S3
-      console.log('Production environment detected - file upload not supported on serverless');
-      console.log('File details:', {
-        originalname: req.file.originalname,
-        mimetype: req.file.mimetype,
-        size: req.file.size
-      });
+    } else if (req.file.buffer) {
+      // Production hack: Convert to base64 data URL
+      const base64Data = req.file.buffer.toString('base64');
+      const mimeType = req.file.mimetype;
+      logoUrl = `data:${mimeType};base64,${base64Data}`;
 
-      // For now, we'll return an error in production for file uploads
-      // You can integrate with cloud storage services here
+      console.log('Production logo upload - converted to base64 data URL');
+      console.log('File size:', req.file.size, 'bytes');
+
+      // Optional: Warn if file is too large (>1MB)
+      if (req.file.size > 1024 * 1024) {
+        console.warn('Large file detected. Consider using external image hosting for better performance.');
+      }
+    } else {
       return res.status(400).json({
         success: false,
-        message: 'File upload not supported in production environment. Please use image URLs instead.',
+        message: 'File processing failed. Please try again.',
         timestamp: new Date().toISOString()
       });
     }
