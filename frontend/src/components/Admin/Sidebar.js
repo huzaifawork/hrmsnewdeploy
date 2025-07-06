@@ -81,6 +81,35 @@ const Sidebar = () => {
   const [forceUpdate, setForceUpdate] = useState(0);
   const navigate = useNavigate();
 
+  // Simple function to change module
+  const handleModuleChange = (newModule) => {
+    console.log("=== MODULE CHANGE ===");
+    console.log("From:", selectedModule);
+    console.log("To:", newModule);
+    console.log("Is Mobile:", isMobile);
+    console.log("Mobile Menu Open:", isMobileMenuOpen);
+
+    // Force immediate state update
+    setSelectedModule(newModule);
+    setForceUpdate(prev => prev + 1);
+
+    // Close mobile menu and dropdown immediately
+    setIsMobileMenuOpen(false);
+    setOpenDropdown(null);
+
+    // Additional mobile-specific handling
+    if (isMobile) {
+      // Ensure body scroll is restored
+      document.body.style.overflow = "unset";
+      console.log("Mobile menu closed after navigation");
+
+      // Force a re-render to ensure the component updates
+      setTimeout(() => {
+        setForceUpdate(prev => prev + 1);
+      }, 50);
+    }
+  };
+
   useEffect(() => {
     const name = localStorage.getItem("name");
     if (name) {
@@ -104,16 +133,15 @@ const Sidebar = () => {
   // Monitor selectedModule changes
   useEffect(() => {
     console.log("selectedModule state changed to:", selectedModule);
-  }, [selectedModule]);
+    console.log("Force update counter:", forceUpdate);
+    console.log("Is mobile:", isMobile);
+    console.log("Mobile menu open:", isMobileMenuOpen);
+  }, [selectedModule, forceUpdate, isMobile, isMobileMenuOpen]);
 
-  // Function to change module
-  const changeModule = (newModule) => {
-    console.log("=== CHANGING MODULE ===");
-    console.log("From:", selectedModule);
-    console.log("To:", newModule);
-    setSelectedModule(newModule);
-    setForceUpdate(prev => prev + 1);
-  };
+  // Monitor openDropdown changes
+  useEffect(() => {
+    console.log("openDropdown state changed to:", openDropdown);
+  }, [openDropdown]);
 
   const handleLogout = () => {
     localStorage.clear();
@@ -131,7 +159,14 @@ const Sidebar = () => {
   };
 
   const toggleDropdown = (module) => {
-    setOpenDropdown(openDropdown === module ? null : module);
+    console.log("=== TOGGLE DROPDOWN ===");
+    console.log("Module:", module);
+    console.log("Current openDropdown:", openDropdown);
+    console.log("Is Mobile:", isMobile);
+
+    const newState = openDropdown === module ? null : module;
+    console.log("Setting openDropdown to:", newState);
+    setOpenDropdown(newState);
   };
 
   const toggleNotification = () => {
@@ -311,6 +346,10 @@ const Sidebar = () => {
   ];
 
   const renderContent = () => {
+    console.log("=== RENDER CONTENT ===");
+    console.log("selectedModule:", selectedModule);
+    console.log("Type:", typeof selectedModule);
+
     switch (selectedModule) {
       case "Dashboard":
         return <Dashboardmodule key="dashboard" />;
@@ -351,6 +390,7 @@ const Sidebar = () => {
       case "Recommendation System":
         return <RecommendationSystem />;
       case "Reporting":
+      case "ReportingAnalytics":
         return <ReportingAnalytics />;
       case "Settings":
       case "AdminSettings":
@@ -376,6 +416,11 @@ const Sidebar = () => {
       case "MenuRecommendationAnalytics":
         return <RecommendationEvaluation />;
       default:
+        console.warn("=== DEFAULT CASE TRIGGERED ===");
+        console.warn("No component matched for selectedModule:", selectedModule);
+        console.warn("Type of selectedModule:", typeof selectedModule);
+        console.warn("Available cases: Dashboard, User Profile, AdminAddRoom, AdminViewRooms, AdminRoomUpdate, AdminDeleteRoom, AdminAddTable, AdminViewTables, AdminUpdateTable, AdminDeleteTable, AdminManageBookings, AdminManageReservations, AdminCustomerManagement, StaffManagement, ShiftManagement, SentimentAnalysis, ReportingAnalytics, AdminSettings, HotelBrandingSettings, AdminOrders, AdminViewMenus, AdminAddMenu, AdminUpdateMenu, AdminDeleteMenu, TableRecommendationAnalytics, RecommendationEvaluation, RoomRecommendationAnalytics");
+        console.warn("Falling back to Dashboard");
         return <Dashboardmodule />;
     }
   };
@@ -386,20 +431,25 @@ const Sidebar = () => {
       <div
         className={`mobile-overlay ${isMobileMenuOpen ? "active" : ""}`}
         onClick={(e) => {
-          e.preventDefault();
-          e.stopPropagation();
-          console.log("Mobile overlay clicked - closing menu");
-          setIsMobileMenuOpen(false);
+          // Only close if clicking the overlay itself, not child elements
+          if (e.target === e.currentTarget) {
+            e.preventDefault();
+            e.stopPropagation();
+            console.log("Mobile overlay clicked - closing menu");
+            setIsMobileMenuOpen(false);
+            document.body.style.overflow = "unset";
+          }
         }}
         style={{
           display: isMobileMenuOpen ? "block" : "none",
           position: "fixed",
           top: 0,
-          left: 0,
-          width: "100%",
+          left: 280, // Start after the sidebar width
+          width: "calc(100% - 280px)",
           height: "100%",
           backgroundColor: "rgba(0, 0, 0, 0.5)",
-          zIndex: 998
+          zIndex: 999,
+          pointerEvents: isMobileMenuOpen ? "auto" : "none"
         }}
       />
 
@@ -475,20 +525,54 @@ const Sidebar = () => {
                         onMouseLeave={(e) => {
                           e.target.style.color = "#000000";
                         }}
+                        onTouchStart={(e) => {
+                          console.log("=== TOUCH START EVENT ===");
+                          console.log("Touch start detected on:", item.name);
+                        }}
+                        onTouchEnd={(e) => {
+                          console.log("=== TOUCH END EVENT ===");
+                          console.log("Touch end detected on:", item.name);
+
+                          // Trigger appropriate action for mobile
+                          if (isMobile) {
+                            const hasSubmenu = item.submenu && item.submenu.length > 0;
+                            console.log("Has submenu:", hasSubmenu);
+
+                            if (hasSubmenu) {
+                              console.log("Mobile touch - opening dropdown for:", item.name);
+                              toggleDropdown(item.name);
+                            } else {
+                              console.log("Mobile touch - triggering navigation");
+                              const newModule = item.component || item.name;
+                              console.log("Calling handleModuleChange with:", newModule);
+                              console.log("Current selectedModule before change:", selectedModule);
+                              handleModuleChange(newModule);
+                              console.log("handleModuleChange called successfully");
+                            }
+                          }
+                        }}
+
                         onClick={(e) => {
                           e.preventDefault();
                           e.stopPropagation();
+                          console.log("=== MENU ITEM CLICKED ===");
+                          console.log("Item:", item.name);
+                          console.log("Component:", item.component);
+                          console.log("Has submenu:", hasSubmenu);
+                          console.log("Is Mobile:", isMobile);
+                          console.log("Mobile Menu Open:", isMobileMenuOpen);
+                          console.log("Event target:", e.target);
+                          console.log("Current target:", e.currentTarget);
+
                           if (hasSubmenu) {
+                            console.log("Opening dropdown for:", item.name);
                             toggleDropdown(item.name);
                           } else {
                             const newModule = item.component || item.name;
-                            changeModule(newModule);
-
-                            // Close mobile menu and any open dropdowns
-                            if (isMobile) {
-                              setIsMobileMenuOpen(false);
-                            }
-                            setOpenDropdown(null);
+                            console.log("Calling handleModuleChange with:", newModule);
+                            console.log("Current selectedModule before change:", selectedModule);
+                            handleModuleChange(newModule);
+                            console.log("handleModuleChange called successfully");
                           }
                         }}
                       >
@@ -544,7 +628,7 @@ const Sidebar = () => {
                       )}
                     </li>
 
-                    {hasSubmenu && isDropdownOpen && !isSidebarCollapsed && (
+                    {hasSubmenu && isDropdownOpen && (!isSidebarCollapsed || isMobile) && (
                       <ul className="nav-submenu">
                         {item.submenu.map((subItem) => {
                           const SubIconComponent = subItem.icon || FiGrid;
@@ -569,17 +653,40 @@ const Sidebar = () => {
                                 onMouseLeave={(e) => {
                                   e.target.style.color = "#000000";
                                 }}
+                                onTouchStart={(e) => {
+                                  console.log("=== SUBMENU TOUCH START ===");
+                                  console.log("Touch start on submenu:", subItem.name);
+                                }}
+                                onTouchEnd={(e) => {
+                                  console.log("=== SUBMENU TOUCH END ===");
+                                  console.log("Touch end on submenu:", subItem.name);
+
+                                  // Trigger click manually for mobile
+                                  if (isMobile) {
+                                    console.log("Mobile submenu touch - triggering navigation");
+                                    const newModule = subItem.component;
+                                    console.log("Calling handleModuleChange with:", newModule);
+                                    console.log("Current selectedModule before change:", selectedModule);
+                                    handleModuleChange(newModule);
+                                    console.log("handleModuleChange called successfully");
+                                  }
+                                }}
                                 onClick={(e) => {
                                   e.preventDefault();
                                   e.stopPropagation();
-                                  const newModule = subItem.component;
-                                  changeModule(newModule);
+                                  console.log("=== SUBMENU ITEM CLICKED ===");
+                                  console.log("Submenu item:", subItem.name);
+                                  console.log("Component:", subItem.component);
+                                  console.log("Is Mobile:", isMobile);
+                                  console.log("Mobile Menu Open:", isMobileMenuOpen);
+                                  console.log("Event target:", e.target);
+                                  console.log("Current target:", e.currentTarget);
 
-                                  // Close mobile menu and dropdowns
-                                  if (isMobile) {
-                                    setIsMobileMenuOpen(false);
-                                  }
-                                  setOpenDropdown(null);
+                                  const newModule = subItem.component;
+                                  console.log("Calling handleModuleChange with:", newModule);
+                                  console.log("Current selectedModule before change:", selectedModule);
+                                  handleModuleChange(newModule);
+                                  console.log("handleModuleChange called successfully");
                                 }}
                               >
                                 <SubIconComponent
@@ -679,16 +786,7 @@ const Sidebar = () => {
             <div>
               <h1 className="header-title">Hi, Admin!</h1>
               <p className="header-subtitle">Welcome to your dashboard</p>
-              <div style={{
-                background: "yellow",
-                padding: "5px",
-                fontSize: "12px",
-                marginTop: "5px",
-                borderRadius: "4px",
-                color: "black"
-              }}>
-                Current Module: {selectedModule} | Force Update: {forceUpdate}
-              </div>
+             
             </div>
           </div>
 
