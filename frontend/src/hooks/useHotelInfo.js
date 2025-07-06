@@ -191,6 +191,10 @@ export const useBranding = () => {
     }
   };
 
+  // console.log('useBranding - Settings:', settings);
+  // console.log('useBranding - Settings branding:', settings?.branding);
+  // console.log('useBranding - Using default?', !settings?.branding);
+
   return settings?.branding || defaultBranding;
 };
 
@@ -199,6 +203,12 @@ export const useBranding = () => {
  */
 export const useLogos = () => {
   const branding = useBranding();
+  const { settings } = useHotelSettings();
+
+  // console.log('useLogos - Raw settings:', settings);
+  // console.log('useLogos - Branding:', branding);
+  // console.log('useLogos - Logo object:', branding.logo);
+
   return branding.logo;
 };
 

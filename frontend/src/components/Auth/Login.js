@@ -189,19 +189,30 @@ const AuthPage = () => {
       {/* Left Side - Branding */}
       <div className="login-branding">
         <div className="branding-content">
-          <div className="brand-logo">
-            {logos.loginLogo && logos.loginLogo !== '/images/logo-login.png' ? (
+          <div className="brand-logo" key={`login-logo-${logos.loginLogo}-${logos.primary}-${forceUpdate}`}>
+            {(logos.loginLogo && logos.loginLogo !== '/images/logo-login.png' && logos.loginLogo.trim() !== '') ||
+             (logos.primary && logos.primary !== '/images/logo-primary.png' && logos.primary.trim() !== '') ? (
               <img
-                src={logos.loginLogo}
+                src={logos.loginLogo && logos.loginLogo !== '/images/logo-login.png' && logos.loginLogo.trim() !== ''
+                     ? logos.loginLogo
+                     : logos.primary}
                 alt={`${hotelInfo.hotelName} Logo`}
                 className="login-logo-image"
                 onError={(e) => {
+                  console.log('Login logo failed to load, showing fallback');
                   e.target.style.display = 'none';
                   e.target.nextSibling.style.display = 'flex';
                 }}
+                onLoad={() => {
+                  console.log('Login logo loaded successfully');
+                }}
               />
             ) : null}
-            <div className="professional-logo" style={{ display: logos.loginLogo && logos.loginLogo !== '/images/logo-login.png' ? 'none' : 'flex' }}>
+            <div className="professional-logo" style={{
+              display: ((logos.loginLogo && logos.loginLogo !== '/images/logo-login.png' && logos.loginLogo.trim() !== '') ||
+                       (logos.primary && logos.primary !== '/images/logo-primary.png' && logos.primary.trim() !== ''))
+                       ? 'none' : 'flex'
+            }}>
               <span className="logo-text">{hotelInfo.hotelName.substring(0, 2).toUpperCase()}</span>
               <span className="logo-accent">MS</span>
             </div>

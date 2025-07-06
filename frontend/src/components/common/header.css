@@ -183,14 +183,21 @@ body {
 
 /* Header Logo Image */
 .header-logo-image {
-  max-height: 40px;
+  max-height: 55px;
   width: auto;
+  max-width: 180px;
   object-fit: contain;
   transition: all 0.3s ease;
+  margin-left: -10px;
 }
 
 .navbar-scrolled .header-logo-image {
-  max-height: 35px;
+  max-height: 50px;
+}
+
+/* Logo hover effects */
+.header-logo-image:hover {
+  transform: scale(1.02);
 }
 
 /* Simple underline effect */

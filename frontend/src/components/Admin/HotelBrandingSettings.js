@@ -485,6 +485,31 @@ const HotelBrandingSettings = () => {
               </button>
               <button
                 type="button"
+                onClick={() => {
+                  console.log('Force refreshing header...');
+                  // Clear cache and force refresh
+                  hotelSettingsService.clearCache();
+                  loadSettings(true);
+                  // Trigger header refresh
+                  window.dispatchEvent(new CustomEvent('hotelSettingsChanged', {
+                    detail: { forceRefresh: true }
+                  }));
+                  toast.success('Header refresh triggered');
+                }}
+                style={{
+                  padding: '8px 16px',
+                  backgroundColor: '#8b5cf6',
+                  color: 'white',
+                  border: 'none',
+                  borderRadius: '4px',
+                  cursor: 'pointer',
+                  fontSize: '12px'
+                }}
+              >
+                🔄 Refresh Header
+              </button>
+              <button
+                type="button"
                 onClick={() => navigate('/admin/dashboard')}
                 style={{
                   padding: '8px 16px',
