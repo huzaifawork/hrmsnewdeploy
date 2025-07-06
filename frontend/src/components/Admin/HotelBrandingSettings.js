@@ -56,6 +56,28 @@ const HotelBrandingSettings = () => {
     favicon: false
   });
 
+  // Track if any logo is currently uploading
+  const isAnyLogoUploading = Object.values(logoUploading).some(uploading => uploading);
+
+  // Sync with context settings when they change (but not during uploads)
+  useEffect(() => {
+    if (contextSettings && !isAnyLogoUploading && !initialLoading) {
+      console.log('Syncing with context settings:', contextSettings.branding?.logo);
+      setSettings(prev => ({
+        ...prev,
+        branding: {
+          ...prev.branding,
+          logo: {
+            primary: contextSettings.branding?.logo?.primary || prev.branding.logo.primary,
+            secondary: contextSettings.branding?.logo?.secondary || prev.branding.logo.secondary,
+            loginLogo: contextSettings.branding?.logo?.loginLogo || prev.branding.logo.loginLogo,
+            favicon: contextSettings.branding?.logo?.favicon || prev.branding.logo.favicon
+          }
+        }
+      }));
+    }
+  }, [contextSettings, isAnyLogoUploading, initialLoading]);
+
   // Load current settings from the database
   const loadCurrentSettings = async () => {
     try {
@@ -64,7 +86,7 @@ const HotelBrandingSettings = () => {
 
       if (result.success && result.data) {
         const data = result.data;
-        setSettings({
+        const newSettings = {
           hotelName: data.hotelName || '',
           hotelSubtitle: data.hotelSubtitle || '',
           description: data.description || '',
@@ -100,7 +122,15 @@ const HotelBrandingSettings = () => {
               accent: data.branding?.colors?.accent || '#ffffff'
             }
           }
+        };
+
+        console.log('Loading settings with logos:', {
+          primary: newSettings.branding.logo.primary,
+          secondary: newSettings.branding.logo.secondary,
+          loginLogo: newSettings.branding.logo.loginLogo
         });
+
+        setSettings(newSettings);
       }
     } catch (error) {
       console.error('Error loading hotel settings:', error);
@@ -123,6 +153,16 @@ const HotelBrandingSettings = () => {
     // Load current settings
     loadCurrentSettings();
   }, [navigate]);
+
+  // Debug function to check logo state
+  const debugLogoState = () => {
+    console.log('=== LOGO DEBUG STATE ===');
+    console.log('Local settings logos:', settings.branding.logo);
+    console.log('Context settings logos:', contextSettings?.branding?.logo);
+    console.log('Upload states:', logoUploading);
+    console.log('Initial loading:', initialLoading);
+    console.log('========================');
+  };
 
   const handleInputChange = (field, value) => {
     if (field.includes('.')) {
@@ -179,26 +219,50 @@ const HotelBrandingSettings = () => {
 
       if (result.success) {
         // Update the settings state with the new logo URL
-        setSettings(prev => ({
-          ...prev,
-          branding: {
-            ...prev.branding,
-            logo: {
-              ...prev.branding.logo,
-              [logoType]: result.data.logoUrl
+        const newLogoUrl = result.data.logoUrl;
+
+        // First update local state immediately
+        setSettings(prev => {
+          const updatedSettings = {
+            ...prev,
+            branding: {
+              ...prev.branding,
+              logo: {
+                ...prev.branding.logo,
+                [logoType]: newLogoUrl
+              }
+            }
+          };
+          console.log(`Local state updated: ${logoType} = ${newLogoUrl}`);
+          return updatedSettings;
+        });
+
+        toast.success(result.message || `${logoType} logo uploaded successfully!`);
+
+        // Then refresh context in background (don't await to prevent state reset)
+        setTimeout(async () => {
+          try {
+            await loadSettings(true);
+            console.log('Context refreshed after logo upload');
+          } catch (refreshError) {
+            console.error('Error refreshing context after logo upload:', refreshError);
+          }
+        }, 1000);
+
+        // Trigger a custom event to notify other components
+        window.dispatchEvent(new CustomEvent('hotelSettingsChanged', {
+          detail: {
+            settings: {
+              branding: {
+                logo: {
+                  [logoType]: newLogoUrl
+                }
+              }
             }
           }
         }));
 
-        toast.success(result.message || `${logoType} logo uploaded successfully!`);
-
-        // Refresh the context to update all components
-        await loadSettings(true);
-
-        // Trigger a custom event to notify other components
-        window.dispatchEvent(new CustomEvent('hotelSettingsChanged', {
-          detail: { settings: result.data }
-        }));
+        console.log(`Logo uploaded successfully: ${logoType} = ${newLogoUrl}`);
       } else {
         toast.error(result.error || 'Failed to upload logo');
       }
@@ -263,13 +327,22 @@ const HotelBrandingSettings = () => {
       if (result.success) {
         toast.success('Hotel settings saved successfully!');
 
-        // Refresh the context to update all components
-        await loadSettings(true);
+        // Update context in background without resetting local state
+        setTimeout(async () => {
+          try {
+            await loadSettings(true);
+            console.log('Context updated after save');
+          } catch (error) {
+            console.error('Error updating context after save:', error);
+          }
+        }, 500);
 
         // Trigger a custom event to notify other components
         window.dispatchEvent(new CustomEvent('hotelSettingsChanged', {
           detail: { settings: result.data }
         }));
+
+        console.log('Hotel settings saved successfully');
       } else {
         toast.error(result.error || 'Failed to save settings');
       }
@@ -284,11 +357,150 @@ const HotelBrandingSettings = () => {
   if (initialLoading) return <div className="simple-admin-container"><p>Loading current settings...</p></div>;
 
   return (
-    <div className="simple-admin-container">
-      <div className="simple-admin-header">
-        <h1>Hotel Settings</h1>
-        <p>Manage your hotel's basic information and contact details</p>
-      </div>
+    <>
+      {/* CSS Overrides for Logo Preview Issues */}
+      <style>{`
+        .logo-preview-container {
+          background: #ffffff !important;
+          border: 1px solid #e5e7eb !important;
+          border-radius: 8px !important;
+          padding: 10px !important;
+          margin-top: 10px !important;
+          display: block !important;
+          visibility: visible !important;
+          opacity: 1 !important;
+          position: relative !important;
+          z-index: 1000 !important;
+          overflow: visible !important;
+        }
+
+        .logo-preview-container img {
+          display: block !important;
+          visibility: visible !important;
+          opacity: 1 !important;
+          background: transparent !important;
+          border: none !important;
+          max-height: 50px !important;
+          max-width: 200px !important;
+          object-fit: contain !important;
+        }
+
+        .logo-preview-container p {
+          color: #000000 !important;
+          font-size: 12px !important;
+          margin: 0 0 8px 0 !important;
+          font-weight: bold !important;
+        }
+
+        /* Override any conflicting dark theme styles */
+        .simple-admin-container .logo-preview-container,
+        .simple-admin-container .logo-preview-container * {
+          background: #ffffff !important;
+          color: #000000 !important;
+        }
+
+        /* Ensure form sections are visible */
+        .simple-form-container {
+          background: #ffffff !important;
+          color: #000000 !important;
+          overflow: visible !important;
+        }
+
+        .simple-form-container * {
+          color: #000000 !important;
+        }
+
+        /* Fix any overlay issues */
+        .simple-admin-container::before,
+        .simple-admin-container::after {
+          display: none !important;
+        }
+      `}</style>
+
+      <div className="simple-admin-container">
+        <div className="simple-admin-header">
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            <div>
+              <h1>Hotel Settings</h1>
+              <p>Manage your hotel's basic information and contact details</p>
+            </div>
+            <div style={{ display: 'flex', gap: '10px' }}>
+              <button
+                type="button"
+                onClick={debugLogoState}
+                style={{
+                  padding: '8px 16px',
+                  backgroundColor: '#6b7280',
+                  color: 'white',
+                  border: 'none',
+                  borderRadius: '4px',
+                  cursor: 'pointer',
+                  fontSize: '12px'
+                }}
+              >
+                🐛 Debug Logos
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  console.log('Force refreshing settings...');
+                  loadCurrentSettings();
+                }}
+                style={{
+                  padding: '8px 16px',
+                  backgroundColor: '#10b981',
+                  color: 'white',
+                  border: 'none',
+                  borderRadius: '4px',
+                  cursor: 'pointer',
+                  fontSize: '12px'
+                }}
+              >
+                🔄 Refresh
+              </button>
+              <button
+                type="button"
+                onClick={async () => {
+                  console.log('Testing API directly...');
+                  try {
+                    const result = await hotelSettingsService.getPublicSettings();
+                    console.log('API Test Result:', result);
+                    toast.success('Check console for API test results');
+                  } catch (error) {
+                    console.error('API Test Error:', error);
+                    toast.error('API test failed - check console');
+                  }
+                }}
+                style={{
+                  padding: '8px 16px',
+                  backgroundColor: '#f59e0b',
+                  color: 'white',
+                  border: 'none',
+                  borderRadius: '4px',
+                  cursor: 'pointer',
+                  fontSize: '12px'
+                }}
+              >
+                🧪 Test API
+              </button>
+              <button
+                type="button"
+                onClick={() => navigate('/admin/dashboard')}
+                style={{
+                  padding: '8px 16px',
+                  backgroundColor: '#3b82f6',
+                  color: 'white',
+                  border: 'none',
+                  borderRadius: '4px',
+                  cursor: 'pointer',
+                  fontSize: '14px'
+                }}
+              >
+                🏠 Dashboard
+              </button>
+            </div>
+          </div>
+        </div>
 
       <div className="simple-admin-controls">
         <button 
@@ -572,15 +784,22 @@ const HotelBrandingSettings = () => {
                     </button>
                   </div>
                   {settings.branding.logo.primary && (
-                    <div style={{ marginTop: '10px' }}>
+                    <div className="logo-preview-container">
+                      <p>Preview:</p>
                       <img
                         src={settings.branding.logo.primary}
                         alt="Primary Logo Preview"
-                        style={{ maxHeight: '50px', maxWidth: '200px', objectFit: 'contain' }}
                         onError={(e) => {
                           e.target.style.display = 'none';
+                          e.target.nextSibling.style.display = 'block';
                         }}
                       />
+                      <p style={{
+                        color: '#ef4444',
+                        fontSize: '10px',
+                        margin: '5px 0 0 0',
+                        display: 'none'
+                      }}>Failed to load image</p>
                     </div>
                   )}
                 </div>
@@ -643,15 +862,22 @@ const HotelBrandingSettings = () => {
                     </button>
                   </div>
                   {settings.branding.logo.loginLogo && (
-                    <div style={{ marginTop: '10px' }}>
+                    <div className="logo-preview-container">
+                      <p>Preview:</p>
                       <img
                         src={settings.branding.logo.loginLogo}
                         alt="Login Logo Preview"
-                        style={{ maxHeight: '50px', maxWidth: '200px', objectFit: 'contain' }}
                         onError={(e) => {
                           e.target.style.display = 'none';
+                          e.target.nextSibling.style.display = 'block';
                         }}
                       />
+                      <p style={{
+                        color: '#ef4444',
+                        fontSize: '10px',
+                        margin: '5px 0 0 0',
+                        display: 'none'
+                      }}>Failed to load image</p>
                     </div>
                   )}
                 </div>
@@ -694,15 +920,22 @@ const HotelBrandingSettings = () => {
                     </label>
                   </div>
                   {settings.branding.logo.secondary && (
-                    <div style={{ marginTop: '10px' }}>
+                    <div className="logo-preview-container">
+                      <p>Preview:</p>
                       <img
                         src={settings.branding.logo.secondary}
                         alt="Secondary Logo Preview"
-                        style={{ maxHeight: '50px', maxWidth: '200px', objectFit: 'contain' }}
                         onError={(e) => {
                           e.target.style.display = 'none';
+                          e.target.nextSibling.style.display = 'block';
                         }}
                       />
+                      <p style={{
+                        color: '#ef4444',
+                        fontSize: '10px',
+                        margin: '5px 0 0 0',
+                        display: 'none'
+                      }}>Failed to load image</p>
                     </div>
                   )}
                 </div>
@@ -794,9 +1027,128 @@ const HotelBrandingSettings = () => {
             <h4 style={{ color: '#000000', margin: '0 0 10px 0' }}>Description</h4>
             <p style={{ color: '#000000', margin: '5px 0', lineHeight: '1.6' }}>{settings.description}</p>
           </div>
+
+          {/* Logo Summary Section */}
+          <div style={{ marginTop: '20px' }}>
+            <h4 style={{ color: '#000000', margin: '0 0 10px 0' }}>Current Logos</h4>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '15px' }}>
+              {settings.branding.logo.primary && (
+                <div style={{
+                  padding: '10px',
+                  border: '1px solid #e5e7eb',
+                  borderRadius: '8px',
+                  backgroundColor: '#f9fafb',
+                  textAlign: 'center'
+                }}>
+                  <p style={{ color: '#000000', margin: '0 0 8px 0', fontSize: '12px', fontWeight: 'bold' }}>Primary Logo</p>
+                  <img
+                    src={settings.branding.logo.primary}
+                    alt="Primary Logo"
+                    style={{
+                      maxHeight: '40px',
+                      maxWidth: '150px',
+                      objectFit: 'contain',
+                      display: 'block',
+                      margin: '0 auto'
+                    }}
+                    onError={(e) => {
+                      e.target.style.display = 'none';
+                      e.target.nextSibling.style.display = 'block';
+                    }}
+                  />
+                  <p style={{
+                    color: '#ef4444',
+                    fontSize: '10px',
+                    margin: '5px 0 0 0',
+                    display: 'none'
+                  }}>Failed to load</p>
+                </div>
+              )}
+
+              {settings.branding.logo.loginLogo && (
+                <div style={{
+                  padding: '10px',
+                  border: '1px solid #e5e7eb',
+                  borderRadius: '8px',
+                  backgroundColor: '#f9fafb',
+                  textAlign: 'center'
+                }}>
+                  <p style={{ color: '#000000', margin: '0 0 8px 0', fontSize: '12px', fontWeight: 'bold' }}>Login Logo</p>
+                  <img
+                    src={settings.branding.logo.loginLogo}
+                    alt="Login Logo"
+                    style={{
+                      maxHeight: '40px',
+                      maxWidth: '150px',
+                      objectFit: 'contain',
+                      display: 'block',
+                      margin: '0 auto'
+                    }}
+                    onError={(e) => {
+                      e.target.style.display = 'none';
+                      e.target.nextSibling.style.display = 'block';
+                    }}
+                  />
+                  <p style={{
+                    color: '#ef4444',
+                    fontSize: '10px',
+                    margin: '5px 0 0 0',
+                    display: 'none'
+                  }}>Failed to load</p>
+                </div>
+              )}
+
+              {settings.branding.logo.secondary && (
+                <div style={{
+                  padding: '10px',
+                  border: '1px solid #e5e7eb',
+                  borderRadius: '8px',
+                  backgroundColor: '#f9fafb',
+                  textAlign: 'center'
+                }}>
+                  <p style={{ color: '#000000', margin: '0 0 8px 0', fontSize: '12px', fontWeight: 'bold' }}>Secondary Logo</p>
+                  <img
+                    src={settings.branding.logo.secondary}
+                    alt="Secondary Logo"
+                    style={{
+                      maxHeight: '40px',
+                      maxWidth: '150px',
+                      objectFit: 'contain',
+                      display: 'block',
+                      margin: '0 auto'
+                    }}
+                    onError={(e) => {
+                      e.target.style.display = 'none';
+                      e.target.nextSibling.style.display = 'block';
+                    }}
+                  />
+                  <p style={{
+                    color: '#ef4444',
+                    fontSize: '10px',
+                    margin: '5px 0 0 0',
+                    display: 'none'
+                  }}>Failed to load</p>
+                </div>
+              )}
+            </div>
+
+            {!settings.branding.logo.primary && !settings.branding.logo.loginLogo && !settings.branding.logo.secondary && (
+              <div style={{ padding: '15px', backgroundColor: '#f3f4f6', borderRadius: '8px', margin: '10px 0' }}>
+                <p style={{ color: '#6b7280', fontStyle: 'italic', margin: '0 0 10px 0' }}>No logos uploaded yet</p>
+                <div style={{ fontSize: '12px', color: '#9ca3af' }}>
+                  <p style={{ margin: '2px 0' }}>Debug info:</p>
+                  <p style={{ margin: '2px 0' }}>Primary: "{settings.branding.logo.primary}"</p>
+                  <p style={{ margin: '2px 0' }}>Login: "{settings.branding.logo.loginLogo}"</p>
+                  <p style={{ margin: '2px 0' }}>Secondary: "{settings.branding.logo.secondary}"</p>
+                  <p style={{ margin: '2px 0' }}>Context Primary: "{contextSettings?.branding?.logo?.primary || 'undefined'}"</p>
+                </div>
+              </div>
+            )}
+          </div>
         </div>
       </div>
     </div>
+    </>
   );
 };
 

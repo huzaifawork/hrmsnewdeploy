@@ -40,6 +40,9 @@ class HotelSettingsService {
   async getPublicSettings() {
     try {
       const response = await axios.get(apiConfig.endpoints.hotelSettingsPublic);
+
+      console.log('Public settings response branding:', response.data.data.branding);
+
       return {
         success: true,
         data: response.data.data,

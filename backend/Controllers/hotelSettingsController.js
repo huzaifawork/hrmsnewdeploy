@@ -134,8 +134,24 @@ const getPublicHotelSettings = async (req, res) => {
       statistics: settings.statistics,
       heroContent: settings.heroContent,
       services: settings.services,
-      seo: settings.seo
+      seo: settings.seo,
+      // Include branding data for logos and colors
+      branding: {
+        logo: {
+          primary: settings.branding?.logo?.primary || '',
+          secondary: settings.branding?.logo?.secondary || '',
+          loginLogo: settings.branding?.logo?.loginLogo || '',
+          favicon: settings.branding?.logo?.favicon || ''
+        },
+        colors: {
+          primary: settings.branding?.colors?.primary || '#64ffda',
+          secondary: settings.branding?.colors?.secondary || '#0A192F',
+          accent: settings.branding?.colors?.accent || '#ffffff'
+        }
+      }
     };
+
+    console.log('Public settings branding data:', publicData.branding);
 
     res.status(200).json({
       success: true,
@@ -303,7 +319,12 @@ const uploadLogo = async (req, res) => {
       settings.settings.updatedBy = userId;
     }
 
+    console.log(`Saving logo to database: ${logoType} = ${logoUrl.substring(0, 50)}...`);
     await settings.save();
+
+    // Verify the save worked
+    const verifySettings = await HotelSettings.getSingleton();
+    console.log(`Verification - Logo saved: ${logoType} = ${verifySettings.branding?.logo?.[logoType] ? 'YES' : 'NO'}`);
 
     res.status(200).json({
       success: true,
