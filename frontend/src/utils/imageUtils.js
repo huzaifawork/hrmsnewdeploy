@@ -25,6 +25,12 @@ export const getImageUrl = (imagePath, fallback = "/images/placeholder-food.jpg"
       return imagePath;
     }
 
+    // If it's a base64 image (from admin upload), return as is
+    if (imagePath.startsWith('data:image/')) {
+      console.log('getImageUrl: Base64 image detected');
+      return imagePath;
+    }
+
     // If it's a local upload path
     const cleanPath = imagePath.replace(/^\/+/, '');
     console.log('getImageUrl: Processing local path:', imagePath, '-> cleaned:', cleanPath);

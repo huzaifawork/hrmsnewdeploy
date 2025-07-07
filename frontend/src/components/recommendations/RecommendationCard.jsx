@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { OverlayTrigger, Tooltip, Toast } from 'react-bootstrap';
 import { FiStar, FiShoppingCart, FiHeart, FiInfo, FiClock, FiAward } from 'react-icons/fi';
+import { getMenuImageUrl, handleImageError } from '../../utils/imageUtils';
 import { recommendationHelpers, recommendationAPI } from '../../api/recommendations';
 import './RecommendationCard.css';
 
@@ -93,14 +94,7 @@ const RecommendationCard = ({
     setShowToast(true);
   };
 
-  const getImageUrl = (imagePath) => {
-    if (!imagePath) return "/placeholder-food.jpg";
-    if (imagePath.startsWith("http://") || imagePath.startsWith("https://")) {
-      return imagePath;
-    }
-    const apiUrl = process.env.REACT_APP_API_URL || 'https://hrms-bace.vercel.app';
-    return `${apiUrl}${imagePath.startsWith('/') ? imagePath : '/' + imagePath}`;
-  };
+
 
   return (
     <div
@@ -111,13 +105,10 @@ const RecommendationCard = ({
       {/* Image Container */}
       <div className="recommendation-image-container">
         <img
-          src={getImageUrl(menuItem.image)}
+          src={getMenuImageUrl(menuItem.image)}
           alt={menuItem.name}
           className="recommendation-image"
-          onError={(e) => {
-            e.target.src = "/placeholder-food.jpg";
-            e.target.onerror = null;
-          }}
+          onError={(e) => handleImageError(e, "/images/placeholder-menu.jpg")}
         />
         
         {/* Overlay Badges */}

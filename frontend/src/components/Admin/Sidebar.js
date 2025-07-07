@@ -857,11 +857,11 @@ const Sidebar = () => {
             {/* Hide search and notifications on mobile for cleaner look */}
             {!isMobile && (
               <>
-                <div className="header-search">
-                  <FiSearch className="search-icon" />
+                <div className="header-search" >
+                  <FiSearch className="search-icon"  />
                   <input
                     type="text"
-                    placeholder="Global search..."
+                      placeholder="Global search..."
                     className="search-input"
                   />
                 </div>

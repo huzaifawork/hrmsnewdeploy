@@ -215,23 +215,13 @@ export const tableService = {
   }
 };
 
+// Import centralized image utilities
+import { getTableImageUrl } from '../utils/imageUtils';
+
 // Utility functions
 export const tableUtils = {
-  // Format image URL
-  getImageUrl: (imagePath) => {
-    if (!imagePath) return "/images/placeholder-table.jpg";
-    try {
-      if (imagePath.startsWith("http")) return imagePath;
-      const cleanPath = imagePath.replace(/^\/+/, "");
-      const serverURL = process.env.REACT_APP_API_URL || 'https://hrms-bace.vercel.app';
-      return cleanPath.includes("uploads")
-        ? `${serverURL}/${cleanPath}`
-        : `${serverURL}/uploads/${cleanPath}`;
-    } catch (error) {
-      console.error("Error formatting image URL:", error);
-      return "/images/placeholder-table.jpg";
-    }
-  },
+  // Format image URL - use centralized utility
+  getImageUrl: getTableImageUrl,
 
   // Get occasion icon
   getOccasionIcon: (occasion) => {

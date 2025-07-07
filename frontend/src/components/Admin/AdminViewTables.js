@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import { getTableImageUrl, handleImageError } from "../../utils/imageUtils";
 import "./simple-admin.css";
 
 const AdminViewTables = () => {
@@ -158,14 +159,7 @@ const AdminViewTables = () => {
                 <td style={{ minWidth: "100px" }}>
                   {table.image ? (
                     <img
-                      src={
-                        table.image.startsWith("http")
-                          ? table.image
-                          : `${
-                              process.env.REACT_APP_API_URL ||
-                              "https://hrms-bace.vercel.app"
-                            }${table.image}`
-                      }
+                      src={getTableImageUrl(table.image)}
                       alt={table.tableName}
                       className="simple-room-image"
                       style={{
@@ -174,11 +168,7 @@ const AdminViewTables = () => {
                         objectFit: "cover",
                         borderRadius: "4px",
                       }}
-                      onError={(e) => {
-                        e.target.src =
-                          "https://via.placeholder.com/60x40/e5e7eb/9ca3af?text=No+Image";
-                        e.target.onerror = null;
-                      }}
+                      onError={(e) => handleImageError(e, "/images/placeholder-table.jpg")}
                     />
                   ) : (
                     <div

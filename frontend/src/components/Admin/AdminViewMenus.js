@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import { getMenuImageUrl, handleMenuImageError } from "../../utils/imageUtils";
 import "./simple-admin.css";
 
 const AdminViewMenus = () => {
@@ -155,7 +156,7 @@ const AdminViewMenus = () => {
                 <td style={{ minWidth: "100px" }}>
                   {menu.image ? (
                     <img
-                      src={menu.image}
+                      src={getMenuImageUrl(menu.image)}
                       alt={menu.name}
                       className="simple-room-image"
                       style={{
@@ -164,6 +165,7 @@ const AdminViewMenus = () => {
                         objectFit: "cover",
                         borderRadius: "4px",
                       }}
+                      onError={handleMenuImageError}
                     />
                   ) : (
                     <div

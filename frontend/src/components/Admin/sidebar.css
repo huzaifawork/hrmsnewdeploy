@@ -272,6 +272,7 @@
 }
 
 .search-input {
+  margin-left: 15px;
   width: 300px;
   padding: 0.5rem 1rem 0.5rem 2.5rem;
   border: 1px solid var(--admin-border);

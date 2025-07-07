@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { FiCheckCircle, FiUsers, FiZap, FiAlertCircle } from "react-icons/fi";
+import { getTableImageUrl, handleImageError } from "../../utils/imageUtils";
 import "./Tables.css";
 
 const TablesSection = () => {
@@ -59,9 +60,10 @@ const TablesSection = () => {
                   <div className="card-image">
                     {table.image && (
                       <img
-                        src={`${process.env.REACT_APP_API_URL || 'https://hrms-bace.vercel.app'}${table.image}`}
+                        src={getTableImageUrl(table.image)}
                         alt={table.tableName}
                         loading="lazy"
+                        onError={(e) => handleImageError(e, "/images/placeholder-table.jpg")}
                       />
                     )}
                     <div className="status-badge">
