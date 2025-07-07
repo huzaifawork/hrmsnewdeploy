@@ -301,20 +301,28 @@
   background: #6b7280;
 }
 
-/* Responsive Design */
+/* Mobile-First Responsive Design */
 @media (max-width: 768px) {
+  /* Ensure hero section is never hidden behind mobile navigation */
   .hero-section {
     height: 80vh;
     min-height: 600px;
     padding: 1rem;
-    margin-top: 1rem;
+    margin-top: 4rem; /* Increased top margin for mobile header/navigation */
+    padding-top: 2rem; /* Additional padding to ensure content is not hidden */
+    position: relative;
+    z-index: 1; /* Ensure content is above any background elements */
   }
 
   .hero-content {
     padding: 4rem 1.5rem 2rem 1.5rem;
     max-width: 100%;
     margin: 0 auto;
-    padding-top: 5rem;
+    padding-top: 6rem; /* Increased padding to push content down */
+    position: relative;
+    z-index: 10; /* Ensure content is above background elements */
+    /* Ensure content is never hidden behind fixed elements */
+    margin-top: env(safe-area-inset-top, 0); /* Handle notched devices */
   }
 
   .hero-title {
@@ -366,12 +374,13 @@
     height: 75vh;
     min-height: 550px;
     padding: 0.75rem;
-    margin-top: 0.5rem;
+    margin-top: 3.5rem; /* Increased top margin for smaller mobile devices */
+    padding-top: 1.5rem; /* Additional padding for mobile header */
   }
 
   .hero-content {
     padding: 3rem 1rem 1.5rem 1rem;
-    padding-top: 4rem;
+    padding-top: 5rem; /* Increased padding to ensure content visibility */
   }
 
   .hero-badge {
@@ -440,11 +449,13 @@
     height: 70vh;
     min-height: 500px;
     padding: 0.5rem;
+    margin-top: 3rem; /* Top margin for very small devices */
+    padding-top: 1rem; /* Additional padding for mobile header */
   }
 
   .hero-content {
     padding: 2.5rem 0.75rem 1rem 0.75rem;
-    padding-top: 3.5rem;
+    padding-top: 4.5rem; /* Increased padding for content visibility */
   }
 
   .hero-title {

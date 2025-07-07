@@ -143,7 +143,28 @@ const Sidebar = () => {
     console.log("openDropdown state changed to:", openDropdown);
   }, [openDropdown]);
 
+  // Listen for admin module change events from child components
+  useEffect(() => {
+    const handleAdminModuleChange = (event) => {
+      console.log("=== ADMIN MODULE CHANGE EVENT RECEIVED ===");
+      console.log("Event detail:", event.detail);
+      console.log("Target module:", event.detail.module);
+
+      if (event.detail && event.detail.module) {
+        handleModuleChange(event.detail.module);
+      }
+    };
+
+    window.addEventListener('adminModuleChange', handleAdminModuleChange);
+
+    return () => {
+      window.removeEventListener('adminModuleChange', handleAdminModuleChange);
+    };
+  }, []);
+
   const handleLogout = () => {
+    console.log("=== LOGOUT TRIGGERED ===");
+    console.log("Clearing localStorage and navigating to home");
     localStorage.clear();
     navigate("/", { replace: true });
   };
@@ -765,8 +786,28 @@ const Sidebar = () => {
                 onMouseLeave={(e) => {
                   e.target.style.color = "#000000";
                 }}
+                onTouchStart={(e) => {
+                  console.log("=== LOGOUT TOUCH START ===");
+                }}
+                onTouchEnd={(e) => {
+                  console.log("=== LOGOUT TOUCH END ===");
+                  if (isMobile) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    console.log("Mobile logout touch - triggering logout");
+                    handleLogout();
+                  }
+                }}
                 onClick={(e) => {
                   e.preventDefault();
+
+                  // Skip click handling on mobile (use touch events instead)
+                  if (isMobile) {
+                    console.log("=== LOGOUT CLICK EVENT SKIPPED ON MOBILE ===");
+                    return;
+                  }
+
+                  console.log("=== LOGOUT CLICKED ===");
                   handleLogout();
                 }}
               >
