@@ -462,7 +462,7 @@ const TableReservation = () => {
                       marginTop: '1rem'
                     }}>
                       <Link
-                        to="/reserve-table"
+                        to="/table-reservation"
                         style={{
                           flex: 1,
                           display: 'flex',
@@ -479,7 +479,20 @@ const TableReservation = () => {
                           transition: 'all 0.2s ease',
                           border: 'none'
                         }}
-                        onClick={() => recordInteraction(table._id, 'inquiry')}
+                        onClick={() => {
+                          recordInteraction(table._id, 'inquiry');
+                          // Store table details for the reservation page
+                          const reservationDetails = {
+                            tableId: table._id,
+                            tableName: table.tableName,
+                            tableImage: table.image,
+                            tableCapacity: table.capacity,
+                            tableDescription: table.description,
+                            tableType: table.tableType,
+                            location: table.location
+                          };
+                          localStorage.setItem('reservationDetails', JSON.stringify(reservationDetails));
+                        }}
                         onMouseEnter={(e) => {
                           e.currentTarget.style.background = '#333333';
                         }}

@@ -160,9 +160,9 @@ export default function About() {
               marginBottom: '2rem'
             }}>
               {[
-                { icon: <i className="fa fa-hotel" style={{fontSize: '1.5rem', color: '#374151'}}></i>, text: "Rooms", count: stats.totalRooms },
-                { icon: <i className="fa fa-users" style={{fontSize: '1.5rem', color: '#374151'}}></i>, text: "Staff", count: stats.totalStaff },
-                { icon: <i className="fa fa-users-cog" style={{fontSize: '1.5rem', color: '#374151'}}></i>, text: "Clients", count: stats.totalClients }
+                { icon: <i className="fa fa-hotel" style={{fontSize: '1.5rem', color: '#374151'}}></i>, text: "Rooms", count: stats.loading ? "..." : stats.totalRooms },
+                { icon: <i className="fa fa-utensils" style={{fontSize: '1.5rem', color: '#374151'}}></i>, text: "Menu Items", count: stats.loading ? "..." : stats.totalMenuItems },
+                { icon: <i className="fa fa-users-cog" style={{fontSize: '1.5rem', color: '#374151'}}></i>, text: "Happy Clients", count: stats.loading ? "..." : stats.totalClients }
               ].map((item, index) => (
                 <div key={index} style={{
                   display: 'flex',

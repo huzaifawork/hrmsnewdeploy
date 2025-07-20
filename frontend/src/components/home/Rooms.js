@@ -443,7 +443,7 @@ const Rooms = () => {
                   marginTop: '1rem'
                 }}>
                   <Link
-                    to="/rooms"
+                    to={`/booking-page/${room._id}`}
                     style={{
                       flex: 1,
                       display: 'flex',

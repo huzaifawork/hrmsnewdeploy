@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { FiStar, FiInfo, FiShoppingCart, FiClock, FiThermometer, FiHeart } from "react-icons/fi";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { apiConfig } from "../../config/api";
 import { getMenuImageUrl, handleImageError } from "../../utils/imageUtils";
@@ -10,6 +11,31 @@ const MostPopularItems = () => {
   const [menuItems, setMenuItems] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const navigate = useNavigate();
+
+  // Add to cart function
+  const handleAddToCart = (item) => {
+    const existingCart = JSON.parse(localStorage.getItem("cart")) || [];
+
+    const itemIndex = existingCart.findIndex(cartItem => cartItem._id === item._id);
+
+    if (itemIndex !== -1) {
+      existingCart[itemIndex].quantity += 1;
+      toast.success(`${item.name} quantity updated! Click to go to cart.`, {
+        onClick: () => navigate('/cart'),
+        style: { cursor: 'pointer' }
+      });
+    } else {
+      existingCart.push({ ...item, quantity: 1 });
+      toast.success(`${item.name} added to cart! Click to go to cart.`, {
+        onClick: () => navigate('/cart'),
+        style: { cursor: 'pointer' }
+      });
+    }
+
+    localStorage.setItem("cart", JSON.stringify(existingCart));
+    window.dispatchEvent(new Event("cartUpdated"));
+  };
 
 
 
@@ -436,8 +462,8 @@ const MostPopularItems = () => {
                 </div>
 
                 {/* Action Button */}
-                <Link
-                  to="/order-food"
+                <button
+                  onClick={() => handleAddToCart(item)}
                   style={{
                     display: 'flex',
                     alignItems: 'center',
@@ -463,8 +489,8 @@ const MostPopularItems = () => {
                   }}
                 >
                   <FiShoppingCart size={14} />
-                  Order Now
-                </Link>
+                  Add to Cart
+                </button>
               </div>
             </div>
           ))}
