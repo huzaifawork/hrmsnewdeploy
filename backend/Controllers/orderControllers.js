@@ -9,7 +9,6 @@ if (!mongoose.models.User) {
 }
 const http = require("http");
 const socketIo = require("socket.io");
-const mongoose = require("mongoose");
 const stripe = require("../config/stripe");
 
 const server = http.createServer();

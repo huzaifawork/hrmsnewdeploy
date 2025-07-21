@@ -2,21 +2,14 @@ const express = require("express");
 const router = express.Router();
 const { ensureAuthenticated, ensureAdmin } = require("../Middlewares/Auth");
 
-// Import functions one by one to catch any import errors
-let createOrder, getOrders, getOrderById, updateDeliveryLocation, cancelOrder, updateOrderStatus;
-
-try {
-  const orderController = require("../Controllers/orderControllers");
-  createOrder = orderController.createOrder;
-  getOrders = orderController.getOrders;
-  getOrderById = orderController.getOrderById;
-  updateDeliveryLocation = orderController.updateDeliveryLocation;
-  cancelOrder = orderController.cancelOrder;
-  updateOrderStatus = orderController.updateOrderStatus;
-  console.log("✅ All order controller functions imported successfully");
-} catch (error) {
-  console.error("❌ Error importing order controller functions:", error.message);
-}
+const {
+  createOrder,
+  getOrders,
+  getOrderById,
+  updateDeliveryLocation,
+  cancelOrder,
+  updateOrderStatus,
+} = require("../Controllers/orderControllers");
 
 // ✅ Create Order (Logged-in users only)
 router.post("/", ensureAuthenticated, createOrder);
