@@ -175,10 +175,18 @@ const AdminManageBookings = () => {
                 <td>
                   <div>
                     <div style={{ fontWeight: "bold" }}>
-                      {booking.customerName || booking.customer?.name || "N/A"}
+                      {booking.fullName ||
+                        booking.customerName ||
+                        booking.customer?.name ||
+                        booking.userId?.name ||
+                        "N/A"}
                     </div>
                     <div style={{ fontSize: "12px", color: "#666" }}>
-                      {booking.customerEmail || booking.customer?.email || ""}
+                      {booking.email ||
+                        booking.customerEmail ||
+                        booking.customer?.email ||
+                        booking.userId?.email ||
+                        ""}
                     </div>
                   </div>
                 </td>

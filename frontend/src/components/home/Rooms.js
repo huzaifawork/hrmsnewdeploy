@@ -1,6 +1,13 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { FiStar, FiWifi, FiCoffee, FiTv, FiShoppingCart, FiEye } from "react-icons/fi";
+import {
+  FiStar,
+  FiWifi,
+  FiCoffee,
+  FiTv,
+  FiShoppingCart,
+  FiEye,
+} from "react-icons/fi";
 import { Link } from "react-router-dom";
 import { getRoomImageUrl, handleImageError } from "../../utils/imageUtils";
 import "bootstrap/dist/css/bootstrap.min.css";
@@ -11,23 +18,21 @@ const Rooms = () => {
   const [popularRooms, setPopularRooms] = useState([]);
   const [, setLoading] = useState(true);
   const [, setError] = useState(null);
-  const [, setActiveTab] = useState('popular');
+  const [, setActiveTab] = useState("popular");
   const [user, setUser] = useState(null);
   const [hoveredRoom, setHoveredRoom] = useState(null);
 
-
-
   // Check if user is logged in
   useEffect(() => {
-    const token = localStorage.getItem('token');
-    const userId = localStorage.getItem('userId');
-    const userName = localStorage.getItem('name');
+    const token = localStorage.getItem("token");
+    const userId = localStorage.getItem("userId");
+    const userName = localStorage.getItem("name");
 
     if (token && userId && userName) {
       setUser({ id: userId, token, name: userName });
-      setActiveTab('recommended'); // Show recommendations for logged-in users
+      setActiveTab("recommended"); // Show recommendations for logged-in users
     } else {
-      setActiveTab('popular'); // Default to popular for non-logged-in users
+      setActiveTab("popular"); // Default to popular for non-logged-in users
     }
   }, []);
 
@@ -35,7 +40,9 @@ const Rooms = () => {
   useEffect(() => {
     const fetchRooms = async () => {
       try {
-        const apiUrl = process.env.REACT_APP_API_BASE_URL || 'https://hrms-bace.vercel.app/api';
+        const apiUrl =
+          process.env.REACT_APP_API_BASE_URL ||
+          "https://hrms-bace.vercel.app/api";
         const response = await axios.get(`${apiUrl}/rooms`);
 
         setRooms(response.data);
@@ -54,14 +61,20 @@ const Rooms = () => {
   useEffect(() => {
     const fetchPopularRooms = async () => {
       try {
-        const apiUrl = process.env.REACT_APP_API_BASE_URL || 'https://hrms-bace.vercel.app/api';
+        const apiUrl =
+          process.env.REACT_APP_API_BASE_URL ||
+          "https://hrms-bace.vercel.app/api";
         const response = await axios.get(`${apiUrl}/rooms/popular?count=6`);
         if (response.data.success) {
-          console.log('Fetched popular rooms:', response.data.popularRooms.length, response.data.popularRooms);
+          console.log(
+            "Fetched popular rooms:",
+            response.data.popularRooms.length,
+            response.data.popularRooms
+          );
           setPopularRooms(response.data.popularRooms);
         }
       } catch (error) {
-        console.error('Error fetching popular rooms:', error);
+        console.error("Error fetching popular rooms:", error);
       }
     };
 
@@ -74,21 +87,28 @@ const Rooms = () => {
       if (!user?.id || !user?.token) return;
 
       try {
-        const apiUrl = process.env.REACT_APP_API_BASE_URL || 'https://hrms-bace.vercel.app/api';
+        const apiUrl =
+          process.env.REACT_APP_API_BASE_URL ||
+          "https://hrms-bace.vercel.app/api";
         const response = await axios.get(
           `${apiUrl}/rooms/recommendations/${user.id}?count=6`,
           {
-            headers: { Authorization: `Bearer ${user.token}` }
+            headers: { Authorization: `Bearer ${user.token}` },
           }
         );
 
         if (response.data.success) {
-          const recommendations = response.data.recommendations || response.data.rooms || [];
-          console.log('Fetched recommendations:', recommendations.length, recommendations);
+          const recommendations =
+            response.data.recommendations || response.data.rooms || [];
+          console.log(
+            "Fetched recommendations:",
+            recommendations.length,
+            recommendations
+          );
           setRecommendedRooms(recommendations);
         }
       } catch (error) {
-        console.error('Error fetching recommendations:', error);
+        console.error("Error fetching recommendations:", error);
         // Fallback to popular rooms for new users or on error
         setRecommendedRooms(popularRooms.slice(0, 6));
       }
@@ -99,11 +119,11 @@ const Rooms = () => {
 
   // Get current rooms to display - always show only 3 recommended rooms
   const getCurrentRooms = () => {
-    console.log('Home Rooms Debug:', {
+    console.log("Home Rooms Debug:", {
       recommendedRooms: recommendedRooms.length,
       popularRooms: popularRooms.length,
       allRooms: rooms.length,
-      user: !!user
+      user: !!user,
     });
 
     let selectedRooms = [];
@@ -111,24 +131,32 @@ const Rooms = () => {
     // Always prioritize recommended rooms, limit to 3
     if (recommendedRooms.length > 0) {
       selectedRooms = recommendedRooms.slice(0, 3);
-      console.log('Using recommended rooms:', selectedRooms.length);
+      console.log("Using recommended rooms:", selectedRooms.length);
     } else if (popularRooms.length > 0) {
       selectedRooms = popularRooms.slice(0, 3);
-      console.log('Using popular rooms:', selectedRooms.length);
+      console.log("Using popular rooms:", selectedRooms.length);
     } else {
       selectedRooms = rooms.slice(0, 3);
-      console.log('Using all rooms:', selectedRooms.length);
+      console.log("Using all rooms:", selectedRooms.length);
     }
 
     // Fallback: if we still don't have 3 rooms, try to get more from other sources
     if (selectedRooms.length < 3) {
-      console.log('Not enough rooms, trying fallback...');
-      const allAvailableRooms = [...recommendedRooms, ...popularRooms, ...rooms];
-      const uniqueRooms = allAvailableRooms.filter((room, index, self) =>
-        index === self.findIndex(r => (r._id || r.roomId) === (room._id || room.roomId))
+      console.log("Not enough rooms, trying fallback...");
+      const allAvailableRooms = [
+        ...recommendedRooms,
+        ...popularRooms,
+        ...rooms,
+      ];
+      const uniqueRooms = allAvailableRooms.filter(
+        (room, index, self) =>
+          index ===
+          self.findIndex(
+            (r) => (r._id || r.roomId) === (room._id || room.roomId)
+          )
       );
       selectedRooms = uniqueRooms.slice(0, 3);
-      console.log('Fallback result:', selectedRooms.length);
+      console.log("Fallback result:", selectedRooms.length);
     }
 
     return selectedRooms;
@@ -138,21 +166,15 @@ const Rooms = () => {
 
   // Format price in Pakistani Rupees
   const formatPrice = (price) => {
-    return new Intl.NumberFormat('en-PK', {
-      style: 'currency',
-      currency: 'PKR',
-      minimumFractionDigits: 0
+    return new Intl.NumberFormat("en-PK", {
+      style: "currency",
+      currency: "PKR",
+      minimumFractionDigits: 0,
     }).format(price);
   };
 
-
-
-
-
   const currentRooms = getCurrentRooms();
   const visibleRooms = currentRooms; // Show all 3 without sliding
-
-
 
   return (
     <>
@@ -184,326 +206,385 @@ const Rooms = () => {
           }
         `}
       </style>
-      <section style={{
-        width: '100%',
-        margin: 0,
-        padding: '4rem 0',
-        background: '#ffffff',
-        position: 'relative'
-      }}>
+      <section
+        style={{
+          width: "100%",
+          margin: 0,
+          padding: "4rem 0",
+          background: "#ffffff",
+          position: "relative",
+        }}
+      >
+        <div
+          style={{
+            width: "100%",
+            maxWidth: "1000px",
+            margin: "0 auto",
+            padding: "0 2rem",
+            position: "relative",
+            zIndex: 1,
+          }}
+        >
+          <div style={{ textAlign: "center", marginBottom: "3rem" }}>
+            <h2
+              style={{
+                fontSize: "2rem",
+                fontWeight: "600",
+                color: "#000000",
+                marginBottom: "1rem",
+                fontFamily: "Inter, sans-serif",
+              }}
+            >
+              Featured Rooms
+            </h2>
+            <Link
+              to="/rooms"
+              style={{
+                display: "inline-flex",
+                alignItems: "center",
+                gap: "0.5rem",
+                padding: "0.75rem 1.5rem",
+                background: "#000000",
+                color: "#ffffff",
+                textDecoration: "none",
+                borderRadius: "0.5rem",
+                fontWeight: "500",
+                fontSize: "0.9rem",
+                transition: "all 0.2s ease",
+                border: "none",
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.background = "#333333";
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.background = "#000000";
+              }}
+            >
+              View All Rooms
+            </Link>
+          </div>
 
-      <div style={{
-        width: '100%',
-        maxWidth: '1000px',
-        margin: '0 auto',
-        padding: '0 2rem',
-        position: 'relative',
-        zIndex: 1
-      }}>
-        <div style={{ textAlign: 'center', marginBottom: '3rem' }}>
-          <h2 style={{
-            fontSize: '2rem',
-            fontWeight: '600',
-            color: '#000000',
-            marginBottom: '1rem',
-            fontFamily: 'Inter, sans-serif'
-          }}>
-            Featured Rooms
-          </h2>
-          <Link
-            to="/rooms"
+          <div
+            className="rooms-grid"
             style={{
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: '0.5rem',
-              padding: '0.75rem 1.5rem',
-              background: '#000000',
-              color: '#ffffff',
-              textDecoration: 'none',
-              borderRadius: '0.5rem',
-              fontWeight: '500',
-              fontSize: '0.9rem',
-              transition: 'all 0.2s ease',
-              border: 'none'
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.background = '#333333';
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.background = '#000000';
+              display: "grid",
+              gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))",
+              gap: "2rem",
+              width: "100%",
+              maxWidth: "1200px",
+              margin: "0 auto",
+              padding: "0 1rem",
             }}
           >
-            View All Rooms
-          </Link>
-        </div>
+            {visibleRooms.map((roomItem) => {
+              const room = roomItem.roomDetails || roomItem;
 
-        <div className="rooms-grid" style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
-          gap: '2rem',
-          width: '100%',
-          maxWidth: '1200px',
-          margin: '0 auto',
-          padding: '0 1rem'
-        }}>
-          {visibleRooms.map((roomItem) => {
-            const room = roomItem.roomDetails || roomItem;
-
-            return (
-            <div
-              key={room._id || roomItem.roomId}
-              className="room-card"
-              style={{
-                background: '#ffffff',
-                border: '1px solid #e5e7eb',
-                borderRadius: '0.5rem',
-                overflow: 'hidden',
-                transition: 'all 0.2s ease',
-                cursor: 'pointer',
-                width: '100%',
-                maxWidth: '350px',
-                margin: '0 auto',
-                position: 'relative',
-                boxShadow: hoveredRoom === room._id
-                  ? '0 4px 12px rgba(0, 0, 0, 0.1)'
-                  : '0 1px 3px rgba(0, 0, 0, 0.1)',
-                transform: hoveredRoom === room._id ? 'translateY(-2px)' : 'translateY(0)'
-              }}
-              onMouseEnter={() => setHoveredRoom(room._id)}
-              onMouseLeave={() => setHoveredRoom(null)}
-            >
-              <div style={{
-                position: 'relative',
-                width: '100%',
-                height: '200px',
-                overflow: 'hidden',
-                backgroundSize: 'cover',
-                backgroundPosition: 'center',
-                backgroundImage: `url(${getRoomImageUrl(room.image)})`
-              }}>
-
-
-                {/* Recommendation Badge */}
-                {room.recommendationReason && (
-                  <div style={{
-                    position: 'absolute',
-                    top: '0.75rem',
-                    left: '0.75rem',
-                    background: '#000000',
-                    color: '#ffffff',
-                    padding: '0.25rem 0.5rem',
-                    borderRadius: '0.25rem',
-                    fontSize: '0.75rem',
-                    fontWeight: '500'
-                  }}>
-                    Recommended
-                  </div>
-                )}
-
-                {/* Price Badge */}
-                <div style={{
-                  position: 'absolute',
-                  top: '0.75rem',
-                  right: '0.75rem',
-                  background: '#ffffff',
-                  color: '#000000',
-                  padding: '0.25rem 0.5rem',
-                  borderRadius: '0.25rem',
-                  fontWeight: '600',
-                  fontSize: '0.875rem',
-                  border: '1px solid #e5e7eb'
-                }}>
-                  {formatPrice(room.price)}
-                </div>
-
-                {/* Rating Badge */}
-                <div style={{
-                  position: 'absolute',
-                  bottom: '0.75rem',
-                  left: '0.75rem',
-                  background: '#ffffff',
-                  color: '#000000',
-                  padding: '0.25rem 0.5rem',
-                  borderRadius: '0.25rem',
-                  fontSize: '0.75rem',
-                  fontWeight: '500',
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '0.25rem',
-                  border: '1px solid #e5e7eb'
-                }}>
-                  <FiStar style={{ color: '#fbbf24' }} size={12} />
-                  <span>{room.averageRating?.toFixed(1) || '4.5'}</span>
-                </div>
-              </div>
-
-              <div style={{
-                padding: '1.5rem',
-                display: 'flex',
-                flexDirection: 'column',
-                gap: '1rem',
-                background: '#ffffff'
-              }}>
-                <div>
-                  <h3 style={{
-                    color: '#000000',
-                    fontSize: '1.125rem',
-                    fontWeight: '600',
-                    marginBottom: '0.5rem',
-                    fontFamily: 'Inter, sans-serif'
-                  }}>
-                    {room.roomNumber || 'Luxury Room'}
-                  </h3>
-                  <div style={{
-                    display: 'inline-flex',
-                    alignItems: 'center',
-                    backgroundColor: '#f3f4f6',
-                    color: '#374151',
-                    padding: '0.25rem 0.5rem',
-                    borderRadius: '0.25rem',
-                    fontSize: '0.75rem',
-                    fontWeight: '500'
-                  }}>
-                    {room.roomType || 'Deluxe'}
-                  </div>
-                </div>
-
-                <div style={{
-                  display: 'grid',
-                  gridTemplateColumns: 'repeat(3, 1fr)',
-                  gap: '0.75rem'
-                }}>
-                  <div style={{
-                    display: 'flex',
-                    flexDirection: 'column',
-                    alignItems: 'center',
-                    gap: '0.5rem',
-                    padding: '0.75rem',
-                    backgroundColor: '#f9fafb',
-                    borderRadius: '0.5rem',
-                    border: '1px solid #e5e7eb'
-                  }}>
-                    <FiWifi size={16} style={{ color: '#6b7280' }} />
-                    <span style={{
-                      fontSize: '0.75rem',
-                      color: '#374151',
-                      fontWeight: '500',
-                      textAlign: 'center'
-                    }}>
-                      Free WiFi
-                    </span>
-                  </div>
-
-                  <div style={{
-                    display: 'flex',
-                    flexDirection: 'column',
-                    alignItems: 'center',
-                    gap: '0.5rem',
-                    padding: '0.75rem',
-                    backgroundColor: '#f9fafb',
-                    borderRadius: '0.5rem',
-                    border: '1px solid #e5e7eb'
-                  }}>
-                    <FiCoffee size={16} style={{ color: '#6b7280' }} />
-                    <span style={{
-                      fontSize: '0.75rem',
-                      color: '#374151',
-                      fontWeight: '500',
-                      textAlign: 'center'
-                    }}>
-                      Coffee
-                    </span>
-                  </div>
-
-                  <div style={{
-                    display: 'flex',
-                    flexDirection: 'column',
-                    alignItems: 'center',
-                    gap: '0.5rem',
-                    padding: '0.75rem',
-                    backgroundColor: '#f9fafb',
-                    borderRadius: '0.5rem',
-                    border: '1px solid #e5e7eb'
-                  }}>
-                    <FiTv size={16} style={{ color: '#6b7280' }} />
-                    <span style={{
-                      fontSize: '0.75rem',
-                      color: '#374151',
-                      fontWeight: '500',
-                      textAlign: 'center'
-                    }}>
-                      Smart TV
-                    </span>
-                  </div>
-                </div>
-
-                <div style={{
-                  display: 'flex',
-                  gap: '0.75rem',
-                  marginTop: '1rem'
-                }}>
-                  <Link
-                    to={`/booking-page/${room._id}`}
+              return (
+                <div
+                  key={room._id || roomItem.roomId}
+                  className="room-card"
+                  style={{
+                    background: "#ffffff",
+                    border: "1px solid #e5e7eb",
+                    borderRadius: "0.5rem",
+                    overflow: "hidden",
+                    transition: "all 0.2s ease",
+                    cursor: "pointer",
+                    width: "100%",
+                    maxWidth: "350px",
+                    margin: "0 auto",
+                    position: "relative",
+                    boxShadow:
+                      hoveredRoom === room._id
+                        ? "0 4px 12px rgba(0, 0, 0, 0.1)"
+                        : "0 1px 3px rgba(0, 0, 0, 0.1)",
+                    transform:
+                      hoveredRoom === room._id
+                        ? "translateY(-2px)"
+                        : "translateY(0)",
+                  }}
+                  onMouseEnter={() => setHoveredRoom(room._id)}
+                  onMouseLeave={() => setHoveredRoom(null)}
+                >
+                  <div
                     style={{
-                      flex: 1,
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      gap: '0.5rem',
-                      padding: '0.75rem',
-                      background: '#000000',
-                      color: '#ffffff',
-                      textDecoration: 'none',
-                      borderRadius: '0.5rem',
-                      fontWeight: '500',
-                      fontSize: '0.875rem',
-                      transition: 'all 0.2s ease',
-                      border: 'none'
-                    }}
-                    onMouseEnter={(e) => {
-                      e.currentTarget.style.background = '#333333';
-                    }}
-                    onMouseLeave={(e) => {
-                      e.currentTarget.style.background = '#000000';
+                      position: "relative",
+                      width: "100%",
+                      height: "200px",
+                      overflow: "hidden",
+                      backgroundSize: "cover",
+                      backgroundPosition: "center",
+                      backgroundImage: `url(${getRoomImageUrl(room.image)})`,
                     }}
                   >
-                    <FiShoppingCart size={14} />
-                    Book Now
-                  </Link>
+                    {/* Recommendation Badge */}
+                    {room.recommendationReason && (
+                      <div
+                        style={{
+                          position: "absolute",
+                          top: "0.75rem",
+                          left: "0.75rem",
+                          background: "#000000",
+                          color: "#ffffff",
+                          padding: "0.25rem 0.5rem",
+                          borderRadius: "0.25rem",
+                          fontSize: "0.75rem",
+                          fontWeight: "500",
+                        }}
+                      >
+                        Recommended
+                      </div>
+                    )}
 
-                  <Link
-                    to={`/room-details/${room._id}`}
+                    {/* Price Badge */}
+                    <div
+                      style={{
+                        position: "absolute",
+                        top: "0.75rem",
+                        right: "0.75rem",
+                        background: "#ffffff",
+                        color: "#000000",
+                        padding: "0.25rem 0.5rem",
+                        borderRadius: "0.25rem",
+                        fontWeight: "600",
+                        fontSize: "0.875rem",
+                        border: "1px solid #e5e7eb",
+                      }}
+                    >
+                      {formatPrice(room.price)}
+                    </div>
+
+                    {/* Rating Badge */}
+                    <div
+                      style={{
+                        position: "absolute",
+                        bottom: "0.75rem",
+                        left: "0.75rem",
+                        background: "#ffffff",
+                        color: "#000000",
+                        padding: "0.25rem 0.5rem",
+                        borderRadius: "0.25rem",
+                        fontSize: "0.75rem",
+                        fontWeight: "500",
+                        display: "flex",
+                        alignItems: "center",
+                        gap: "0.25rem",
+                        border: "1px solid #e5e7eb",
+                      }}
+                    >
+                      <FiStar style={{ color: "#fbbf24" }} size={12} />
+                      <span>{room.averageRating?.toFixed(1) || "4.5"}</span>
+                    </div>
+                  </div>
+
+                  <div
                     style={{
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      padding: '0.75rem',
-                      border: '1px solid #e5e7eb',
-                      color: '#374151',
-                      textDecoration: 'none',
-                      borderRadius: '0.5rem',
-                      transition: 'all 0.2s ease',
-                      backgroundColor: '#ffffff'
-                    }}
-                    onMouseEnter={(e) => {
-                      e.currentTarget.style.backgroundColor = '#f9fafb';
-                      e.currentTarget.style.borderColor = '#d1d5db';
-                    }}
-                    onMouseLeave={(e) => {
-                      e.currentTarget.style.backgroundColor = '#ffffff';
-                      e.currentTarget.style.borderColor = '#e5e7eb';
+                      padding: "1.5rem",
+                      display: "flex",
+                      flexDirection: "column",
+                      gap: "1rem",
+                      background: "#ffffff",
                     }}
                   >
-                    <FiEye size={16} />
-                  </Link>
+                    <div>
+                      <h3
+                        style={{
+                          color: "#000000",
+                          fontSize: "1.125rem",
+                          fontWeight: "600",
+                          marginBottom: "0.5rem",
+                          fontFamily: "Inter, sans-serif",
+                        }}
+                      >
+                        {room.roomNumber || "Luxury Room"}
+                      </h3>
+                      <div
+                        style={{
+                          display: "inline-flex",
+                          alignItems: "center",
+                          backgroundColor: "#f3f4f6",
+                          color: "#374151",
+                          padding: "0.25rem 0.5rem",
+                          borderRadius: "0.25rem",
+                          fontSize: "0.75rem",
+                          fontWeight: "500",
+                        }}
+                      >
+                        {room.roomType || "Deluxe"}
+                      </div>
+                    </div>
+
+                    <div
+                      style={{
+                        display: "grid",
+                        gridTemplateColumns: "repeat(3, 1fr)",
+                        gap: "0.75rem",
+                      }}
+                    >
+                      <div
+                        style={{
+                          display: "flex",
+                          flexDirection: "column",
+                          alignItems: "center",
+                          gap: "0.5rem",
+                          padding: "0.75rem",
+                          backgroundColor: "#f9fafb",
+                          borderRadius: "0.5rem",
+                          border: "1px solid #e5e7eb",
+                        }}
+                      >
+                        <FiWifi size={16} style={{ color: "#6b7280" }} />
+                        <span
+                          style={{
+                            fontSize: "0.75rem",
+                            color: "#374151",
+                            fontWeight: "500",
+                            textAlign: "center",
+                          }}
+                        >
+                          Free WiFi
+                        </span>
+                      </div>
+
+                      <div
+                        style={{
+                          display: "flex",
+                          flexDirection: "column",
+                          alignItems: "center",
+                          gap: "0.5rem",
+                          padding: "0.75rem",
+                          backgroundColor: "#f9fafb",
+                          borderRadius: "0.5rem",
+                          border: "1px solid #e5e7eb",
+                        }}
+                      >
+                        <FiCoffee size={16} style={{ color: "#6b7280" }} />
+                        <span
+                          style={{
+                            fontSize: "0.75rem",
+                            color: "#374151",
+                            fontWeight: "500",
+                            textAlign: "center",
+                          }}
+                        >
+                          Coffee
+                        </span>
+                      </div>
+
+                      <div
+                        style={{
+                          display: "flex",
+                          flexDirection: "column",
+                          alignItems: "center",
+                          gap: "0.5rem",
+                          padding: "0.75rem",
+                          backgroundColor: "#f9fafb",
+                          borderRadius: "0.5rem",
+                          border: "1px solid #e5e7eb",
+                        }}
+                      >
+                        <FiTv size={16} style={{ color: "#6b7280" }} />
+                        <span
+                          style={{
+                            fontSize: "0.75rem",
+                            color: "#374151",
+                            fontWeight: "500",
+                            textAlign: "center",
+                          }}
+                        >
+                          Smart TV
+                        </span>
+                      </div>
+                    </div>
+
+                    <div
+                      style={{
+                        display: "flex",
+                        gap: "0.75rem",
+                        marginTop: "1rem",
+                      }}
+                    >
+                      <Link
+                        to={`/booking-page/${room._id}`}
+                        style={{
+                          flex: 1,
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                          gap: "0.5rem",
+                          padding: "0.75rem",
+                          background: "#000000",
+                          color: "#ffffff",
+                          textDecoration: "none",
+                          borderRadius: "0.5rem",
+                          fontWeight: "500",
+                          fontSize: "0.875rem",
+                          transition: "all 0.2s ease",
+                          border: "none",
+                        }}
+                        onClick={() => {
+                          // Store room details for the booking page
+                          const roomBookingData = {
+                            roomId: room._id,
+                            roomNumber: room.roomNumber,
+                            roomType: room.roomType,
+                            price: room.price,
+                            description: room.description,
+                            image: room.image,
+                            capacity: room.capacity,
+                            amenities: room.amenities,
+                            averageRating: room.averageRating,
+                            totalRatings: room.totalRatings,
+                          };
+                          localStorage.setItem(
+                            "roomBookingData",
+                            JSON.stringify(roomBookingData)
+                          );
+                        }}
+                        onMouseEnter={(e) => {
+                          e.currentTarget.style.background = "#333333";
+                        }}
+                        onMouseLeave={(e) => {
+                          e.currentTarget.style.background = "#000000";
+                        }}
+                      >
+                        <FiShoppingCart size={14} />
+                        Book Now
+                      </Link>
+
+                      <Link
+                        to={`/room-details/${room._id}`}
+                        style={{
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                          padding: "0.75rem",
+                          border: "1px solid #e5e7eb",
+                          color: "#374151",
+                          textDecoration: "none",
+                          borderRadius: "0.5rem",
+                          transition: "all 0.2s ease",
+                          backgroundColor: "#ffffff",
+                        }}
+                        onMouseEnter={(e) => {
+                          e.currentTarget.style.backgroundColor = "#f9fafb";
+                          e.currentTarget.style.borderColor = "#d1d5db";
+                        }}
+                        onMouseLeave={(e) => {
+                          e.currentTarget.style.backgroundColor = "#ffffff";
+                          e.currentTarget.style.borderColor = "#e5e7eb";
+                        }}
+                      >
+                        <FiEye size={16} />
+                      </Link>
+                    </div>
+                  </div>
                 </div>
-              </div>
-            </div>
-            );
-          })}
+              );
+            })}
+          </div>
         </div>
-      </div>
-    </section>
+      </section>
     </>
   );
 };

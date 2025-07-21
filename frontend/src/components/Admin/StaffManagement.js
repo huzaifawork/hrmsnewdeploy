@@ -17,9 +17,9 @@ const StaffManagement = () => {
     email: "",
     phone: "",
     department: "",
-    position: "",
+    role: "",
     salary: "",
-    status: "Active",
+    status: "active",
     hireDate: "",
   });
 
@@ -50,17 +50,11 @@ const StaffManagement = () => {
     } catch (error) {
       console.error("Error fetching staff:", error);
       if (error.response?.status === 401) {
-        toast.error("Session expired. Please login again.");
         localStorage.removeItem("token");
         localStorage.removeItem("role");
         navigate("/login");
-      } else if (error.response?.status === 403) {
-        toast.error("Access denied. Admin privileges required.");
-      } else if (error.response?.data?.message) {
-        toast.error(`Failed to fetch staff: ${error.response.data.message}`);
-      } else {
-        toast.error("Failed to fetch staff. Please check your connection.");
       }
+      toast.error("Failed to fetch staff");
     } finally {
       setLoading(false);
     }
@@ -75,61 +69,31 @@ const StaffManagement = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    console.log('🚀 Form submission started');
-    console.log('📝 Form data:', formData);
-
     try {
       const token = localStorage.getItem("token");
-      const role = localStorage.getItem("role");
-
-      console.log('🔑 Token present:', !!token);
-      console.log('👤 User role:', role);
-
-      if (!token) {
-        toast.error("No authentication token found. Please login again.");
-        navigate("/login");
-        return;
-      }
-
       const apiUrl =
         process.env.REACT_APP_API_BASE_URL ||
         "https://hrms-bace.vercel.app/api";
       const url = editingStaff
         ? `${apiUrl}/staff/${editingStaff._id}`
-        : `${apiUrl}/staff`;
+        : `${apiUrl}/staff/add`;
       const method = editingStaff ? "PUT" : "POST";
 
-      console.log('🌐 API URL:', url);
-      console.log('📡 Method:', method);
-
-      // Prepare data with proper field mapping
-      const submitData = {
-        name: formData.name,
-        email: formData.email,
-        phone: formData.phone,
-        position: formData.position,
-        department: formData.department,
-        status: formData.status,
-        salary: formData.salary ? parseFloat(formData.salary) : 0,
-        hireDate: formData.hireDate || null,
-        // Map position to role for backend compatibility
-        role: mapPositionToRole(formData.position)
-      };
-
-      console.log('📦 Submitting staff data:', JSON.stringify(submitData, null, 2));
+      console.log("Submitting staff data:", formData);
+      console.log("URL:", url);
+      console.log("Method:", method);
 
       const response = await axios({
         method,
         url,
-        data: submitData,
+        data: formData,
         headers: {
           Authorization: `Bearer ${token}`,
-          'Content-Type': 'application/json'
+          "Content-Type": "application/json",
         },
       });
 
-      console.log('✅ Success response:', response.data);
+      console.log("Staff submission response:", response.data);
 
       toast.success(
         editingStaff ? "Staff updated successfully" : "Staff added successfully"
@@ -137,54 +101,27 @@ const StaffManagement = () => {
       fetchStaff();
       resetForm();
     } catch (error) {
-      console.error("💥 Error saving staff:", error);
-      console.error("📊 Error details:", {
-        status: error.response?.status,
-        statusText: error.response?.statusText,
-        data: error.response?.data,
-        headers: error.response?.headers,
-        config: {
-          url: error.config?.url,
-          method: error.config?.method,
-          data: error.config?.data
-        }
-      });
+      console.error("Error saving staff:", error);
+      console.error("Error details:", error.response?.data);
 
-      // Enhanced error handling
-      if (error.response?.data?.message) {
-        toast.error(error.response.data.message);
-      } else if (error.response?.data?.details) {
-        toast.error(`Validation Error: ${error.response.data.details}`);
-      } else if (error.response?.status === 401) {
-        toast.error("Authentication failed. Please login again.");
-        localStorage.removeItem("token");
-        localStorage.removeItem("role");
-        navigate("/login");
-      } else if (error.response?.status === 403) {
-        toast.error("Access denied. Admin privileges required.");
-      } else if (error.response?.status === 500) {
-        toast.error(`Server Error: ${error.response?.data?.message || 'Internal server error'}`);
-      } else {
-        toast.error("Failed to save staff. Please try again.");
-      }
+      const errorMessage =
+        error.response?.data?.message ||
+        error.response?.data?.error ||
+        "Failed to save staff";
+      toast.error(errorMessage);
     }
-  };
-
-  // Helper function to map position to role
-  const mapPositionToRole = (position) => {
-    const positionRoleMap = {
-      'Manager': 'manager',
-      'Chef': 'chef',
-      'Waiter': 'waiter',
-      'Host': 'host',
-      'Admin': 'admin'
-    };
-    return positionRoleMap[position] || 'waiter';
   };
 
   const handleEdit = (staffMember) => {
     setEditingStaff(staffMember);
-    setFormData(staffMember);
+    // Format the hire date for the date input field
+    const formattedStaffMember = {
+      ...staffMember,
+      hireDate: staffMember.hireDate
+        ? new Date(staffMember.hireDate).toISOString().split("T")[0]
+        : "",
+    };
+    setFormData(formattedStaffMember);
     setShowAddForm(true);
   };
 
@@ -202,18 +139,7 @@ const StaffManagement = () => {
         fetchStaff();
       } catch (error) {
         console.error("Error deleting staff:", error);
-        if (error.response?.status === 401) {
-          toast.error("Session expired. Please login again.");
-          localStorage.removeItem("token");
-          localStorage.removeItem("role");
-          navigate("/login");
-        } else if (error.response?.status === 403) {
-          toast.error("Access denied. Admin privileges required.");
-        } else if (error.response?.data?.message) {
-          toast.error(`Failed to delete staff: ${error.response.data.message}`);
-        } else {
-          toast.error("Failed to delete staff. Please try again.");
-        }
+        toast.error("Failed to delete staff");
       }
     }
   };
@@ -224,9 +150,9 @@ const StaffManagement = () => {
       email: "",
       phone: "",
       department: "",
-      position: "",
+      role: "",
       salary: "",
-      status: "Active",
+      status: "active",
       hireDate: "",
     });
     setEditingStaff(null);
@@ -287,11 +213,10 @@ const StaffManagement = () => {
             }}
           >
             <option value="All Departments">All Departments</option>
-            <option value="Front Desk">Front Desk</option>
-            <option value="Housekeeping">Housekeeping</option>
-            <option value="Kitchen">Kitchen</option>
-            <option value="Maintenance">Maintenance</option>
-            <option value="Management">Management</option>
+            <option value="front-desk">Front Desk</option>
+            <option value="service">Service</option>
+            <option value="kitchen">Kitchen</option>
+            <option value="management">Management</option>
           </select>
         </div>
         <button
@@ -335,7 +260,6 @@ const StaffManagement = () => {
                 placeholder="Phone Number"
                 value={formData.phone}
                 onChange={handleInputChange}
-                required
               />
               <select
                 name="department"
@@ -344,22 +268,26 @@ const StaffManagement = () => {
                 required
               >
                 <option value="">Select Department</option>
-                <option value="Front Desk">Front Desk</option>
-                <option value="Housekeeping">Housekeeping</option>
-                <option value="Kitchen">Kitchen</option>
-                <option value="Maintenance">Maintenance</option>
-                <option value="Management">Management</option>
+                <option value="front-desk">Front Desk</option>
+                <option value="service">Service</option>
+                <option value="kitchen">Kitchen</option>
+                <option value="management">Management</option>
               </select>
             </div>
             <div className="simple-form-row">
-              <input
-                type="text"
-                name="position"
-                placeholder="Position/Job Title"
-                value={formData.position}
+              <select
+                name="role"
+                value={formData.role}
                 onChange={handleInputChange}
                 required
-              />
+              >
+                <option value="">Select Role</option>
+                <option value="manager">Manager</option>
+                <option value="chef">Chef</option>
+                <option value="waiter">Waiter</option>
+                <option value="host">Host</option>
+                <option value="admin">Admin</option>
+              </select>
               <input
                 type="number"
                 name="salary"
@@ -382,8 +310,8 @@ const StaffManagement = () => {
                 onChange={handleInputChange}
                 required
               >
-                <option value="Active">Active</option>
-                <option value="Inactive">Inactive</option>
+                <option value="active">Active</option>
+                <option value="inactive">Inactive</option>
                 <option value="on-leave">On Leave</option>
               </select>
             </div>
@@ -431,7 +359,7 @@ const StaffManagement = () => {
               <th style={{ minWidth: "180px" }}>Email</th>
               <th style={{ minWidth: "120px" }}>Phone</th>
               <th style={{ minWidth: "120px" }}>Department</th>
-              <th style={{ minWidth: "120px" }}>Position</th>
+              <th style={{ minWidth: "120px" }}>Role</th>
               <th style={{ minWidth: "100px" }}>Salary</th>
               <th style={{ minWidth: "120px" }}>Hire Date</th>
               <th style={{ minWidth: "100px" }}>Status</th>
@@ -445,12 +373,20 @@ const StaffManagement = () => {
                 <td style={{ minWidth: "180px" }}>{member.email}</td>
                 <td style={{ minWidth: "120px" }}>{member.phone || "N/A"}</td>
                 <td style={{ minWidth: "120px" }}>{member.department}</td>
-                <td style={{ minWidth: "120px" }}>{member.position}</td>
+                <td style={{ minWidth: "120px" }}>{member.role}</td>
                 <td style={{ minWidth: "100px" }}>
-                  Rs. {member.salary || "N/A"}
+                  {member.salary
+                    ? `Rs. ${member.salary.toLocaleString()}`
+                    : "N/A"}
                 </td>
                 <td style={{ minWidth: "120px" }}>
-                  {member.hireDate || "N/A"}
+                  {member.hireDate
+                    ? new Date(member.hireDate).toLocaleDateString("en-US", {
+                        year: "numeric",
+                        month: "short",
+                        day: "numeric",
+                      })
+                    : "N/A"}
                 </td>
                 <td style={{ minWidth: "100px" }}>
                   <span

@@ -12,6 +12,16 @@ const ShiftManagement = () => {
   const [selectedDate, setSelectedDate] = useState(
     new Date().toISOString().split("T")[0]
   );
+  const [showAddForm, setShowAddForm] = useState(false);
+  const [formData, setFormData] = useState({
+    staffId: "",
+    date: new Date().toISOString().split("T")[0],
+    startTime: "",
+    endTime: "",
+    duration: "",
+    notes: "",
+  });
+  const [submitting, setSubmitting] = useState(false);
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -33,12 +43,34 @@ const ShiftManagement = () => {
       const apiUrl =
         process.env.REACT_APP_API_BASE_URL ||
         "https://hrms-bace.vercel.app/api";
+
+      console.log(`Fetching shifts from: ${apiUrl}/shift?date=${selectedDate}`);
+      console.log(`Token: ${token ? "Present" : "Missing"}`);
+
+      if (!token) {
+        toast.error("Authentication required. Please login.");
+        return;
+      }
+
       const response = await axios.get(`${apiUrl}/shift?date=${selectedDate}`, {
-        headers: { Authorization: `Bearer ${token}` },
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
       });
       setShifts(response.data);
+      console.log("Shifts fetched successfully:", response.data);
     } catch (error) {
-      toast.error("Failed to fetch shifts");
+      console.error("Error fetching shifts:", error);
+      console.error("Error details:", error.response?.data);
+      console.error("Error status:", error.response?.status);
+      console.error("Error config:", error.config);
+
+      const errorMessage =
+        error.response?.data?.message ||
+        error.response?.statusText ||
+        "Failed to fetch shifts";
+      toast.error(errorMessage);
     } finally {
       setLoading(false);
     }
@@ -74,6 +106,113 @@ const ShiftManagement = () => {
       hour: "2-digit",
       minute: "2-digit",
     });
+  };
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+
+    // Auto-calculate duration when both start and end times are set
+    if (name === "startTime" || name === "endTime") {
+      const startTime = name === "startTime" ? value : formData.startTime;
+      const endTime = name === "endTime" ? value : formData.endTime;
+
+      if (startTime && endTime) {
+        const start = new Date(`2000-01-01T${startTime}`);
+        const end = new Date(`2000-01-01T${endTime}`);
+        const diffMs = end - start;
+        const diffHours = diffMs / (1000 * 60 * 60);
+
+        if (diffHours > 0) {
+          setFormData((prev) => ({
+            ...prev,
+            duration: diffHours.toString(),
+          }));
+        }
+      }
+    }
+  };
+
+  const resetForm = () => {
+    setFormData({
+      staffId: "",
+      date: new Date().toISOString().split("T")[0],
+      startTime: "",
+      endTime: "",
+      duration: "",
+      notes: "",
+    });
+    setShowAddForm(false);
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setSubmitting(true);
+
+    try {
+      const token = localStorage.getItem("token");
+      const apiUrl =
+        process.env.REACT_APP_API_BASE_URL ||
+        "https://hrms-bace.vercel.app/api";
+
+      if (!token) {
+        toast.error("Authentication required. Please login.");
+        return;
+      }
+
+      // Validate form data
+      if (
+        !formData.staffId ||
+        !formData.date ||
+        !formData.startTime ||
+        !formData.endTime ||
+        !formData.duration
+      ) {
+        toast.error("Please fill in all required fields");
+        return;
+      }
+
+      console.log("Submitting shift data:", formData);
+      console.log("API URL:", `${apiUrl}/shift/add`);
+
+      const response = await axios.post(`${apiUrl}/shift/add`, formData, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      });
+
+      console.log("Shift created:", response.data);
+      toast.success("Shift assigned successfully!");
+      fetchShifts();
+      resetForm();
+    } catch (error) {
+      console.error("Error creating shift:", error);
+      console.error("Error details:", error.response?.data);
+      console.error("Error status:", error.response?.status);
+      console.error("Error config:", error.config);
+
+      let errorMessage = "Failed to assign shift";
+
+      if (error.response?.status === 404) {
+        errorMessage =
+          "API endpoint not found. Please check server configuration.";
+      } else if (error.response?.status === 401) {
+        errorMessage = "Authentication failed. Please login again.";
+      } else if (error.response?.status === 400) {
+        errorMessage =
+          error.response?.data?.message || "Invalid shift data provided";
+      } else if (error.response?.data?.message) {
+        errorMessage = error.response.data.message;
+      }
+
+      toast.error(errorMessage);
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   if (loading)
@@ -138,8 +277,230 @@ const ShiftManagement = () => {
           >
             {loading ? "Loading..." : "Refresh"}
           </button>
+          <button
+            onClick={() => setShowAddForm(!showAddForm)}
+            className="simple-btn simple-btn-primary"
+            style={{
+              width: window.innerWidth <= 768 ? "100%" : "auto",
+              whiteSpace: "nowrap",
+            }}
+          >
+            {showAddForm ? "Cancel" : "Add Shift"}
+          </button>
         </div>
       </div>
+
+      {/* Add Shift Form */}
+      {showAddForm && (
+        <div
+          style={{
+            background: "#f9fafb",
+            border: "1px solid #e5e7eb",
+            borderRadius: "8px",
+            padding: "20px",
+            marginBottom: "20px",
+          }}
+        >
+          <h3 style={{ marginBottom: "20px", color: "#000000" }}>
+            Assign New Shift
+          </h3>
+          <form onSubmit={handleSubmit}>
+            <div
+              style={{
+                display: "grid",
+                gridTemplateColumns:
+                  window.innerWidth <= 768 ? "1fr" : "repeat(3, 1fr)",
+                gap: "15px",
+                marginBottom: "20px",
+              }}
+            >
+              <div>
+                <label
+                  style={{
+                    display: "block",
+                    marginBottom: "5px",
+                    color: "#000000",
+                    fontWeight: "500",
+                  }}
+                >
+                  Staff Member *
+                </label>
+                <select
+                  name="staffId"
+                  value={formData.staffId}
+                  onChange={handleInputChange}
+                  required
+                  style={{
+                    width: "100%",
+                    padding: "10px",
+                    border: "1px solid #e5e7eb",
+                    borderRadius: "4px",
+                    background: "#ffffff",
+                  }}
+                >
+                  <option value="">Select Staff Member</option>
+                  {staff.map((member) => (
+                    <option key={member._id} value={member._id}>
+                      {member.name} - {member.role}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              <div>
+                <label
+                  style={{
+                    display: "block",
+                    marginBottom: "5px",
+                    color: "#000000",
+                    fontWeight: "500",
+                  }}
+                >
+                  Date *
+                </label>
+                <input
+                  type="date"
+                  name="date"
+                  value={formData.date}
+                  onChange={handleInputChange}
+                  required
+                  style={{
+                    width: "100%",
+                    padding: "10px",
+                    border: "1px solid #e5e7eb",
+                    borderRadius: "4px",
+                  }}
+                />
+              </div>
+
+              <div>
+                <label
+                  style={{
+                    display: "block",
+                    marginBottom: "5px",
+                    color: "#000000",
+                    fontWeight: "500",
+                  }}
+                >
+                  Start Time *
+                </label>
+                <input
+                  type="time"
+                  name="startTime"
+                  value={formData.startTime}
+                  onChange={handleInputChange}
+                  required
+                  style={{
+                    width: "100%",
+                    padding: "10px",
+                    border: "1px solid #e5e7eb",
+                    borderRadius: "4px",
+                  }}
+                />
+              </div>
+
+              <div>
+                <label
+                  style={{
+                    display: "block",
+                    marginBottom: "5px",
+                    color: "#000000",
+                    fontWeight: "500",
+                  }}
+                >
+                  End Time *
+                </label>
+                <input
+                  type="time"
+                  name="endTime"
+                  value={formData.endTime}
+                  onChange={handleInputChange}
+                  required
+                  style={{
+                    width: "100%",
+                    padding: "10px",
+                    border: "1px solid #e5e7eb",
+                    borderRadius: "4px",
+                  }}
+                />
+              </div>
+
+              <div>
+                <label
+                  style={{
+                    display: "block",
+                    marginBottom: "5px",
+                    color: "#000000",
+                    fontWeight: "500",
+                  }}
+                >
+                  Duration (hours)
+                </label>
+                <input
+                  type="number"
+                  name="duration"
+                  value={formData.duration}
+                  onChange={handleInputChange}
+                  step="0.5"
+                  min="1"
+                  max="12"
+                  readOnly
+                  style={{
+                    width: "100%",
+                    padding: "10px",
+                    border: "1px solid #e5e7eb",
+                    borderRadius: "4px",
+                    background: "#f3f4f6",
+                  }}
+                />
+              </div>
+
+              <div>
+                <label
+                  style={{
+                    display: "block",
+                    marginBottom: "5px",
+                    color: "#000000",
+                    fontWeight: "500",
+                  }}
+                >
+                  Notes
+                </label>
+                <input
+                  type="text"
+                  name="notes"
+                  value={formData.notes}
+                  onChange={handleInputChange}
+                  placeholder="Optional notes"
+                  style={{
+                    width: "100%",
+                    padding: "10px",
+                    border: "1px solid #e5e7eb",
+                    borderRadius: "4px",
+                  }}
+                />
+              </div>
+            </div>
+
+            <div style={{ display: "flex", gap: "10px" }}>
+              <button
+                type="submit"
+                disabled={submitting}
+                className="simple-btn simple-btn-primary"
+              >
+                {submitting ? "Assigning..." : "Assign Shift"}
+              </button>
+              <button
+                type="button"
+                onClick={resetForm}
+                className="simple-btn simple-btn-secondary"
+              >
+                Cancel
+              </button>
+            </div>
+          </form>
+        </div>
+      )}
 
       {/* Table scroll hint for mobile */}
       <div
