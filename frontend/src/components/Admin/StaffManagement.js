@@ -50,11 +50,17 @@ const StaffManagement = () => {
     } catch (error) {
       console.error("Error fetching staff:", error);
       if (error.response?.status === 401) {
+        toast.error("Session expired. Please login again.");
         localStorage.removeItem("token");
         localStorage.removeItem("role");
         navigate("/login");
+      } else if (error.response?.status === 403) {
+        toast.error("Access denied. Admin privileges required.");
+      } else if (error.response?.data?.message) {
+        toast.error(`Failed to fetch staff: ${error.response.data.message}`);
+      } else {
+        toast.error("Failed to fetch staff. Please check your connection.");
       }
-      toast.error("Failed to fetch staff");
     } finally {
       setLoading(false);
     }
@@ -79,10 +85,26 @@ const StaffManagement = () => {
         : `${apiUrl}/staff`;
       const method = editingStaff ? "PUT" : "POST";
 
+      // Prepare data with proper field mapping
+      const submitData = {
+        name: formData.name,
+        email: formData.email,
+        phone: formData.phone,
+        position: formData.position,
+        department: formData.department,
+        status: formData.status,
+        salary: formData.salary ? parseFloat(formData.salary) : 0,
+        hireDate: formData.hireDate || null,
+        // Map position to role for backend compatibility
+        role: mapPositionToRole(formData.position)
+      };
+
+      console.log('Submitting staff data:', submitData);
+
       await axios({
         method,
         url,
-        data: formData,
+        data: submitData,
         headers: { Authorization: `Bearer ${token}` },
       });
 
@@ -93,8 +115,35 @@ const StaffManagement = () => {
       resetForm();
     } catch (error) {
       console.error("Error saving staff:", error);
-      toast.error("Failed to save staff");
+
+      // Enhanced error handling
+      if (error.response?.data?.message) {
+        toast.error(error.response.data.message);
+      } else if (error.response?.data?.details) {
+        toast.error(`Validation Error: ${error.response.data.details}`);
+      } else if (error.response?.status === 401) {
+        toast.error("Authentication failed. Please login again.");
+        localStorage.removeItem("token");
+        localStorage.removeItem("role");
+        navigate("/login");
+      } else if (error.response?.status === 403) {
+        toast.error("Access denied. Admin privileges required.");
+      } else {
+        toast.error("Failed to save staff. Please try again.");
+      }
     }
+  };
+
+  // Helper function to map position to role
+  const mapPositionToRole = (position) => {
+    const positionRoleMap = {
+      'Manager': 'manager',
+      'Chef': 'chef',
+      'Waiter': 'waiter',
+      'Host': 'host',
+      'Admin': 'admin'
+    };
+    return positionRoleMap[position] || 'waiter';
   };
 
   const handleEdit = (staffMember) => {
@@ -117,7 +166,18 @@ const StaffManagement = () => {
         fetchStaff();
       } catch (error) {
         console.error("Error deleting staff:", error);
-        toast.error("Failed to delete staff");
+        if (error.response?.status === 401) {
+          toast.error("Session expired. Please login again.");
+          localStorage.removeItem("token");
+          localStorage.removeItem("role");
+          navigate("/login");
+        } else if (error.response?.status === 403) {
+          toast.error("Access denied. Admin privileges required.");
+        } else if (error.response?.data?.message) {
+          toast.error(`Failed to delete staff: ${error.response.data.message}`);
+        } else {
+          toast.error("Failed to delete staff. Please try again.");
+        }
       }
     }
   };
@@ -239,6 +299,7 @@ const StaffManagement = () => {
                 placeholder="Phone Number"
                 value={formData.phone}
                 onChange={handleInputChange}
+                required
               />
               <select
                 name="department"
@@ -287,6 +348,7 @@ const StaffManagement = () => {
               >
                 <option value="Active">Active</option>
                 <option value="Inactive">Inactive</option>
+                <option value="on-leave">On Leave</option>
               </select>
             </div>
             <div className="simple-form-actions">

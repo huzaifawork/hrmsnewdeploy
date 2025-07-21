@@ -56,13 +56,32 @@ const StaffScheduling = () => {
     setLoading(true);
     setError('');
     try {
+      const token = localStorage.getItem("token");
       const apiUrl = process.env.REACT_APP_API_BASE_URL || 'https://hrms-bace.vercel.app/api';
-      const response = await axios.post(`${apiUrl}/staff/add`, newStaff);
+
+      // Prepare staff data with required fields
+      const staffData = {
+        name: newStaff.name,
+        position: newStaff.position,
+        email: `${newStaff.name.toLowerCase().replace(/\s+/g, '.')}@company.com`, // Generate email
+        phone: '000-000-0000', // Default phone
+        department: 'service', // Default department
+        status: 'Active'
+      };
+
+      const response = await axios.post(`${apiUrl}/staff`, staffData, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
       setStaff([...staff, response.data]);
       setNewStaff({ name: '', position: '' });
       setFeedback({ type: 'success', message: 'Staff added successfully!' });
     } catch (error) {
-      setError('Error adding staff.');
+      console.error('Error adding staff:', error);
+      if (error.response?.data?.message) {
+        setError(`Error adding staff: ${error.response.data.message}`);
+      } else {
+        setError('Error adding staff. Please try again.');
+      }
     } finally {
       setLoading(false);
     }
@@ -128,13 +147,21 @@ const StaffScheduling = () => {
       setLoading(true);
       setError('');
       try {
+        const token = localStorage.getItem("token");
         const apiUrl = process.env.REACT_APP_API_BASE_URL || 'https://hrms-bace.vercel.app/api';
-        await axios.delete(`${apiUrl}/staff/${id}`);
+        await axios.delete(`${apiUrl}/staff/${id}`, {
+          headers: { Authorization: `Bearer ${token}` }
+        });
         setStaff(staff.filter(s => s._id !== id));
         await fetchShifts();
         setFeedback({ type: 'success', message: 'Staff and associated shifts deleted successfully!' });
       } catch (error) {
-        setError('Error deleting staff.');
+        console.error('Error deleting staff:', error);
+        if (error.response?.data?.message) {
+          setError(`Error deleting staff: ${error.response.data.message}`);
+        } else {
+          setError('Error deleting staff. Please try again.');
+        }
       } finally {
         setLoading(false);
       }
@@ -149,18 +176,26 @@ const StaffScheduling = () => {
     setLoading(true);
     setError('');
     try {
+      const token = localStorage.getItem("token");
       const apiUrl = process.env.REACT_APP_API_BASE_URL || 'https://hrms-bace.vercel.app/api';
-      const response = await axios.put(`${apiUrl}/staff/${selectedStaff._id}`, selectedStaff);
+      const response = await axios.put(`${apiUrl}/staff/${selectedStaff._id}`, selectedStaff, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
       setStaff(staff.map(s => (s._id === selectedStaff._id ? response.data : s)));
       setShifts(shifts.map(shift =>
-        shift.staffId._id === selectedStaff._id 
-          ? { ...shift, staffId: { ...shift.staffId, name: response.data.name } } 
+        shift.staffId._id === selectedStaff._id
+          ? { ...shift, staffId: { ...shift.staffId, name: response.data.name } }
           : shift
       ));
       setFeedback({ type: 'success', message: 'Staff updated successfully!' });
       setShowEditModal(false);
     } catch (error) {
-      setError('Error updating staff.');
+      console.error('Error updating staff:', error);
+      if (error.response?.data?.message) {
+        setError(`Error updating staff: ${error.response.data.message}`);
+      } else {
+        setError('Error updating staff. Please try again.');
+      }
     } finally {
       setLoading(false);
     }

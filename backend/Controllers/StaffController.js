@@ -3,11 +3,20 @@ const Shift = require('../Models/shift');
 
 exports.addStaff = async (req, res) => {
   try {
-    const { name, email, phone, role, department, status } = req.body;
+    const { name, email, phone, role, position, department, status, salary, hireDate } = req.body;
 
     // Validate required fields
-    if (!name || !email || !phone || !role || !department) {
-      return res.status(400).json({ message: 'All fields are required' });
+    if (!name || !email || !phone || !department || !position) {
+      return res.status(400).json({
+        message: 'Name, email, phone, department, and position are required',
+        missingFields: {
+          name: !name,
+          email: !email,
+          phone: !phone,
+          department: !department,
+          position: !position
+        }
+      });
     }
 
     // Check if email already exists
@@ -20,14 +29,25 @@ exports.addStaff = async (req, res) => {
       name,
       email,
       phone,
-      role,
+      role: role || 'waiter', // Default role if not provided
+      position,
       department,
-      status: status || 'active'
+      status: status || 'Active',
+      salary: salary || 0,
+      hireDate: hireDate || null
     });
 
     await staff.save();
     res.status(201).json(staff);
   } catch (error) {
+    console.error('Error adding staff:', error);
+    if (error.name === 'ValidationError') {
+      return res.status(400).json({
+        message: 'Validation error',
+        details: error.message,
+        errors: error.errors
+      });
+    }
     res.status(500).json({ message: error.message });
   }
 };
@@ -43,7 +63,7 @@ exports.getAllStaff = async (req, res) => {
 
 exports.updateStaff = async (req, res) => {
   try {
-    const { name, email, phone, role, department, status } = req.body;
+    const { name, email, phone, role, position, department, status, salary, hireDate } = req.body;
     const staffId = req.params.id;
 
     // Check if staff exists
@@ -60,14 +80,33 @@ exports.updateStaff = async (req, res) => {
       }
     }
 
+    const updateData = {};
+    if (name) updateData.name = name;
+    if (email) updateData.email = email;
+    if (phone) updateData.phone = phone;
+    if (role) updateData.role = role;
+    if (position) updateData.position = position;
+    if (department) updateData.department = department;
+    if (status) updateData.status = status;
+    if (salary !== undefined) updateData.salary = salary;
+    if (hireDate) updateData.hireDate = hireDate;
+
     const updatedStaff = await Staff.findByIdAndUpdate(
       staffId,
-      { name, email, phone, role, department, status },
+      updateData,
       { new: true, runValidators: true }
     );
 
     res.status(200).json(updatedStaff);
   } catch (error) {
+    console.error('Error updating staff:', error);
+    if (error.name === 'ValidationError') {
+      return res.status(400).json({
+        message: 'Validation error',
+        details: error.message,
+        errors: error.errors
+      });
+    }
     res.status(500).json({ message: error.message });
   }
 };

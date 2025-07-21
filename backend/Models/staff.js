@@ -25,16 +25,29 @@ const staffSchema = new mongoose.Schema({
     enum: ['manager', 'chef', 'waiter', 'host', 'admin'],
     default: 'waiter'
   },
+  position: {
+    type: String,
+    required: [true, 'Position is required'],
+    trim: true
+  },
   department: {
     type: String,
     required: [true, 'Department is required'],
-    enum: ['kitchen', 'service', 'management', 'front-desk'],
+    enum: ['Front Desk', 'Housekeeping', 'Kitchen', 'Maintenance', 'Management', 'kitchen', 'service', 'management', 'front-desk'],
     default: 'service'
+  },
+  salary: {
+    type: Number,
+    default: 0
+  },
+  hireDate: {
+    type: Date,
+    default: null
   },
   status: {
     type: String,
-    enum: ['active', 'inactive', 'on-leave'],
-    default: 'active'
+    enum: ['Active', 'Inactive', 'active', 'inactive', 'on-leave'],
+    default: 'Active'
   },
   avatar: {
     type: String,
