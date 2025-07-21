@@ -1,6 +1,7 @@
 const Order = require("../Models/Order");
 const User = require("../Models/User");
 const UserFoodInteraction = require("../Models/UserFoodInteraction");
+const mongoose = require("mongoose");
 
 // Ensure User model is registered
 if (!mongoose.models.User) {
@@ -276,6 +277,10 @@ exports.getOrders = async (req, res) => {
       finalIsAdmin: isAdmin
     });
 
+    // Check if there are any orders in the database at all
+    const totalOrdersInDB = await Order.countDocuments({});
+    console.log("🔍 Total orders in database:", totalOrdersInDB);
+
     if (!isAdmin) {
       // Regular users can only see their own orders
       console.log("🔍 User is not admin, searching for user-specific orders");
@@ -304,11 +309,40 @@ exports.getOrders = async (req, res) => {
     } else {
       // Admin can see all orders
       console.log("🔍 Admin user, fetching all orders");
-      orders = await Order.find(query)
-        .populate("user", "name email phone")
-        .sort({ createdAt: -1 })
-        .skip(skip)
-        .limit(limit);
+      console.log("🔍 Query object:", query);
+      console.log("🔍 Pagination - skip:", skip, "limit:", limit);
+
+      try {
+        // First try without population to see if basic query works
+        const basicOrders = await Order.find(query).sort({ createdAt: -1 });
+        console.log("🔍 Basic orders found (no population):", basicOrders.length);
+
+        // Then try with population
+        orders = await Order.find(query)
+          .populate("user", "name email phone")
+          .sort({ createdAt: -1 })
+          .skip(skip)
+          .limit(limit);
+        console.log("🔍 Populated orders found:", orders.length);
+
+        if (orders.length > 0) {
+          console.log("🔍 Sample order:", {
+            id: orders[0]._id,
+            user: orders[0].user,
+            status: orders[0].status,
+            totalPrice: orders[0].totalPrice,
+            items: orders[0].items?.length || 0
+          });
+        }
+      } catch (populationError) {
+        console.error("❌ Error during order population:", populationError);
+        // Fallback: return orders without user population
+        orders = await Order.find(query)
+          .sort({ createdAt: -1 })
+          .skip(skip)
+          .limit(limit);
+        console.log("🔄 Fallback orders (no user population):", orders.length);
+      }
     }
 
     // Get total count for pagination (use the same query logic)

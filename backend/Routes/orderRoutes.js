@@ -16,6 +16,15 @@ router.post("/", ensureAuthenticated, createOrder);
 // ✅ Get Orders (Logged-in users can see their own orders, admin can see all)
 router.get("/", ensureAuthenticated, getOrders);
 
+// 🔧 Debug route to test if orders route is loading
+router.get("/debug", (req, res) => {
+  res.json({
+    message: "Orders route is working",
+    timestamp: new Date().toISOString(),
+    route: "/api/orders/debug"
+  });
+});
+
 // ✅ Get Single Order (Any authenticated user can access any order temporarily to fix issues)
 router.get("/:orderId", ensureAuthenticated, getOrderById);
 
