@@ -46,7 +46,9 @@ exports.addStaff = async (req, res) => {
       department,
       status: status || 'Active',
       salary: salary || 0,
-      hireDate: hireDate || null
+      hireDate: hireDate || null,
+      // Add a unique userId to prevent constraint issues
+      userId: new mongoose.Types.ObjectId()
     };
 
     console.log('📋 Creating staff with data:', JSON.stringify(staffData, null, 2));

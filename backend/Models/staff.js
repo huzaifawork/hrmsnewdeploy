@@ -49,6 +49,11 @@ const staffSchema = new mongoose.Schema({
     enum: ['Active', 'Inactive', 'active', 'inactive', 'on-leave'],
     default: 'Active'
   },
+  userId: {
+    type: mongoose.Schema.Types.ObjectId,
+    default: null,
+    sparse: true // This allows multiple null values and prevents unique constraint issues
+  },
   avatar: {
     type: String,
     default: null
