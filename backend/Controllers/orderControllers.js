@@ -1,6 +1,11 @@
 const Order = require("../Models/Order");
 const User = require("../Models/User");
 const UserFoodInteraction = require("../Models/UserFoodInteraction");
+
+// Ensure User model is registered
+if (!mongoose.models.User) {
+  require("../Models/User");
+}
 const http = require("http");
 const socketIo = require("socket.io");
 const mongoose = require("mongoose");
@@ -263,7 +268,15 @@ exports.getOrders = async (req, res) => {
     let query = {};
     let orders = [];
 
-    if (!req.user.isAdmin) {
+    // Check if user is admin (check both isAdmin flag and role)
+    const isAdmin = req.user.isAdmin || req.user.role === 'admin';
+    console.log("🔍 User admin status:", {
+      isAdmin: req.user.isAdmin,
+      role: req.user.role,
+      finalIsAdmin: isAdmin
+    });
+
+    if (!isAdmin) {
       // Regular users can only see their own orders
       console.log("🔍 User is not admin, searching for user-specific orders");
 
@@ -300,7 +313,7 @@ exports.getOrders = async (req, res) => {
 
     // Get total count for pagination (use the same query logic)
     let totalOrders;
-    if (!req.user.isAdmin) {
+    if (!isAdmin) {
       // Try to count with current user ID first
       totalOrders = await Order.countDocuments({ user: userId });
       if (totalOrders === 0) {

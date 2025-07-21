@@ -37,13 +37,28 @@ const AdminManageBookings = () => {
         },
       });
 
-      setBookings(response.data);
-      toast.success("Bookings loaded successfully");
+      console.log("Bookings response:", response.data);
+      console.log("Bookings response type:", typeof response.data);
+      console.log("Bookings response keys:", Object.keys(response.data || {}));
+
+      if (Array.isArray(response.data)) {
+        setBookings(response.data);
+        toast.success(`Bookings loaded successfully (${response.data.length} found)`);
+      } else {
+        console.log("❌ Bookings response is not an array:", response.data);
+        setBookings([]);
+        toast.warning("No bookings data received");
+      }
     } catch (error) {
       console.error("Error fetching bookings:", error);
+      console.error("Error response:", error.response?.data);
+      console.error("Error status:", error.response?.status);
+
       if (error.response?.status === 401) {
         toast.error("Session expired. Please login again");
         navigate("/login");
+      } else if (error.response?.status === 500) {
+        toast.error(`Server error: ${error.response?.data?.error || 'Internal server error'}`);
       } else {
         toast.error("Failed to fetch bookings");
       }

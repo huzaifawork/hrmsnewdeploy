@@ -35,21 +35,34 @@ const AdminOrders = () => {
       });
 
       console.log("Orders response:", response.data);
+      console.log("Orders response type:", typeof response.data);
+      console.log("Orders response keys:", Object.keys(response.data || {}));
 
       if (response.data && Array.isArray(response.data.orders)) {
+        console.log("✅ Found orders array in response.data.orders");
         console.log("Sample order:", response.data.orders[0]);
         setOrders(response.data.orders);
       } else if (Array.isArray(response.data)) {
+        console.log("✅ Found orders array in response.data");
         console.log("Sample order:", response.data[0]);
         setOrders(response.data);
       } else {
+        console.log("❌ No orders array found, setting empty array");
+        console.log("Response structure:", response.data);
         setOrders([]);
       }
     } catch (error) {
       console.error("Error fetching orders:", error);
+      console.error("Error response:", error.response?.data);
+      console.error("Error status:", error.response?.status);
+
       if (error.response?.status === 401) {
         toast.error("Session expired. Please login again");
+        localStorage.removeItem("token");
+        localStorage.removeItem("role");
         navigate("/login");
+      } else if (error.response?.status === 500) {
+        toast.error(`Server error: ${error.response?.data?.message || 'Internal server error'}`);
       } else {
         toast.error("Failed to fetch orders");
       }
