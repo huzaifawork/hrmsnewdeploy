@@ -84,11 +84,19 @@ exports.addStaff = async (req, res) => {
         // Handle the userId index issue by providing a unique userId
         console.log('🔧 Handling userId duplicate key error - retrying with userId');
         try {
-          const staffDataWithUserId = {
-            ...staffData,
+          const retryStaffData = {
+            name,
+            email,
+            phone,
+            role: role || 'waiter',
+            position,
+            department,
+            status: status || 'Active',
+            salary: salary || 0,
+            hireDate: hireDate || null,
             userId: new mongoose.Types.ObjectId() // Generate a unique userId
           };
-          const staff = new Staff(staffDataWithUserId);
+          const staff = new Staff(retryStaffData);
           await staff.save();
           console.log('✅ Staff created successfully with generated userId');
           return res.status(201).json(staff);
