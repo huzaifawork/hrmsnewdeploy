@@ -272,6 +272,7 @@ exports.getOrders = async (req, res) => {
     // Check if user is admin (check both isAdmin flag and role)
     const isAdmin = req.user.isAdmin || req.user.role === 'admin';
     console.log("🔍 User admin status:", {
+      id: req.user._id,
       isAdmin: req.user.isAdmin,
       role: req.user.role,
       finalIsAdmin: isAdmin
@@ -281,84 +282,70 @@ exports.getOrders = async (req, res) => {
     const totalOrdersInDB = await Order.countDocuments({});
     console.log("🔍 Total orders in database:", totalOrdersInDB);
 
+    let totalOrders;
+
     if (!isAdmin) {
       // Regular users can only see their own orders
-      console.log("🔍 User is not admin, searching for user-specific orders");
-
-      // Try current user ID format first
+      console.log("🔍 Regular user, searching for user-specific orders");
       query.user = userId;
-      orders = await Order.find(query)
-        .populate("user", "name email phone")
-        .sort({ createdAt: -1 })
-        .skip(skip)
-        .limit(limit);
 
-      console.log("Orders found with current userId:", orders.length);
-
-      // If no orders found, try string version of user ID
-      if (orders.length === 0) {
-        console.log("🔄 Trying to find orders with string userId...");
-        query.user = userId.toString();
+      try {
         orders = await Order.find(query)
           .populate("user", "name email phone")
           .sort({ createdAt: -1 })
           .skip(skip)
           .limit(limit);
-        console.log("Orders found with string userId:", orders.length);
+        console.log("✅ User orders found:", orders.length);
+
+        totalOrders = await Order.countDocuments(query);
+      } catch (error) {
+        console.error("❌ Error fetching user orders:", error);
+        // Fallback without population
+        orders = await Order.find(query)
+          .sort({ createdAt: -1 })
+          .skip(skip)
+          .limit(limit);
+        totalOrders = await Order.countDocuments(query);
       }
     } else {
       // Admin can see all orders
       console.log("🔍 Admin user, fetching all orders");
-      console.log("🔍 Query object:", query);
-      console.log("🔍 Pagination - skip:", skip, "limit:", limit);
 
       try {
-        // First try without population to see if basic query works
-        const basicOrders = await Order.find(query).sort({ createdAt: -1 });
-        console.log("🔍 Basic orders found (no population):", basicOrders.length);
-
-        // Then try with population
         orders = await Order.find(query)
           .populate("user", "name email phone")
           .sort({ createdAt: -1 })
           .skip(skip)
           .limit(limit);
-        console.log("🔍 Populated orders found:", orders.length);
+        console.log("✅ Admin orders found:", orders.length);
+
+        totalOrders = await Order.countDocuments(query);
 
         if (orders.length > 0) {
           console.log("🔍 Sample order:", {
             id: orders[0]._id,
-            user: orders[0].user,
+            user: orders[0].user?.name || 'No user',
             status: orders[0].status,
             totalPrice: orders[0].totalPrice,
             items: orders[0].items?.length || 0
           });
         }
       } catch (populationError) {
-        console.error("❌ Error during order population:", populationError);
+        console.error("❌ Error during admin order population:", populationError);
         // Fallback: return orders without user population
         orders = await Order.find(query)
           .sort({ createdAt: -1 })
           .skip(skip)
           .limit(limit);
-        console.log("🔄 Fallback orders (no user population):", orders.length);
+        totalOrders = await Order.countDocuments(query);
+        console.log("🔄 Fallback admin orders (no user population):", orders.length);
       }
     }
 
-    // Get total count for pagination (use the same query logic)
-    let totalOrders;
-    if (!isAdmin) {
-      // Try to count with current user ID first
-      totalOrders = await Order.countDocuments({ user: userId });
-      if (totalOrders === 0) {
-        totalOrders = await Order.countDocuments({ user: userId.toString() });
-      }
-    } else {
-      totalOrders = await Order.countDocuments({});
-    }
-
+    // Calculate pagination
     const totalPages = Math.ceil(totalOrders / limit);
-    console.log("Final orders found:", orders.length);
+    console.log("🔍 Pagination info:", { totalOrders, totalPages, page, limit });
+    console.log("✅ Final orders found:", orders.length);
 
     // Debug: Log sample order data
     if (orders.length > 0) {
