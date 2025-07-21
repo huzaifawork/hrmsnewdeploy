@@ -1,12 +1,18 @@
 const Staff = require('../Models/staff');
 const Shift = require('../Models/shift');
+const mongoose = require('mongoose');
 
 exports.addStaff = async (req, res) => {
   try {
+    console.log('🔄 Staff creation request received');
+    console.log('📝 Request body:', JSON.stringify(req.body, null, 2));
+    console.log('👤 User info:', req.user ? { id: req.user.id, role: req.user.role } : 'No user info');
+
     const { name, email, phone, role, position, department, status, salary, hireDate } = req.body;
 
     // Validate required fields
     if (!name || !email || !phone || !department || !position) {
+      console.log('❌ Validation failed - missing required fields');
       return res.status(400).json({
         message: 'Name, email, phone, department, and position are required',
         missingFields: {
@@ -19,13 +25,19 @@ exports.addStaff = async (req, res) => {
       });
     }
 
+    console.log('✅ Basic validation passed');
+
     // Check if email already exists
+    console.log('🔍 Checking if email exists:', email);
     const existingStaff = await Staff.findOne({ email });
     if (existingStaff) {
+      console.log('❌ Email already exists');
       return res.status(400).json({ message: 'Email already exists' });
     }
 
-    const staff = new Staff({
+    console.log('✅ Email is unique');
+
+    const staffData = {
       name,
       email,
       phone,
@@ -35,20 +47,71 @@ exports.addStaff = async (req, res) => {
       status: status || 'Active',
       salary: salary || 0,
       hireDate: hireDate || null
-    });
+    };
 
+    console.log('📋 Creating staff with data:', JSON.stringify(staffData, null, 2));
+
+    const staff = new Staff(staffData);
+
+    console.log('💾 Saving staff to database...');
     await staff.save();
+
+    console.log('✅ Staff created successfully:', staff._id);
     res.status(201).json(staff);
   } catch (error) {
-    console.error('Error adding staff:', error);
+    console.error('💥 Error adding staff:', error);
+    console.error('📊 Error details:', {
+      name: error.name,
+      message: error.message,
+      stack: error.stack,
+      code: error.code
+    });
+
     if (error.name === 'ValidationError') {
+      console.log('❌ Mongoose validation error');
       return res.status(400).json({
         message: 'Validation error',
         details: error.message,
         errors: error.errors
       });
     }
-    res.status(500).json({ message: error.message });
+
+    if (error.code === 11000) {
+      console.log('❌ Duplicate key error');
+      const field = Object.keys(error.keyPattern)[0];
+
+      if (field === 'userId') {
+        // Handle the userId index issue by providing a unique userId
+        console.log('🔧 Handling userId duplicate key error - retrying with userId');
+        try {
+          const staffDataWithUserId = {
+            ...staffData,
+            userId: new mongoose.Types.ObjectId() // Generate a unique userId
+          };
+          const staff = new Staff(staffDataWithUserId);
+          await staff.save();
+          console.log('✅ Staff created successfully with generated userId');
+          return res.status(201).json(staff);
+        } catch (retryError) {
+          console.error('❌ Retry with userId also failed:', retryError);
+          return res.status(500).json({
+            message: 'Failed to create staff due to database constraint',
+            details: retryError.message
+          });
+        }
+      }
+
+      return res.status(400).json({
+        message: field === 'email' ? 'Email already exists' : `${field} already exists`,
+        field: field
+      });
+    }
+
+    res.status(500).json({
+      message: error.message,
+      type: error.name,
+      timestamp: new Date().toISOString()
+    });
   }
 };
 

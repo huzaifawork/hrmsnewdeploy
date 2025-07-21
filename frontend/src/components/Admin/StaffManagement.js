@@ -75,8 +75,23 @@ const StaffManagement = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    console.log('🚀 Form submission started');
+    console.log('📝 Form data:', formData);
+
     try {
       const token = localStorage.getItem("token");
+      const role = localStorage.getItem("role");
+
+      console.log('🔑 Token present:', !!token);
+      console.log('👤 User role:', role);
+
+      if (!token) {
+        toast.error("No authentication token found. Please login again.");
+        navigate("/login");
+        return;
+      }
+
       const apiUrl =
         process.env.REACT_APP_API_BASE_URL ||
         "https://hrms-bace.vercel.app/api";
@@ -84,6 +99,9 @@ const StaffManagement = () => {
         ? `${apiUrl}/staff/${editingStaff._id}`
         : `${apiUrl}/staff`;
       const method = editingStaff ? "PUT" : "POST";
+
+      console.log('🌐 API URL:', url);
+      console.log('📡 Method:', method);
 
       // Prepare data with proper field mapping
       const submitData = {
@@ -99,14 +117,19 @@ const StaffManagement = () => {
         role: mapPositionToRole(formData.position)
       };
 
-      console.log('Submitting staff data:', submitData);
+      console.log('📦 Submitting staff data:', JSON.stringify(submitData, null, 2));
 
-      await axios({
+      const response = await axios({
         method,
         url,
         data: submitData,
-        headers: { Authorization: `Bearer ${token}` },
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        },
       });
+
+      console.log('✅ Success response:', response.data);
 
       toast.success(
         editingStaff ? "Staff updated successfully" : "Staff added successfully"
@@ -114,7 +137,18 @@ const StaffManagement = () => {
       fetchStaff();
       resetForm();
     } catch (error) {
-      console.error("Error saving staff:", error);
+      console.error("💥 Error saving staff:", error);
+      console.error("📊 Error details:", {
+        status: error.response?.status,
+        statusText: error.response?.statusText,
+        data: error.response?.data,
+        headers: error.response?.headers,
+        config: {
+          url: error.config?.url,
+          method: error.config?.method,
+          data: error.config?.data
+        }
+      });
 
       // Enhanced error handling
       if (error.response?.data?.message) {
@@ -128,6 +162,8 @@ const StaffManagement = () => {
         navigate("/login");
       } else if (error.response?.status === 403) {
         toast.error("Access denied. Admin privileges required.");
+      } else if (error.response?.status === 500) {
+        toast.error(`Server Error: ${error.response?.data?.message || 'Internal server error'}`);
       } else {
         toast.error("Failed to save staff. Please try again.");
       }
