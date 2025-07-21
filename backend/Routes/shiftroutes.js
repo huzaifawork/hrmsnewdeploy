@@ -1,11 +1,11 @@
-const express = require('express');
+const express = require("express");
 const {
   addShift,
   getAllShifts,
   updateShiftStatus,
   deleteShift,
-} = require('../Controllers/shift controller');
-const { ensureAuthenticated } = require('../Middlewares/Auth');
+} = require("../Controllers/ShiftController");
+const { ensureAuthenticated } = require("../Middlewares/Auth");
 
 const router = express.Router();
 
@@ -13,9 +13,9 @@ const router = express.Router();
 router.use(ensureAuthenticated);
 
 // Shift routes
-router.post('/add', addShift);
-router.get('/', getAllShifts);
-router.patch('/:id/status', updateShiftStatus);
-router.delete('/:id', deleteShift);
+router.post("/add", addShift);
+router.get("/", getAllShifts);
+router.patch("/:id/status", updateShiftStatus);
+router.delete("/:id", deleteShift);
 
 module.exports = router;

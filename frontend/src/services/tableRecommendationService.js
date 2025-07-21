@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { apiConfig } from '../config/api';
+import { getTableImageUrl } from '../utils/imageUtils';
 
 const API_BASE_URL = apiConfig.baseURL;
 
@@ -214,9 +215,6 @@ export const tableService = {
     }
   }
 };
-
-// Import centralized image utilities
-import { getTableImageUrl } from '../utils/imageUtils';
 
 // Utility functions
 export const tableUtils = {

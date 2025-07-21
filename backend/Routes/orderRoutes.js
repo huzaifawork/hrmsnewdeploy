@@ -7,7 +7,7 @@ const {
   getOrderById,
   updateDeliveryLocation,
   cancelOrder,
-  updateOrderStatus
+  updateOrderStatus,
 } = require("../Controllers/orderControllers");
 
 // ✅ Create Order (Logged-in users only)
@@ -20,10 +20,19 @@ router.get("/", ensureAuthenticated, getOrders);
 router.get("/:orderId", ensureAuthenticated, getOrderById);
 
 // ✅ Update Order Status (Admin only)
-router.patch("/:orderId/status", ensureAuthenticated, updateOrderStatus);
+router.patch(
+  "/:orderId/status",
+  ensureAuthenticated,
+  ensureAdmin,
+  updateOrderStatus
+);
 
 // ✅ Update Delivery Location (Any authenticated user can update for now)
-router.put("/:orderId/delivery-location", ensureAuthenticated, updateDeliveryLocation);
+router.put(
+  "/:orderId/delivery-location",
+  ensureAuthenticated,
+  updateDeliveryLocation
+);
 
 // ✅ Cancel Order (Any authenticated user can cancel for now)
 router.delete("/:orderId", ensureAuthenticated, cancelOrder);
