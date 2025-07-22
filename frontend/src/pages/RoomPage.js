@@ -26,6 +26,25 @@ import { getRoomImageUrl, handleImageError } from "../utils/imageUtils";
 
 // Add responsive styles for RoomPage
 const responsiveStyles = `
+  /* Price badge color override - only for price badges */
+  .room-price-badge,
+  .room-price-badge *,
+  .room-price-badge span,
+  .room-price-badge small {
+    color: #ffffff !important;
+  }
+
+  /* Check availability button styling */
+  .check-availability-btn {
+    background: #000000 !important;
+    color: #ffffff !important;
+  }
+
+  .check-availability-btn:disabled {
+    background: #cccccc !important;
+    color: #666666 !important;
+  }
+
   @media (max-width: 768px) {
     .room-page-hero {
       padding: 1.5rem 1rem 1rem !important;
@@ -1780,6 +1799,7 @@ const RoomPage = () => {
               </div>
 
               <button
+                className="check-availability-btn"
                 onClick={handleCheckAvailability}
                 disabled={
                   !bookingValidation.checkInDate ||
@@ -2099,13 +2119,13 @@ const RoomPage = () => {
 
                         {/* Price Badge */}
                         <div
-                          className="room-page-badge"
+                          className="room-page-badge room-price-badge"
                           style={{
                             position: "absolute",
                             top: "1rem",
                             right: "1rem",
                             background: "#000000",
-                            color: "#ffffff",
+                            color: "#ffffff !important",
                             padding: "0.5rem 1rem",
                             borderRadius: "0.5rem",
                             fontSize: "0.875rem",
@@ -2114,8 +2134,10 @@ const RoomPage = () => {
                             fontFamily: "Inter, sans-serif",
                           }}
                         >
-                          {formatPrice(room.price)}
-                          <small style={{ fontSize: "0.75rem" }}>/night</small>
+                          <span style={{ color: "#ffffff !important" }}>
+                            {formatPrice(room.price)}
+                          </span>
+                          <small style={{ fontSize: "0.75rem", color: "#ffffff !important" }}>/night</small>
                         </div>
 
                         {/* Recommendation Badge */}

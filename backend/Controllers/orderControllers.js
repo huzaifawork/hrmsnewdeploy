@@ -206,40 +206,9 @@ exports.createOrder = async (req, res) => {
       // Don't fail the order if interaction recording fails
     }
 
-    // Get socket.io instance and start automatic progression
-    const socketModule = require("../socket");
-    const io = socketModule.getIO();
-
-    // Start automatic order progression
-    if (socketModule.startAutomaticOrderProgression) {
-      socketModule.startAutomaticOrderProgression(savedOrder._id);
-      console.log(
-        `[Socket] Automatic progression started for order: ${savedOrder._id}`
-      );
-    }
-
-    // Emit socket event for real-time updates
-    if (io) {
-      const orderUpdate = {
-        orderId: savedOrder._id,
-        status: "pending",
-        timestamp: new Date(),
-        estimatedDelivery: new Date(Date.now() + 30 * 60000), // 30 minutes from now
-        completed: false,
-      };
-
-      // Emit to everyone in the room for this order
-      io.to(`order_${savedOrder._id}`).emit("orderUpdate", orderUpdate);
-
-      // Also emit a global event for any page that might be displaying this order
-      io.emit("orderStatusUpdate", orderUpdate);
-
-      console.log(
-        `[Socket] Order ${savedOrder._id} created with status: pending`
-      );
-    } else {
-      console.warn("[Socket] Socket.io instance not available");
-    }
+    // Start automatic order progression for demo purposes
+    startAutomaticOrderProgression(savedOrder._id);
+    console.log(`[Order] Automatic progression started for order: ${savedOrder._id}`);
 
     res.status(201).json({
       message: "Order created successfully",
@@ -651,4 +620,60 @@ exports.updateOrderStatus = async (req, res) => {
       .status(500)
       .json({ message: "Error updating order status", error: error.message });
   }
+};
+
+// Get order status for real-time tracking (polling-based)
+exports.getOrderStatus = async (req, res) => {
+  try {
+    const { orderId } = req.params;
+    const userId = req.user.id;
+
+    const order = await Order.findOne({ _id: orderId, userId })
+      .select('status createdAt updatedAt _id');
+
+    if (!order) {
+      return res.status(404).json({ message: "Order not found" });
+    }
+
+    res.json({
+      success: true,
+      order: {
+        _id: order._id,
+        status: order.status,
+        createdAt: order.createdAt,
+        updatedAt: order.updatedAt
+      }
+    });
+  } catch (error) {
+    console.error("Error fetching order status:", error);
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
+// Automatic order progression for demo purposes
+const startAutomaticOrderProgression = (orderId) => {
+  const statusProgression = [
+    { status: 'confirmed', delay: 2000 },      // 2 seconds
+    { status: 'preparing', delay: 8000 },      // 8 seconds
+    { status: 'ready_for_pickup', delay: 5000 }, // 5 seconds
+    { status: 'out_for_delivery', delay: 10000 }, // 10 seconds
+    { status: 'arriving_soon', delay: 8000 },   // 8 seconds
+    { status: 'delivered', delay: 5000 }        // 5 seconds
+  ];
+
+  console.log(`[Order] Starting automatic progression for order: ${orderId}`);
+
+  statusProgression.forEach(({ status, delay }, index) => {
+    setTimeout(async () => {
+      try {
+        await Order.findByIdAndUpdate(orderId, {
+          status: status,
+          updatedAt: new Date()
+        });
+        console.log(`[Order] ${orderId} status updated to: ${status}`);
+      } catch (error) {
+        console.error(`[Order] Error updating status for ${orderId}:`, error);
+      }
+    }, delay);
+  });
 };

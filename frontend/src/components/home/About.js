@@ -202,16 +202,7 @@ export default function About() {
                 <span style={{ color: '#ffffff !important' }}>Learn More</span>
                 <FiArrowUpRight size={16} style={{ color: '#ffffff !important' }} />
               </Link>
-              <div style={{ display: 'flex', gap: '1.5rem' }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: '#6b7280' }}>
-                  <FiTrendingUp style={{ color: '#374151' }} size={16} />
-                  <span style={{ fontSize: '0.875rem', fontFamily: 'Inter, sans-serif' }}>99.9% Uptime</span>
-                </div>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: '#6b7280' }}>
-                  <FiUsers style={{ color: '#374151' }} size={16} />
-                  <span style={{ fontSize: '0.875rem', fontFamily: 'Inter, sans-serif' }}>500+ Hotels</span>
-                </div>
-              </div>
+
             </div>
           </div>
 

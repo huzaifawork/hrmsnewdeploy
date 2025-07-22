@@ -427,7 +427,7 @@ const MostPopularItems = () => {
                     border: '1px solid #e5e7eb'
                   }}>
                     <FiClock size={12} />
-                    <span>15 min</span>
+                    <span>{item.cookingTime || item.prepTime || '15 min'}</span>
                   </div>
                   <div style={{
                     display: 'flex',
@@ -442,7 +442,7 @@ const MostPopularItems = () => {
                     border: '1px solid #e5e7eb'
                   }}>
                     <FiThermometer size={12} />
-                    <span>Spicy</span>
+                    <span>{item.spiceLevel || item.taste || 'Mild'}</span>
                   </div>
                   <div style={{
                     display: 'flex',
@@ -457,7 +457,7 @@ const MostPopularItems = () => {
                     border: '1px solid #e5e7eb'
                   }}>
                     <FiHeart size={12} />
-                    <span>Popular</span>
+                    <span>{item.dietaryInfo || item.type || 'Popular'}</span>
                   </div>
                 </div>
 

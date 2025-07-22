@@ -10,6 +10,7 @@ import {
 } from "react-icons/fi";
 import { Link } from "react-router-dom";
 import { getRoomImageUrl, handleImageError } from "../../utils/imageUtils";
+import RoomDetailsModal from "../RoomDetailsModal";
 import "bootstrap/dist/css/bootstrap.min.css";
 
 const Rooms = () => {
@@ -21,6 +22,8 @@ const Rooms = () => {
   const [, setActiveTab] = useState("popular");
   const [user, setUser] = useState(null);
   const [hoveredRoom, setHoveredRoom] = useState(null);
+  const [selectedRoom, setSelectedRoom] = useState(null);
+  const [showModal, setShowModal] = useState(false);
 
   // Check if user is logged in
   useEffect(() => {
@@ -171,6 +174,17 @@ const Rooms = () => {
       currency: "PKR",
       minimumFractionDigits: 0,
     }).format(price);
+  };
+
+  // Modal handlers
+  const handleViewDetails = (room) => {
+    setSelectedRoom(room);
+    setShowModal(true);
+  };
+
+  const handleCloseModal = () => {
+    setShowModal(false);
+    setSelectedRoom(null);
   };
 
   const currentRooms = getCurrentRooms();
@@ -626,50 +640,35 @@ const Rooms = () => {
                         </button>
                       )}
 
-                      {roomId && typeof roomId === 'string' ? (
-                        <Link
-                          to={`/room-details/${roomId}`}
-                          style={{
-                            display: "flex",
-                            alignItems: "center",
-                            justifyContent: "center",
-                            padding: "0.75rem",
-                            border: "1px solid #e5e7eb",
-                            color: "#374151",
-                            textDecoration: "none",
-                            borderRadius: "0.5rem",
-                            transition: "all 0.2s ease",
-                            backgroundColor: "#ffffff",
-                          }}
-                          onMouseEnter={(e) => {
-                            e.currentTarget.style.backgroundColor = "#f9fafb";
-                            e.currentTarget.style.borderColor = "#d1d5db";
-                          }}
-                          onMouseLeave={(e) => {
-                            e.currentTarget.style.backgroundColor = "#ffffff";
-                            e.currentTarget.style.borderColor = "#e5e7eb";
-                          }}
-                        >
-                          <FiEye size={16} />
-                        </Link>
-                      ) : (
-                        <button
-                          disabled
-                          style={{
-                            display: "flex",
-                            alignItems: "center",
-                            justifyContent: "center",
-                            padding: "0.75rem",
-                            border: "1px solid #cccccc",
-                            color: "#999999",
-                            borderRadius: "0.5rem",
-                            backgroundColor: "#f5f5f5",
-                            cursor: "not-allowed",
-                          }}
-                        >
-                          <FiEye size={16} />
-                        </button>
-                      )}
+                      <button
+                        onClick={() => {
+                          // Add the extracted roomId to the room object before passing to modal
+                          const roomWithId = { ...room, _id: roomId };
+                          handleViewDetails(roomWithId);
+                        }}
+                        style={{
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                          padding: "0.75rem",
+                          border: "1px solid #e5e7eb",
+                          color: "#374151",
+                          borderRadius: "0.5rem",
+                          transition: "all 0.2s ease",
+                          backgroundColor: "#ffffff",
+                          cursor: "pointer",
+                        }}
+                        onMouseEnter={(e) => {
+                          e.currentTarget.style.backgroundColor = "#f9fafb";
+                          e.currentTarget.style.borderColor = "#d1d5db";
+                        }}
+                        onMouseLeave={(e) => {
+                          e.currentTarget.style.backgroundColor = "#ffffff";
+                          e.currentTarget.style.borderColor = "#e5e7eb";
+                        }}
+                      >
+                        <FiEye size={16} />
+                      </button>
                     </div>
                   </div>
                 </div>
@@ -678,6 +677,11 @@ const Rooms = () => {
           </div>
         </div>
       </section>
+
+      {/* Room Details Modal */}
+      {showModal && selectedRoom && (
+        <RoomDetailsModal room={selectedRoom} onClose={handleCloseModal} />
+      )}
     </>
   );
 };

@@ -504,31 +504,7 @@ const TableReservation = () => {
                         Reserve
                       </Link>
 
-                      <Link
-                        to={`/table-details/${table._id}`}
-                        style={{
-                          display: 'flex',
-                          alignItems: 'center',
-                          justifyContent: 'center',
-                          padding: '0.75rem',
-                          border: '1px solid #e5e7eb',
-                          color: '#374151',
-                          textDecoration: 'none',
-                          borderRadius: '0.5rem',
-                          transition: 'all 0.2s ease',
-                          backgroundColor: '#ffffff'
-                        }}
-                        onMouseEnter={(e) => {
-                          e.currentTarget.style.backgroundColor = '#f9fafb';
-                          e.currentTarget.style.borderColor = '#d1d5db';
-                        }}
-                        onMouseLeave={(e) => {
-                          e.currentTarget.style.backgroundColor = '#ffffff';
-                          e.currentTarget.style.borderColor = '#e5e7eb';
-                        }}
-                      >
-                        <FiEye size={16} />
-                      </Link>
+
                     </div>
                   </div>
                 </div>

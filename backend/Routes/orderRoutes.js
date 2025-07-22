@@ -9,6 +9,7 @@ const {
   updateDeliveryLocation,
   cancelOrder,
   updateOrderStatus,
+  getOrderStatus,
 } = require("../Controllers/orderControllers");
 
 // ✅ Create Order (Logged-in users only)
@@ -28,6 +29,9 @@ router.get("/debug", (req, res) => {
 
 // ✅ Get Single Order (Any authenticated user can access any order temporarily to fix issues)
 router.get("/:orderId", ensureAuthenticated, getOrderById);
+
+// ✅ Get Order Status for Real-time Tracking (Polling-based)
+router.get("/:orderId/status", ensureAuthenticated, getOrderStatus);
 
 // ✅ Update Order Status (Admin only)
 router.patch(

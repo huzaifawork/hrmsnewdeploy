@@ -97,12 +97,18 @@
   top: 1rem;
   right: 1rem;
   background: #000000;
-  color: #ffffff;
+  color: #ffffff !important;
   padding: 0.5rem 1rem;
   border-radius: 25px;
   font-weight: 600;
   font-size: 1.1rem;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+}
+
+/* Ensure price text and small elements are white */
+.modal-price,
+.modal-price small {
+  color: #ffffff !important;
 }
 
 .modal-body {

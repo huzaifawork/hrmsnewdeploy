@@ -1,87 +1,104 @@
 // src/services/socketService.js
-import io from 'socket.io-client';
+import axios from 'axios';
 import { apiConfig } from '../config/api';
 
-const SOCKET_SERVER = apiConfig.serverURL;
+const API_BASE_URL = apiConfig.baseURL;
 
-let socketInstance = null;
+let pollingInterval = null;
 let activeCallbacks = new Set();
 let activeOrderId = null;
 
+// Polling-based order tracking (works with Vercel serverless)
 export const initializeSocket = (orderId) => {
   if (!orderId) {
-    console.error('[Socket] No order ID provided');
+    console.error('[Polling] No order ID provided');
     return null;
   }
 
-  // If already tracking this order with an active socket, return it
-  if (socketInstance && socketInstance.connected && activeOrderId === orderId) {
-    console.log('[Socket] Already tracking order:', orderId);
-    return socketInstance;
+  // If already tracking this order, return existing setup
+  if (activeOrderId === orderId && pollingInterval) {
+    console.log('[Polling] Already tracking order:', orderId);
+    return { connected: true, orderId };
   }
-  
-  // Clean up any existing socket
-  if (socketInstance) {
-    console.log('[Socket] Cleaning up existing socket');
+
+  // Clean up any existing polling
+  if (pollingInterval) {
+    console.log('[Polling] Cleaning up existing polling');
     cleanupSocket();
   }
 
-  // Store order ID and create new socket
+  // Store order ID and start polling
   activeOrderId = orderId;
-  console.log('[Socket] Creating new connection for order:', orderId);
-  
-  socketInstance = io(SOCKET_SERVER, {
-    transports: ["websocket", "polling"],
-    reconnection: true,
-    timeout: 10000
-  });
+  console.log('[Polling] Starting order tracking for:', orderId);
 
-  // Set up event handlers
-  socketInstance.on('connect', () => {
-    console.log('[Socket] Connected to server');
-    
-    // Start tracking once connected
-    socketInstance.emit('trackOrder', { orderId });
-    console.log('[Socket] Tracking request sent for order:', orderId);
-  });
-
-  socketInstance.on('disconnect', () => {
-    console.log('[Socket] Disconnected from server');
-  });
-
-  socketInstance.on('error', (error) => {
-    console.error('[Socket] Error:', error);
-  });
-
-  // Handle order updates
-  socketInstance.on('orderUpdate', (data) => {
-    console.log('[Socket] Received update:', data);
-    
-    // Only process updates for the order we're tracking
-    if (data.orderId === activeOrderId) {
-      activeCallbacks.forEach(callback => {
-        try {
-          callback(data);
-        } catch (error) {
-          console.error('[Socket] Error in callback:', error);
+  // Start polling for order updates every 3 seconds
+  pollingInterval = setInterval(async () => {
+    try {
+      const response = await axios.get(`${API_BASE_URL}/orders/${orderId}/status`, {
+        headers: {
+          'Authorization': `Bearer ${localStorage.getItem('token')}`
         }
       });
-    }
-  });
 
-  return socketInstance;
+      if (response.data && response.data.order) {
+        const order = response.data.order;
+        const statusUpdate = {
+          orderId: order._id,
+          status: mapStatusToDisplay(order.status),
+          timestamp: new Date(order.updatedAt || order.createdAt),
+          completed: order.status === 'delivered'
+        };
+
+        console.log('[Polling] Order update:', statusUpdate);
+
+        // Notify all callbacks
+        activeCallbacks.forEach(callback => {
+          try {
+            callback(statusUpdate);
+          } catch (error) {
+            console.error('[Polling] Error in callback:', error);
+          }
+        });
+      }
+    } catch (error) {
+      console.error('[Polling] Error fetching order status:', error);
+    }
+  }, 3000); // Poll every 3 seconds
+
+  // Simulate socket connection for compatibility
+  return {
+    connected: true,
+    orderId,
+    emit: (event, data) => {
+      console.log('[Polling] Simulated emit:', event, data);
+    }
+  };
+};
+
+// Map database status to display status
+const mapStatusToDisplay = (dbStatus) => {
+  const statusMap = {
+    'pending': 'Order Received',
+    'confirmed': 'Order Confirmed',
+    'preparing': 'Preparing',
+    'ready_for_pickup': 'Ready for Pickup',
+    'out_for_delivery': 'On the Way',
+    'arriving_soon': 'Arriving Soon',
+    'delivered': 'Delivered'
+  };
+
+  return statusMap[dbStatus] || dbStatus.charAt(0).toUpperCase() + dbStatus.slice(1);
 };
 
 const cleanupSocket = () => {
-  if (socketInstance) {
-    socketInstance.removeAllListeners();
-    socketInstance.disconnect();
-    socketInstance = null;
+  if (pollingInterval) {
+    clearInterval(pollingInterval);
+    pollingInterval = null;
   }
 };
 
 export const disconnectSocket = () => {
-  console.log('[Socket] Disconnecting socket');
+  console.log('[Polling] Stopping order tracking');
   cleanupSocket();
   activeCallbacks.clear();
   activeOrderId = null;

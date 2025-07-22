@@ -132,16 +132,40 @@ export default function OrderFood() {
 
     const handleRateItem = (menuItemId, rating) => {
         const userId = recommendationHelpers.getCurrentUserId();
+        const token = localStorage.getItem('token');
+
+        console.log('🔍 Rating Debug Info:', {
+            userId,
+            menuItemId,
+            rating,
+            hasToken: !!token,
+            isLoggedIn: recommendationHelpers.isUserLoggedIn()
+        });
+
         if (userId && recommendationHelpers.isUserLoggedIn()) {
             recommendationAPI.rateMenuItem(userId, menuItemId, rating)
-                .then(() => {
+                .then((response) => {
+                    console.log('✅ Rating success:', response);
                     toast.success('Rating submitted successfully!');
                 })
                 .catch((error) => {
-                    console.error('Error rating item:', error);
-                    toast.error('Failed to submit rating');
+                    console.error('❌ Rating error details:', {
+                        message: error.message,
+                        status: error.response?.status,
+                        data: error.response?.data,
+                        config: error.config
+                    });
+
+                    if (error.response?.status === 401) {
+                        toast.error('Please login again to rate items');
+                    } else if (error.response?.status === 400) {
+                        toast.error(error.response?.data?.message || 'Invalid rating data');
+                    } else {
+                        toast.error('Failed to submit rating. Please try again.');
+                    }
                 });
         } else {
+            console.log('❌ User not logged in or missing data:', { userId, hasToken: !!token });
             toast.info('Please login to rate items');
         }
     };

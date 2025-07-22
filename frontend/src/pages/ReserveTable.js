@@ -287,54 +287,20 @@ const ReserveTable = () => {
   };
 
   const handleReserveClick = async (table) => {
-    // Validate reservation data
-    const validationErrors = validateReservation();
-    if (validationErrors.length > 0) {
-      setError(validationErrors.join(". "));
-      return;
-    }
-
-    // Check if table capacity is sufficient
-    if (table.capacity < parseInt(reservationData.guests)) {
-      setError(`This table can only accommodate ${table.capacity} guests. You selected ${reservationData.guests} guests.`);
-      return;
-    }
-
-    // Check for double booking
-    try {
-      const apiUrl = process.env.REACT_APP_API_BASE_URL || 'https://hrms-bace.vercel.app/api';
-      const response = await axios.get(`${apiUrl}/tables/availability`, {
-        params: {
-          reservationDate: reservationData.date,
-          time: reservationData.time,
-          endTime: calculateEndTime(reservationData.time)
-        }
-      });
-
-      const tableAvailability = response.data.find(t => t.table._id === table._id);
-      if (tableAvailability && !tableAvailability.isAvailable) {
-        setError("This table is already reserved for the selected time. Please choose a different time or table.");
-        return;
-      }
-    } catch (error) {
-      console.error("Error checking availability:", error);
-      setError("Unable to verify table availability. Please try again.");
-      return;
-    }
-
     // Record booking interaction
     await recordInteraction(table._id, 'booking');
 
     // Store the selected table and reservation data in localStorage
+    // Use simple approach like recommendations tab - let user fill details on reservation page
     const reservationDetails = {
       tableId: table._id,
       tableName: table.tableName,
       tableImage: tableUtils.getImageUrl(table.image),
       tableCapacity: table.capacity,
       tableDescription: table.description,
-      date: reservationData.date,
-      time: reservationData.time,
-      guests: reservationData.guests,
+      date: reservationData.date || '', // Pass current values but allow empty
+      time: reservationData.time || '', // Pass current values but allow empty
+      guests: reservationData.guests || 1,
     };
 
     localStorage.setItem('reservationDetails', JSON.stringify(reservationDetails));
