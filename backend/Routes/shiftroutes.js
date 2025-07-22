@@ -9,7 +9,17 @@ const { ensureAuthenticated } = require("../Middlewares/Auth");
 
 const router = express.Router();
 
-// Apply authentication middleware to all routes
+// Test route to verify shift routes are working (no auth required)
+router.get("/test", (req, res) => {
+  res.json({
+    success: true,
+    message: "Shift routes are working",
+    timestamp: new Date().toISOString(),
+    route: "/api/shift/test"
+  });
+});
+
+// Apply authentication middleware to all other routes
 router.use(ensureAuthenticated);
 
 // Shift routes

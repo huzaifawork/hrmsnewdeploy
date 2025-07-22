@@ -129,7 +129,7 @@ const ShiftManagement = () => {
         if (diffHours > 0) {
           setFormData((prev) => ({
             ...prev,
-            duration: diffHours.toString(),
+            duration: diffHours,
           }));
         }
       }
@@ -175,10 +175,16 @@ const ShiftManagement = () => {
         return;
       }
 
-      console.log("Submitting shift data:", formData);
+      // Prepare data with proper types
+      const shiftData = {
+        ...formData,
+        duration: parseFloat(formData.duration) // Ensure duration is a number
+      };
+
+      console.log("Submitting shift data:", shiftData);
       console.log("API URL:", `${apiUrl}/shift/add`);
 
-      const response = await axios.post(`${apiUrl}/shift/add`, formData, {
+      const response = await axios.post(`${apiUrl}/shift/add`, shiftData, {
         headers: {
           Authorization: `Bearer ${token}`,
           "Content-Type": "application/json",
