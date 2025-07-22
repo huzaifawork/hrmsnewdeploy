@@ -7,50 +7,60 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: #ffffff;
+  background: none;
   padding: 2rem;
   margin-top: 2rem;
+  opacity: 1;
 }
 
 .hero-section.loaded {
   opacity: 1;
 }
 
-/* Clean Background Images */
+/* Clean Background Images - FORCE DISPLAY */
 .hero-background {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
+  position: absolute !important;
+  top: 0 !important;
+  left: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
   background-size: cover !important;
   background-position: center !important;
   background-repeat: no-repeat !important;
-  opacity: 0;
-  transition: opacity 1s ease-in-out;
-  z-index: 1;
-  background-color: #f8fafc;
+  background-attachment: fixed !important;
+  opacity: 1 !important; /* Force visible */
+  transition: opacity 1s ease-in-out !important;
+  z-index: 1 !important;
+  background-color: #1a1a1a !important;
+  display: block !important;
+  visibility: visible !important;
+}
+
+/* Make first slide visible by default */
+.hero-background:first-child {
+  opacity: 1 !important;
+  z-index: 2 !important;
 }
 
 .hero-background.active {
   opacity: 1 !important;
+  z-index: 2 !important;
+  display: block !important;
+  visibility: visible !important;
 }
 
-/* Light overlay for text readability */
+/* Remove overlay completely to show images */
 .gradient-overlay-primary {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(255, 255, 255, 0.3);
-  z-index: 2;
-  pointer-events: none;
+  display: none !important;
+  opacity: 0 !important;
+  visibility: hidden !important;
 }
 
 .gradient-overlay-secondary,
 .gradient-overlay-accent {
-  display: none;
+  display: none !important;
+  opacity: 0 !important;
+  visibility: hidden !important;
 }
 
 /* Remove particles */
@@ -64,14 +74,16 @@
 
 /* ========== Clean Hero Content ========== */
 .hero-content {
-  position: relative;
-  z-index: 10;
+  position: relative !important;
+  z-index: 10 !important;
   max-width: 800px;
   padding: 2rem;
   text-align: center;
-  color: #ffffff;
+  color: #ffffff !important;
   width: 100%;
   box-sizing: border-box;
+  background: none !important;
+  text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.8), 0 0 20px rgba(0, 0, 0, 0.5) !important;
 }
 
 /* Simple Hero Badge */
@@ -139,7 +151,7 @@
   background-image: none !important;
   -webkit-background-clip: unset !important;
   -webkit-text-fill-color: #ffffff !important;
-  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7) !important;
+  text-shadow: 3px 3px 10px rgba(0, 0, 0, 0.9), 0 0 25px rgba(0, 0, 0, 0.6) !important;
 }
 
 .hero-description {
@@ -264,12 +276,13 @@
   gap: 0.5rem;
   font-family: 'Inter', sans-serif;
   font-size: 0.875rem;
-  color: #6b7280;
+  color: #ffffff !important;
+  text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.8) !important;
 }
 
 .trust-icon {
   font-size: 1rem;
-  color: #374151;
+  color: #ffffff !important;
 }
 
 /* Slide Indicators */
@@ -589,14 +602,6 @@
 
 /* ========== BACKGROUND IMAGE DISPLAY FIX ========== */
 
-/* Ensure background images are properly displayed */
-.hero-background {
-  background-size: cover !important;
-  background-position: center !important;
-  background-repeat: no-repeat !important;
-  background-attachment: fixed !important;
-}
-
 /* Fix for mobile background attachment */
 @media (max-width: 768px) {
   .hero-background {
@@ -604,9 +609,144 @@
   }
 }
 
-/* Ensure images load properly */
-.hero-section {
-  background-color: #f8fafc;
+/* FORCE BACKGROUND IMAGES TO DISPLAY - OVERRIDE ALL CONFLICTS */
+.hero-section .hero-background {
+  opacity: 1 !important;
+  display: block !important;
+  visibility: visible !important;
+  background-size: cover !important;
+  background-position: center !important;
+  background-repeat: no-repeat !important;
+  z-index: 1 !important;
+  /* Temporary debugging - different colors for each slide */
+}
+
+/* ========== FORCE TRANSPARENT BACKGROUNDS - NO WHITE BOXES ========== */
+
+/* Remove white backgrounds from content elements only (preserve hero-background) */
+.hero-content,
+.hero-badge,
+.hero-subtitle,
+.hero-title,
+.hero-description,
+.hero-buttons,
+.trust-indicators {
+  background: transparent !important;
+  background-color: transparent !important;
+}
+
+/* Override any Bootstrap or global styles that might add white backgrounds to content */
+.hero-section .container:not(.hero-background),
+.hero-section .container-fluid:not(.hero-background),
+.hero-section .row:not(.hero-background),
+.hero-section .col:not(.hero-background),
+.hero-section [class*="col-"]:not(.hero-background) {
+  background: transparent !important;
+  background-color: transparent !important;
+}
+
+/* Force transparency on content wrapper elements only */
+.hero-content .wrapper,
+.hero-content .content-wrapper,
+.hero-content .inner,
+.hero-content .content {
+  background: transparent !important;
+  background-color: transparent !important;
+}
+
+/* ========== AGGRESSIVE WHITE BOX REMOVAL ========== */
+/* Target any possible white background sources */
+.hero-section div:not(.hero-background),
+.hero-section section:not(.hero-background),
+.hero-section article:not(.hero-background),
+.hero-section main:not(.hero-background),
+.hero-section header:not(.hero-background),
+.hero-section .card,
+.hero-section .panel,
+.hero-section .box,
+.hero-section .content-box,
+.hero-section .white-box,
+.hero-section [style*="background: white"],
+.hero-section [style*="background-color: white"],
+.hero-section [style*="background: #fff"],
+.hero-section [style*="background-color: #fff"],
+.hero-section [style*="background: #ffffff"],
+.hero-section [style*="background-color: #ffffff"] {
+  background: transparent !important;
+  background-color: transparent !important;
+  background-image: none !important;
+}
+
+/* Override any CSS framework white backgrounds */
+.hero-section .bg-white,
+.hero-section .bg-light,
+.hero-section .background-white,
+.hero-section .white-bg {
+  background: transparent !important;
+  background-color: transparent !important;
+}
+
+/* Force all text containers to be transparent */
+.hero-section p,
+.hero-section h1,
+.hero-section h2,
+.hero-section h3,
+.hero-section h4,
+.hero-section h5,
+.hero-section h6,
+.hero-section span,
+.hero-section div:not(.hero-background) {
+  background: transparent !important;
+  background-color: transparent !important;
+}
+
+/* ========== SPECIFIC TEXT COLOR OVERRIDES ========== */
+/* Target trust indicators specifically for white text */
+.hero-section .trust-indicators .trust-item,
+.hero-section .trust-indicators .trust-item span {
+  color: #ffffff !important;
+  text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.8) !important;
+}
+
+.hero-section .trust-indicators .trust-icon {
+  color: #ffffff !important;
+}
+
+/* Force main title and description to be white with strong shadow */
+.hero-section .hero-title,
+.hero-section h1 {
+  color: #ffffff !important;
+  text-shadow: 3px 3px 10px rgba(0, 0, 0, 0.9), 0 0 25px rgba(0, 0, 0, 0.6) !important;
+  -webkit-text-fill-color: #ffffff !important;
+  background: none !important;
+  background-image: none !important;
+  -webkit-background-clip: unset !important;
+}
+
+.hero-section .hero-description,
+.hero-section p {
+  color: #ffffff !important;
+  text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.8) !important;
+}
+
+/* Override any Bootstrap or framework gray text classes */
+.hero-section .text-gray-500,
+.hero-section .text-gray-600,
+.hero-section .text-muted,
+.hero-section .text-dark,
+.hero-section .text-black {
+  color: #ffffff !important;
+  text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.8) !important;
+}
+
+.hero-section .hero-background.active {
+  opacity: 1 !important;
+  z-index: 2 !important;
+}
+
+.hero-section .hero-background:first-child {
+  opacity: 1 !important;
+  z-index: 2 !important;
 }
 
 .hero-background.active {

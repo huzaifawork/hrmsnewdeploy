@@ -12,24 +12,50 @@ const MainContentCarousel = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
-  // Get dynamic hotel content
-  const hotelInfo = useHotelInfo();
-  const heroContent = useHeroContent();
+  // Get dynamic hotel content with fallbacks
+  const hotelInfo = useHotelInfo() || { hotelName: 'Hotel Royal' };
+  const heroContent = useHeroContent() || {
+    mainTitle: 'Luxury Hotel Experience',
+    description: 'Premium accommodations with world-class hospitality'
+  };
 
   // Fallback images in case Unsplash fails
   const fallbackImages = [
-    "https://via.placeholder.com/2070x1380/1a365d/ffffff?text=Luxury+Hotel",
-    "https://via.placeholder.com/2070x1380/2d3748/ffffff?text=Fine+Dining",
-    "https://via.placeholder.com/2070x1380/4a5568/ffffff?text=Premium+Experience"
+    "https://via.placeholder.com/2070x1380/1a365d/ffffff?text=Restaurant+View",
+    "https://via.placeholder.com/2070x1380/2d3748/ffffff?text=Luxury+Pool",
+    "https://via.placeholder.com/2070x1380/4a5568/ffffff?text=Waterfront+View"
+  ];
+
+  // Define heroSlides before using it in useEffect
+  const heroSlides = [
+    {
+      image: "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80",
+      title: heroContent.mainTitle,
+      description: heroContent.description
+    },
+    {
+      image: "https://images.unsplash.com/photo-1571003123894-1f0594d2b5d9?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80",
+      title: "Luxury Pool & Resort Experience",
+      description: `Relax and unwind at ${hotelInfo.hotelName}'s stunning pool area`
+    },
+    {
+      image: "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80",
+      title: "Breathtaking Waterfront Views",
+      description: `Experience the magic of ${hotelInfo.hotelName} by the water`
+    }
   ];
 
   // Debug: Check if router context is available
   useEffect(() => {
+    console.log('MainContentCarousel - Component mounted');
     console.log('Router context available:', !!navigate);
     console.log('Current location:', location.pathname);
     console.log('Screen width:', window.innerWidth);
     console.log('Mobile view:', window.innerWidth <= 768);
-  }, [navigate, location]);
+    console.log('Hero content:', heroContent);
+    console.log('Hotel info:', hotelInfo);
+    console.log('Hero slides:', heroSlides);
+  }, [navigate, location, heroContent, hotelInfo, heroSlides]);
 
   const handleNavigation = (path, event) => {
     event.preventDefault();
@@ -43,24 +69,6 @@ const MainContentCarousel = () => {
       window.location.href = path;
     }
   };
-
-  const heroSlides = [
-    {
-      image: "https://images.unsplash.com/photo-1566073771259-6a8506099945?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80",
-      title: heroContent.mainTitle,
-      description: heroContent.description
-    },
-    {
-      image: "https://images.unsplash.com/photo-1414235077428-338989a2e8c0?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80",
-      title: "Culinary Excellence Awaits",
-      description: `Finest cuisine at ${hotelInfo.hotelName}`
-    },
-    {
-      image: "https://images.unsplash.com/photo-1551632811-561732d1e306?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80",
-      title: "Premium Dining Experience",
-      description: `Exceptional cuisine and service at ${hotelInfo.hotelName}`
-    }
-  ];
 
   // Handle image loading errors
   const handleImageError = (index) => {

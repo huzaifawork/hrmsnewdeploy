@@ -279,9 +279,52 @@ const Rooms = () => {
             {visibleRooms.map((roomItem) => {
               const room = roomItem.roomDetails || roomItem;
 
+              // Enhanced room ID extraction with better debugging
+              let roomId = null;
+
+              // Try multiple ways to get the room ID
+              if (room._id && typeof room._id === 'string') {
+                roomId = room._id;
+              } else if (room._id && typeof room._id === 'object' && room._id.$oid) {
+                roomId = room._id.$oid;
+              } else if (roomItem.roomId && typeof roomItem.roomId === 'string') {
+                roomId = roomItem.roomId;
+              } else if (roomItem.roomId && typeof roomItem.roomId === 'object') {
+                if (roomItem.roomId._id) {
+                  roomId = roomItem.roomId._id;
+                } else if (roomItem.roomId.$oid) {
+                  roomId = roomItem.roomId.$oid;
+                }
+              } else if (room.roomId && typeof room.roomId === 'string') {
+                roomId = room.roomId;
+              } else if (room.id) {
+                roomId = room.id;
+              }
+
+              // Comprehensive debug log
+              console.log('🔍 Room data debug:', {
+                roomItem: roomItem,
+                room: room,
+                'room._id': room._id,
+                'room._id type': typeof room._id,
+                'roomItem.roomId': roomItem.roomId,
+                'roomItem.roomId type': typeof roomItem.roomId,
+                'room.roomId': room.roomId,
+                'room.id': room.id,
+                'final roomId': roomId,
+                'roomId type': typeof roomId,
+                'roomId valid': !!roomId && typeof roomId === 'string'
+              });
+
+              // Skip rendering if we don't have a valid room ID
+              if (!roomId || typeof roomId !== 'string') {
+                console.error('❌ Skipping room - no valid ID found:', roomItem);
+                return null;
+              }
+
               return (
                 <div
-                  key={room._id || roomItem.roomId}
+                  key={roomId}
                   className="room-card"
                   style={{
                     background: "#ffffff",
@@ -504,79 +547,129 @@ const Rooms = () => {
                         marginTop: "1rem",
                       }}
                     >
-                      <Link
-                        to={`/booking-page/${room._id}`}
-                        style={{
-                          flex: 1,
-                          display: "flex",
-                          alignItems: "center",
-                          justifyContent: "center",
-                          gap: "0.5rem",
-                          padding: "0.75rem",
-                          background: "#000000",
-                          color: "#ffffff",
-                          textDecoration: "none",
-                          borderRadius: "0.5rem",
-                          fontWeight: "500",
-                          fontSize: "0.875rem",
-                          transition: "all 0.2s ease",
-                          border: "none",
-                        }}
-                        onClick={() => {
-                          // Store room details for the booking page
-                          const roomBookingData = {
-                            roomId: room._id,
-                            roomNumber: room.roomNumber,
-                            roomType: room.roomType,
-                            price: room.price,
-                            description: room.description,
-                            image: room.image,
-                            capacity: room.capacity,
-                            amenities: room.amenities,
-                            averageRating: room.averageRating,
-                            totalRatings: room.totalRatings,
-                          };
-                          localStorage.setItem(
-                            "roomBookingData",
-                            JSON.stringify(roomBookingData)
-                          );
-                        }}
-                        onMouseEnter={(e) => {
-                          e.currentTarget.style.background = "#333333";
-                        }}
-                        onMouseLeave={(e) => {
-                          e.currentTarget.style.background = "#000000";
-                        }}
-                      >
-                        <FiShoppingCart size={14} />
-                        Book Now
-                      </Link>
+                      {roomId && typeof roomId === 'string' ? (
+                        <Link
+                          to={`/booking-page/${roomId}`}
+                          style={{
+                            flex: 1,
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "center",
+                            gap: "0.5rem",
+                            padding: "0.75rem",
+                            background: "#000000",
+                            color: "#ffffff",
+                            textDecoration: "none",
+                            borderRadius: "0.5rem",
+                            fontWeight: "500",
+                            fontSize: "0.875rem",
+                            transition: "all 0.2s ease",
+                            border: "none",
+                          }}
+                          onClick={() => {
+                            console.log('📝 Storing room booking data:', {
+                              roomId: roomId,
+                              roomNumber: room.roomNumber,
+                              roomType: room.roomType,
+                              price: room.price
+                            });
 
-                      <Link
-                        to={`/room-details/${room._id}`}
-                        style={{
-                          display: "flex",
-                          alignItems: "center",
-                          justifyContent: "center",
-                          padding: "0.75rem",
-                          border: "1px solid #e5e7eb",
-                          color: "#374151",
-                          textDecoration: "none",
-                          borderRadius: "0.5rem",
-                          transition: "all 0.2s ease",
-                          backgroundColor: "#ffffff",
-                        }}
-                        onMouseEnter={(e) => {
-                          e.currentTarget.style.backgroundColor = "#f9fafb";
-                          e.currentTarget.style.borderColor = "#d1d5db";
-                        }}
-                        onMouseLeave={(e) => {
-                          e.currentTarget.style.backgroundColor = "#ffffff";
-                          e.currentTarget.style.borderColor = "#e5e7eb";
-                        }}
-                      >
-                        <FiEye size={16} />
-                      </Link>
+                            // Store room details for the booking page
+                            const roomBookingData = {
+                              roomId: roomId,
+                              roomNumber: room.roomNumber,
+                              roomType: room.roomType,
+                              price: room.price,
+                              description: room.description,
+                              image: room.image,
+                              capacity: room.capacity,
+                              amenities: room.amenities,
+                              averageRating: room.averageRating,
+                              totalRatings: room.totalRatings,
+                            };
+                            localStorage.setItem(
+                              "roomBookingData",
+                              JSON.stringify(roomBookingData)
+                            );
+                          }}
+                          onMouseEnter={(e) => {
+                            e.currentTarget.style.background = "#333333";
+                          }}
+                          onMouseLeave={(e) => {
+                            e.currentTarget.style.background = "#000000";
+                          }}
+                        >
+                          <FiShoppingCart size={14} />
+                          Book Now
+                        </Link>
+                      ) : (
+                        <button
+                          disabled
+                          style={{
+                            flex: 1,
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "center",
+                            gap: "0.5rem",
+                            padding: "0.75rem",
+                            background: "#cccccc",
+                            color: "#666666",
+                            borderRadius: "0.5rem",
+                            fontWeight: "500",
+                            fontSize: "0.875rem",
+                            border: "none",
+                            cursor: "not-allowed",
+                          }}
+                        >
+                          <FiShoppingCart size={14} />
+                          Room ID Missing
+                        </button>
+                      )}
+
+                      {roomId && typeof roomId === 'string' ? (
+                        <Link
+                          to={`/room-details/${roomId}`}
+                          style={{
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "center",
+                            padding: "0.75rem",
+                            border: "1px solid #e5e7eb",
+                            color: "#374151",
+                            textDecoration: "none",
+                            borderRadius: "0.5rem",
+                            transition: "all 0.2s ease",
+                            backgroundColor: "#ffffff",
+                          }}
+                          onMouseEnter={(e) => {
+                            e.currentTarget.style.backgroundColor = "#f9fafb";
+                            e.currentTarget.style.borderColor = "#d1d5db";
+                          }}
+                          onMouseLeave={(e) => {
+                            e.currentTarget.style.backgroundColor = "#ffffff";
+                            e.currentTarget.style.borderColor = "#e5e7eb";
+                          }}
+                        >
+                          <FiEye size={16} />
+                        </Link>
+                      ) : (
+                        <button
+                          disabled
+                          style={{
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "center",
+                            padding: "0.75rem",
+                            border: "1px solid #cccccc",
+                            color: "#999999",
+                            borderRadius: "0.5rem",
+                            backgroundColor: "#f5f5f5",
+                            cursor: "not-allowed",
+                          }}
+                        >
+                          <FiEye size={16} />
+                        </button>
+                      )}
                     </div>
                   </div>
                 </div>

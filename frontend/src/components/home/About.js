@@ -190,7 +190,7 @@ export default function About() {
                 gap: '0.5rem',
                 padding: '0.75rem 1.5rem',
                 background: '#000000',
-                color: '#ffffff',
+                color: '#ffffff !important',
                 textDecoration: 'none',
                 borderRadius: '6px',
                 fontWeight: '500',
@@ -199,8 +199,8 @@ export default function About() {
                 border: '1px solid #000000',
                 transition: 'all 0.3s ease'
               }}>
-                <span>Learn More</span>
-                <FiArrowUpRight size={16} />
+                <span style={{ color: '#ffffff !important' }}>Learn More</span>
+                <FiArrowUpRight size={16} style={{ color: '#ffffff !important' }} />
               </Link>
               <div style={{ display: 'flex', gap: '1.5rem' }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: '#6b7280' }}>
