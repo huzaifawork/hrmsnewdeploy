@@ -23,6 +23,8 @@ exports.updateUser = async (req, res) => {
     const { name, email, role, isActive } = req.body;
     const adminId = req.user._id;
 
+
+
     // Check if user exists
     const user = await User.findById(id);
     if (!user) {
