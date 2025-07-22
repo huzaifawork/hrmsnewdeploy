@@ -37,6 +37,37 @@ const ShiftManagement = () => {
     fetchStaff();
   }, [selectedDate, navigate]);
 
+  // Auto-calculate duration when startTime or endTime changes
+  useEffect(() => {
+    if (formData.startTime && formData.endTime) {
+      const start = new Date(`2000-01-01T${formData.startTime}`);
+      const end = new Date(`2000-01-01T${formData.endTime}`);
+      const diffMs = end - start;
+      const diffHours = diffMs / (1000 * 60 * 60);
+
+      if (diffHours > 0) {
+        const roundedHours = Math.round(diffHours * 2) / 2; // Round to nearest 0.5 hours
+
+        if (formData.duration !== roundedHours) {
+          setFormData((prev) => ({
+            ...prev,
+            duration: roundedHours,
+          }));
+        }
+      } else if (formData.duration !== "") {
+        setFormData((prev) => ({
+          ...prev,
+          duration: "",
+        }));
+      }
+    } else if (formData.duration !== "") {
+      setFormData((prev) => ({
+        ...prev,
+        duration: "",
+      }));
+    }
+  }, [formData.startTime, formData.endTime]);
+
   const fetchShifts = async () => {
     try {
       const token = localStorage.getItem("token");
@@ -52,7 +83,18 @@ const ShiftManagement = () => {
         return;
       }
 
-      const response = await axios.get(`${apiUrl}/shift?date=${selectedDate}`, {
+      // Build query parameters
+      const params = new URLSearchParams();
+      if (selectedDate) {
+        params.append('date', selectedDate);
+      }
+
+      const queryString = params.toString();
+      const url = `${apiUrl}/shift${queryString ? `?${queryString}` : ''}`;
+
+      console.log("Fetching shifts from URL:", url);
+
+      const response = await axios.get(url, {
         headers: {
           Authorization: `Bearer ${token}`,
           "Content-Type": "application/json",
@@ -60,6 +102,10 @@ const ShiftManagement = () => {
       });
       setShifts(response.data);
       console.log("Shifts fetched successfully:", response.data);
+      if (response.data.length > 0) {
+        console.log("Sample shift data:", response.data[0]);
+        console.log("Sample staffId data:", response.data[0].staffId);
+      }
     } catch (error) {
       console.error("Error fetching shifts:", error);
       console.error("Error details:", error.response?.data);
@@ -91,14 +137,30 @@ const ShiftManagement = () => {
     }
   };
 
-  const getStaffName = (staffId) => {
-    const staffMember = staff.find((member) => member._id === staffId);
-    return staffMember ? staffMember.name : "Unknown Staff";
+  const getStaffName = (staffData) => {
+    // If staffData is already populated (object), use it directly
+    if (staffData && typeof staffData === 'object' && staffData.name) {
+      return staffData.name;
+    }
+    // If staffData is just an ID (string), find it in the staff array
+    if (typeof staffData === 'string') {
+      const staffMember = staff.find((member) => member._id === staffData);
+      return staffMember ? staffMember.name : "Unknown Staff";
+    }
+    return "Unknown Staff";
   };
 
-  const getStaffRole = (staffId) => {
-    const staffMember = staff.find((member) => member._id === staffId);
-    return staffMember ? staffMember.role : "Unknown Role";
+  const getStaffRole = (staffData) => {
+    // If staffData is already populated (object), use it directly
+    if (staffData && typeof staffData === 'object' && staffData.role) {
+      return staffData.role;
+    }
+    // If staffData is just an ID (string), find it in the staff array
+    if (typeof staffData === 'string') {
+      const staffMember = staff.find((member) => member._id === staffData);
+      return staffMember ? staffMember.role : "Unknown Role";
+    }
+    return "Unknown Role";
   };
 
   const formatTime = (timeString) => {
@@ -129,9 +191,22 @@ const ShiftManagement = () => {
         if (diffHours > 0) {
           setFormData((prev) => ({
             ...prev,
-            duration: diffHours,
+            [name]: value,
+            duration: Math.round(diffHours * 2) / 2, // Round to nearest 0.5 hours
+          }));
+        } else {
+          setFormData((prev) => ({
+            ...prev,
+            [name]: value,
+            duration: "",
           }));
         }
+      } else {
+        setFormData((prev) => ({
+          ...prev,
+          [name]: value,
+          duration: "",
+        }));
       }
     }
   };
@@ -193,7 +268,14 @@ const ShiftManagement = () => {
 
       console.log("Shift created:", response.data);
       toast.success("Shift assigned successfully!");
-      fetchShifts();
+
+      // Update the selected date to match the created shift's date
+      if (formData.date !== selectedDate) {
+        setSelectedDate(formData.date);
+      }
+
+      // Fetch shifts to refresh the list
+      await fetchShifts();
       resetForm();
     } catch (error) {
       console.error("Error creating shift:", error);
@@ -248,17 +330,20 @@ const ShiftManagement = () => {
             style={{
               minWidth: window.innerWidth <= 768 ? "100%" : "auto",
               marginBottom: window.innerWidth <= 768 ? "10px" : "0",
+              display: "flex",
+              alignItems: "center",
+              gap: "10px",
+              flexWrap: "wrap",
             }}
           >
             <label
               style={{
-                marginRight: "10px",
                 color: "#000000",
                 display: window.innerWidth <= 768 ? "block" : "inline",
                 marginBottom: window.innerWidth <= 768 ? "5px" : "0",
               }}
             >
-              Select Date:
+              Filter by Date:
             </label>
             <input
               type="date"
@@ -271,6 +356,17 @@ const ShiftManagement = () => {
                 width: window.innerWidth <= 768 ? "100%" : "auto",
               }}
             />
+            <button
+              onClick={() => setSelectedDate("")}
+              className="simple-btn simple-btn-secondary"
+              style={{
+                padding: "8px 12px",
+                fontSize: "14px",
+                whiteSpace: "nowrap",
+              }}
+            >
+              Show All
+            </button>
           </div>
           <button
             onClick={fetchShifts}
@@ -440,23 +536,24 @@ const ShiftManagement = () => {
                     fontWeight: "500",
                   }}
                 >
-                  Duration (hours)
+                  Duration (hours) - Auto-calculated
                 </label>
                 <input
                   type="number"
                   name="duration"
-                  value={formData.duration}
+                  value={formData.duration || ""}
                   onChange={handleInputChange}
                   step="0.5"
                   min="1"
                   max="12"
-                  readOnly
+                  placeholder="Auto-calculated"
                   style={{
                     width: "100%",
                     padding: "10px",
                     border: "1px solid #e5e7eb",
                     borderRadius: "4px",
-                    background: "#f3f4f6",
+                    background: "#f9fafb",
+                    color: "#374151",
                   }}
                 />
               </div>
@@ -528,7 +625,7 @@ const ShiftManagement = () => {
       >
         <table
           className="simple-table"
-          style={{ minWidth: "900px", width: "100%" }}
+          style={{ minWidth: "800px", width: "100%" }}
         >
           <thead>
             <tr>
@@ -539,7 +636,6 @@ const ShiftManagement = () => {
               <th style={{ minWidth: "100px" }}>End Time</th>
               <th style={{ minWidth: "100px" }}>Duration</th>
               <th style={{ minWidth: "100px" }}>Status</th>
-              <th style={{ minWidth: "100px" }}>Attended</th>
             </tr>
           </thead>
           <tbody>
@@ -556,17 +652,6 @@ const ShiftManagement = () => {
                     className={`simple-status simple-status-${shift.status}`}
                   >
                     {shift.status}
-                  </span>
-                </td>
-                <td>
-                  <span
-                    className={`simple-status ${
-                      shift.attended
-                        ? "simple-status-available"
-                        : "simple-status-unavailable"
-                    }`}
-                  >
-                    {shift.attended ? "Present" : "Absent"}
                   </span>
                 </td>
               </tr>

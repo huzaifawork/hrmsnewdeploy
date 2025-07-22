@@ -66,7 +66,12 @@ exports.getAllShifts = async (req, res) => {
     console.log("Fetching shifts with query params:", { date, staffId, status });
 
     // Apply filters if provided
-    if (date) query.date = new Date(date);
+    if (date) {
+      // Handle date filtering more reliably
+      const startOfDay = new Date(date + 'T00:00:00.000Z');
+      const endOfDay = new Date(date + 'T23:59:59.999Z');
+      query.date = { $gte: startOfDay, $lte: endOfDay };
+    }
     if (staffId) query.staffId = staffId;
     if (status) query.status = status;
 
@@ -77,6 +82,9 @@ exports.getAllShifts = async (req, res) => {
       .sort({ date: 1, startTime: 1 });
 
     console.log("Shifts found:", shifts.length);
+    if (shifts.length > 0) {
+      console.log("Sample shift with populated staff:", JSON.stringify(shifts[0], null, 2));
+    }
     res.status(200).json(shifts);
   } catch (error) {
     console.error("Error fetching shifts:", error);
