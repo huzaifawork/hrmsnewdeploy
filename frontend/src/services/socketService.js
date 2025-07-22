@@ -31,8 +31,10 @@ export const initializeSocket = (orderId) => {
   activeOrderId = orderId;
   console.log('[Polling] Starting order tracking for:', orderId);
 
-  // Start polling for order updates every 3 seconds using existing endpoint
-  pollingInterval = setInterval(async () => {
+  // Wait 2 seconds before starting polling to ensure order is saved
+  setTimeout(() => {
+    // Start polling for order updates every 3 seconds using existing endpoint
+    pollingInterval = setInterval(async () => {
     try {
       const response = await axios.get(`${API_BASE_URL}/orders/${orderId}/tracking`, {
         headers: {
@@ -69,6 +71,7 @@ export const initializeSocket = (orderId) => {
       }
     }
   }, 3000); // Poll every 3 seconds
+  }, 2000); // Wait 2 seconds before starting polling
 
   // Simulate socket connection for compatibility
   return {

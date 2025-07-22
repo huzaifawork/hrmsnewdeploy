@@ -14,6 +14,34 @@ const stripe = require("../config/stripe");
 const server = http.createServer();
 const io = socketIo(server);
 
+// Automatic order progression for demo purposes
+const startAutomaticOrderProgression = (orderId) => {
+  const statusProgression = [
+    { status: 'confirmed', delay: 2000 },      // 2 seconds
+    { status: 'preparing', delay: 8000 },      // 8 seconds
+    { status: 'ready_for_pickup', delay: 5000 }, // 5 seconds
+    { status: 'out_for_delivery', delay: 10000 }, // 10 seconds
+    { status: 'arriving_soon', delay: 8000 },   // 8 seconds
+    { status: 'delivered', delay: 5000 }        // 5 seconds
+  ];
+
+  console.log(`[Order] Starting automatic progression for order: ${orderId}`);
+
+  statusProgression.forEach(({ status, delay }, index) => {
+    setTimeout(async () => {
+      try {
+        await Order.findByIdAndUpdate(orderId, {
+          status: status,
+          updatedAt: new Date()
+        });
+        console.log(`[Order] ${orderId} status updated to: ${status}`);
+      } catch (error) {
+        console.error(`[Order] Error updating status for ${orderId}:`, error);
+      }
+    }, delay);
+  });
+};
+
 // ✅ Create Order (Logged-in users only)
 exports.createOrder = async (req, res) => {
   try {
@@ -207,8 +235,10 @@ exports.createOrder = async (req, res) => {
     }
 
     // Start automatic order progression for demo purposes
-    startAutomaticOrderProgression(savedOrder._id);
-    console.log(`[Order] Automatic progression started for order: ${savedOrder._id}`);
+    setTimeout(() => {
+      startAutomaticOrderProgression(savedOrder._id);
+      console.log(`[Order] Automatic progression started for order: ${savedOrder._id}`);
+    }, 1000); // Wait 1 second before starting progression
 
     res.status(201).json({
       message: "Order created successfully",
@@ -650,30 +680,4 @@ exports.getOrderStatus = async (req, res) => {
   }
 };
 
-// Automatic order progression for demo purposes
-const startAutomaticOrderProgression = (orderId) => {
-  const statusProgression = [
-    { status: 'confirmed', delay: 2000 },      // 2 seconds
-    { status: 'preparing', delay: 8000 },      // 8 seconds
-    { status: 'ready_for_pickup', delay: 5000 }, // 5 seconds
-    { status: 'out_for_delivery', delay: 10000 }, // 10 seconds
-    { status: 'arriving_soon', delay: 8000 },   // 8 seconds
-    { status: 'delivered', delay: 5000 }        // 5 seconds
-  ];
 
-  console.log(`[Order] Starting automatic progression for order: ${orderId}`);
-
-  statusProgression.forEach(({ status, delay }, index) => {
-    setTimeout(async () => {
-      try {
-        await Order.findByIdAndUpdate(orderId, {
-          status: status,
-          updatedAt: new Date()
-        });
-        console.log(`[Order] ${orderId} status updated to: ${status}`);
-      } catch (error) {
-        console.error(`[Order] Error updating status for ${orderId}:`, error);
-      }
-    }, delay);
-  });
-};
