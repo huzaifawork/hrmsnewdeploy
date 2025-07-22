@@ -328,21 +328,30 @@ exports.checkRoomAvailability = async (req, res) => {
 // Update a room
 exports.updateRoom = async (req, res) => {
   try {
-    const { roomNumber, roomType, price, status, description } = req.body;
+    const { roomNumber, roomType, price, status, description, capacity, image, imageUrl } = req.body;
+
+    // Debug logging
+    console.log("=== ROOM UPDATE DEBUG ===");
+    console.log("Request body keys:", Object.keys(req.body));
+    console.log("Image field:", image ? `${image.substring(0, 50)}...` : "null/undefined");
+    console.log("ImageUrl field:", imageUrl);
+    console.log("Has file upload:", !!req.file);
+
     const updateData = {
       roomNumber,
       roomType,
       price,
       status,
       description,
+      capacity: capacity ? parseInt(capacity) : undefined,
     };
 
-    // Handle image update
+    // Handle image update - exactly like table controller
     if (req.file) {
       if (req.file.filename) {
         // Disk storage (development)
         updateData.image = `/uploads/${req.file.filename}`;
-        console.log("Development update - saved to disk:", updateData.image);
+        console.log("Development room update - saved to disk:", updateData.image);
       } else {
         // Memory storage (production) - don't update image field
         console.log(
@@ -352,10 +361,13 @@ exports.updateRoom = async (req, res) => {
         // Don't update the image field in production
       }
     } else if (req.body.imageUrl) {
-      // Handle image URL update
+      // Handle imageUrl (base64 or URL) - exactly like table controller
       updateData.image = req.body.imageUrl;
-      console.log("Image URL updated:", updateData.image);
+      console.log("Room update imageUrl provided:", req.body.imageUrl ? `${req.body.imageUrl.substring(0, 50)}...` : "null");
     }
+
+    console.log("Final updateData:", { ...updateData, image: updateData.image ? `${updateData.image.substring(0, 50)}...` : updateData.image });
+    console.log("=== END ROOM UPDATE DEBUG ===");
 
     const updatedRoom = await Room.findByIdAndUpdate(
       req.params.id,

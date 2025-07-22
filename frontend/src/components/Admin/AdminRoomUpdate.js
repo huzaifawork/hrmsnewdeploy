@@ -17,6 +17,7 @@ const AdminRoomUpdate = () => {
     description: "",
     capacity: "",
     image: "",
+    imageUrl: "",
   });
   const [selectedFile, setSelectedFile] = useState(null);
   const [imagePreview, setImagePreview] = useState(null);
@@ -64,10 +65,12 @@ const AdminRoomUpdate = () => {
       description: room.description || "",
       capacity: room.capacity || "",
       image: room.image || "",
+      imageUrl: "",
     });
     // Reset image upload states
     setSelectedFile(null);
     setImagePreview(null);
+    setImageUploading(false);
   };
 
   // Handle file selection
@@ -113,7 +116,7 @@ const AdminRoomUpdate = () => {
         const base64Image = e.target.result;
         setFormData(prev => ({
           ...prev,
-          image: base64Image
+          imageUrl: base64Image
         }));
         toast.success('Image uploaded successfully!');
         setImageUploading(false);
@@ -133,7 +136,7 @@ const AdminRoomUpdate = () => {
     setImagePreview(null);
     setFormData(prev => ({
       ...prev,
-      image: ''
+      imageUrl: ''
     }));
   };
 
@@ -170,10 +173,15 @@ const AdminRoomUpdate = () => {
         description: "",
         capacity: "",
         image: "",
+        imageUrl: "",
       });
+      setSelectedFile(null);
+      setImagePreview(null);
+      setImageUploading(false);
       fetchRooms();
     } catch (error) {
       console.error("Error updating room:", error);
+      console.error("Error response:", error.response?.data);
       toast.error("Failed to update room");
     } finally {
       setLoading(false);
@@ -427,9 +435,9 @@ const AdminRoomUpdate = () => {
                         justifyContent: 'center',
                         backgroundColor: '#f9fafb'
                       }}>
-                        {imagePreview || formData.image ? (
+                        {imagePreview || formData.imageUrl || formData.image ? (
                           <img
-                            src={imagePreview || formData.image}
+                            src={imagePreview || formData.imageUrl || formData.image}
                             alt="Room Preview"
                             style={{
                               maxWidth: '100%',
@@ -437,6 +445,11 @@ const AdminRoomUpdate = () => {
                               objectFit: 'cover',
                               borderRadius: '0.375rem'
                             }}
+                            onError={(e) => {
+                              console.log("Image load error:", e.target.src);
+                              e.target.style.display = 'none';
+                            }}
+                            key={`${formData.image || formData.imageUrl}-${Date.now()}`}
                           />
                         ) : (
                           <span style={{ color: '#9ca3af', fontSize: '0.875rem' }}>
@@ -460,9 +473,9 @@ const AdminRoomUpdate = () => {
                     </label>
                     <input
                       type="url"
-                      name="image"
+                      name="imageUrl"
                       placeholder="https://example.com/room-image.jpg"
-                      value={formData.image}
+                      value={formData.imageUrl}
                       onChange={handleInputChange}
                       style={{
                         width: '100%',
@@ -503,7 +516,11 @@ const AdminRoomUpdate = () => {
                         description: "",
                         capacity: "",
                         image: "",
+                        imageUrl: "",
                       });
+                      setSelectedFile(null);
+                      setImagePreview(null);
+                      setImageUploading(false);
                     }}
                     className="simple-btn simple-btn-secondary"
                   >
