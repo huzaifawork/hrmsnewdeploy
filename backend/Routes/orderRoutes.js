@@ -31,7 +31,7 @@ router.get("/debug", (req, res) => {
 router.get("/:orderId", ensureAuthenticated, getOrderById);
 
 // ✅ Get Order Status for Real-time Tracking (Polling-based)
-router.get("/:orderId/status", ensureAuthenticated, getOrderStatus);
+router.get("/:orderId/tracking", ensureAuthenticated, getOrderStatus);
 
 // ✅ Update Order Status (Admin only)
 router.patch(

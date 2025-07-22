@@ -31,10 +31,10 @@ export const initializeSocket = (orderId) => {
   activeOrderId = orderId;
   console.log('[Polling] Starting order tracking for:', orderId);
 
-  // Start polling for order updates every 3 seconds
+  // Start polling for order updates every 3 seconds using existing endpoint
   pollingInterval = setInterval(async () => {
     try {
-      const response = await axios.get(`${API_BASE_URL}/orders/${orderId}/status`, {
+      const response = await axios.get(`${API_BASE_URL}/orders/${orderId}/tracking`, {
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('token')}`
         }
@@ -62,6 +62,11 @@ export const initializeSocket = (orderId) => {
       }
     } catch (error) {
       console.error('[Polling] Error fetching order status:', error);
+      // If order not found or other error, stop polling after some attempts
+      if (error.response?.status === 404) {
+        console.log('[Polling] Order not found, stopping polling');
+        cleanupSocket();
+      }
     }
   }, 3000); // Poll every 3 seconds
 
